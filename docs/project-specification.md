@@ -78,6 +78,7 @@ Suggested environment aliases:
 - `SERVERIGH_HOST`
 - `SERVERIGH_PORT`
 - `SERVERIGH_WRITE`
+- `SERVERIGH_SHOW_HIDDEN`
 - `SERVERIGH_MAX_PREVIEW_BYTES`
 
 ## Routing
