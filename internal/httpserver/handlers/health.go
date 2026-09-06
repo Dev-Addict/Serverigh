@@ -10,6 +10,6 @@ func (h Handlers) Health(c *fiber.Ctx) error {
 		"write":              h.config.Write,
 		"showHidden":         h.config.ShowHidden,
 		"maxPreviewBytes":    h.config.MaxPreviewBytes,
-		"filesystemBrowsing": "pending",
+		"filesystemBrowsing": "ready",
 	})
 }

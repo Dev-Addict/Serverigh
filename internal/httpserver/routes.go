@@ -1,20 +1,30 @@
 package httpserver
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"net/http"
+
+	"github.com/gofiber/fiber/v2"
+	fiberfs "github.com/gofiber/fiber/v2/middleware/filesystem"
+
+	"serverigh/web"
+)
 
 func (s Server) registerRoutes(app *fiber.App) {
-	app.Static("/static", "./web/static")
+	app.Use("/static", fiberfs.New(fiberfs.Config{
+		Root:       http.FS(web.Static),
+		PathPrefix: "static",
+	}))
 
 	app.Get("/", s.handlers.Root)
 
 	app.Get("/browse", s.handlers.Browse)
 	app.Get("/healthz", s.handlers.Health)
 
-	app.Get("/partials/files", s.handlers.NotImplemented)
+	app.Get("/partials/files", s.handlers.Files)
 	app.Get("/partials/breadcrumbs", s.handlers.NotImplemented)
-	app.Get("/preview", s.handlers.NotImplemented)
-	app.Get("/download", s.handlers.NotImplemented)
-	app.Get("/raw", s.handlers.NotImplemented)
+	app.Get("/preview", s.handlers.Preview)
+	app.Get("/download", s.handlers.Download)
+	app.Get("/raw", s.handlers.Raw)
 
 	app.Post("/actions/mkdir", s.handlers.NotImplemented)
 	app.Post("/actions/rename", s.handlers.NotImplemented)

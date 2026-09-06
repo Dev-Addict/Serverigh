@@ -1,0 +1,45 @@
+<section class="file-panel" data-path="{{ .Path }}">
+	<header class="panel-header">
+		<h2>Files</h2>
+		<p>{{ len .Entries }} entries in {{ .Path }}</p>
+	</header>
+	{{ if .Truncated }}
+	<p class="notice">
+		Showing the first {{ .EntryLimit }} visible entries. Narrow the folder
+		or use search when available.
+	</p>
+	{{ end }}
+
+	{{ if .Entries }}
+	<table class="file-table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Kind</th>
+				<th>Size</th>
+				<th>Modified</th>
+				<th>Mode</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{ range .Entries }}
+			<tr>
+				<td>
+					{{ if .IsDir }}
+					<a href="/browse?path={{ .Path }}">{{ .Name }}/</a>
+					{{ else }}
+					<a href="/preview?path={{ .Path }}">{{ .Name }}</a>
+					{{ end }}
+				</td>
+				<td>{{ .Kind }}</td>
+				<td>{{ .SizeLabel }}</td>
+				<td>{{ .ModTimeLabel }}</td>
+				<td><code>{{ .Mode }}</code></td>
+			</tr>
+			{{ end }}
+		</tbody>
+	</table>
+	{{ else }}
+	<p>This folder is empty.</p>
+	{{ end }}
+</section>

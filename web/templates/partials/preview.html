@@ -1,0 +1,31 @@
+<section class="preview-panel" data-path="{{ .Path }}">
+	<header class="panel-header">
+		<h2>{{ .Name }}</h2>
+		<p>
+			{{ .SizeLabel }}
+			<span aria-hidden="true">/</span>
+			{{ .MIMEType }}
+			<span aria-hidden="true">/</span>
+			Created {{ .CreatedTimeLabel }}
+			<span aria-hidden="true">/</span>
+			Modified {{ .ModifiedTimeLabel }}
+		</p>
+	</header>
+
+	<nav class="file-actions" aria-label="File actions">
+		<a href="/raw?path={{ .Path }}">Raw</a>
+		<a href="/download?path={{ .Path }}">Download</a>
+	</nav>
+
+	{{ if .IsBinary }}
+	<p>Binary files cannot be previewed as text.</p>
+	{{ else }}
+	{{ if .Truncated }}
+	<p>
+		Preview truncated after {{ .BytesRead }} bytes. Use raw or download to
+		read the whole file.
+	</p>
+	{{ end }}
+	<pre class="text-preview"><code>{{ .Content }}</code></pre>
+	{{ end }}
+</section>

@@ -15,34 +15,34 @@ GO_ENV := GOCACHE=$(GOCACHE) GOMODCACHE=$(GOMODCACHE)
 
 .PHONY: help tidy fmt test vet check run build clean
 
-help:
+help: ## Show available commands.
 	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z0-9_-]+:.*##/ { \
 		printf "  %-12s %s\n", $$1, $$2 \
 	}' $(MAKEFILE_LIST)
 
-tidy:
+tidy: ## Sync Go module metadata.
 	$(GO_ENV) $(GO) mod tidy
 
-fmt:
-	@find cmd internal -name '*.go' -print0 | xargs -0 gofmt -w
+fmt: ## Format Go source files.
+	@find cmd internal web -name '*.go' -print0 | xargs -0 gofmt -w
 
-test:
+test: ## Run the Go test suite.
 	$(GO_ENV) $(GO) test ./...
 
-vet:
+vet: ## Run go vet.
 	$(GO_ENV) $(GO) vet ./...
 
-check: fmt tidy vet test
+check: fmt tidy vet test ## Format, tidy, vet, and test.
 
-run:
+run: ## Run the development server.
 	$(GO_ENV) $(GO) run $(CMD) \
 		--root "$(ROOT)" \
 		--host "$(HOST)" \
 		--port "$(PORT)"
 
-build:
+build: ## Build the serverigh binary.
 	@mkdir -p $(BIN_DIR)
 	$(GO_ENV) $(GO) build -o $(BIN) $(CMD)
 
-clean:
+clean: ## Remove build artifacts.
 	rm -rf $(BIN_DIR)

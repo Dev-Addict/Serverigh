@@ -35,3 +35,59 @@ dd {
 	margin: 0;
 	overflow-wrap: anywhere;
 }
+
+.panel-header {
+	margin-bottom: 16px;
+}
+
+.panel-header h2 {
+	margin: 0 0 4px;
+}
+
+.panel-header p {
+	margin: 0;
+	color: #5a6872;
+}
+
+.file-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 14px;
+}
+
+.file-table th,
+.file-table td {
+	padding: 8px;
+	border-bottom: 1px solid #d7dee2;
+	text-align: left;
+	vertical-align: top;
+}
+
+.file-actions {
+	display: flex;
+	gap: 12px;
+	margin-bottom: 16px;
+}
+
+.notice,
+.error-panel {
+	padding: 12px;
+	border: 1px solid #d7dee2;
+	border-radius: 8px;
+	background: #ffffff;
+}
+
+.error-panel {
+	border-color: #d89a8d;
+	background: #fff7f5;
+}
+
+.text-preview {
+	overflow: auto;
+	max-height: 70vh;
+	padding: 16px;
+	border: 1px solid #d7dee2;
+	border-radius: 8px;
+	background: #f8fafb;
+	white-space: pre-wrap;
+}

@@ -31,4 +31,11 @@ func TestHealthReturnsStatus(t *testing.T) {
 	if payload["app"] != "serverigh" {
 		t.Fatalf("expected app serverigh, got %#v", payload["app"])
 	}
+
+	if payload["filesystemBrowsing"] != "ready" {
+		t.Fatalf(
+			"expected filesystem browsing ready, got %#v",
+			payload["filesystemBrowsing"],
+		)
+	}
 }

@@ -2,13 +2,13 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"serverigh/internal/apperror"
 	"serverigh/internal/config"
 	"serverigh/internal/httpserver"
 )
@@ -32,7 +32,11 @@ func run(args []string) error {
 }
 
 func serve(cfg config.Config) error {
-	app := httpserver.New(cfg)
+	app, err := httpserver.New(cfg)
+	if err != nil {
+		return err
+	}
+
 	errCh := make(chan error, 1)
 
 	go func() {
@@ -58,7 +62,12 @@ func serve(cfg config.Config) error {
 		slog.Info("shutting down serverigh", "signal", sig.String())
 
 		if err := app.ShutdownWithTimeout(5 * time.Second); err != nil {
-			return fmt.Errorf("shutdown server: %w", err)
+			return apperror.WrapOperation(
+				apperror.CodeServer,
+				"server error",
+				"shutdown server",
+				err,
+			)
 		}
 
 		return nil
@@ -71,6 +80,11 @@ func serve(cfg config.Config) error {
 			return nil
 		}
 
-		return fmt.Errorf("listen: %w", err)
+		return apperror.WrapOperation(
+			apperror.CodeServer,
+			"server error",
+			"listen",
+			err,
+		)
 	}
 }

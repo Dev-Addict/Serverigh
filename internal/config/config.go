@@ -1,9 +1,12 @@
 package config
 
 import (
-	"fmt"
+	"net"
 	"os"
 	"path/filepath"
+	"strconv"
+
+	"serverigh/internal/apperror"
 )
 
 const (
@@ -26,7 +29,12 @@ type Config struct {
 func Default() (Config, error) {
 	wd, err := os.Getwd()
 	if err != nil {
-		return Config{}, fmt.Errorf("get working directory: %w", err)
+		return Config{}, apperror.WrapOperation(
+			apperror.CodeFilesystem,
+			"filesystem error",
+			"get working directory",
+			err,
+		)
 	}
 
 	return Config{
@@ -41,29 +49,46 @@ func Default() (Config, error) {
 
 func (c *Config) Normalize() error {
 	if c.Host == "" {
-		return fmt.Errorf("host cannot be empty")
+		return apperror.New(
+			apperror.CodeInvalidConfig,
+			"host cannot be empty",
+		)
 	}
 
 	if c.Port < 1 || c.Port > 65535 {
-		return fmt.Errorf("port must be between 1 and 65535")
+		return apperror.New(
+			apperror.CodeInvalidConfig,
+			"port must be between 1 and 65535",
+		)
 	}
 
 	if c.MaxPreviewBytes < 1 {
-		return fmt.Errorf("max preview bytes must be greater than zero")
+		return apperror.New(
+			apperror.CodeInvalidConfig,
+			"max preview bytes must be greater than zero",
+		)
 	}
 
 	root, err := filepath.Abs(c.Root)
 	if err != nil {
-		return fmt.Errorf("resolve root path: %w", err)
+		return apperror.WrapOperation(
+			apperror.CodeInvalidPath,
+			"invalid root path",
+			"resolve root path",
+			err,
+		)
 	}
 
 	info, err := os.Stat(root)
 	if err != nil {
-		return fmt.Errorf("inspect root path %q: %w", root, err)
+		return wrapRootOperation("inspect root path", err)
 	}
 
 	if !info.IsDir() {
-		return fmt.Errorf("root path %q is not a directory", root)
+		return apperror.New(
+			apperror.CodeNotDirectory,
+			"root path is not a directory",
+		)
 	}
 
 	c.Root = root
@@ -72,5 +97,5 @@ func (c *Config) Normalize() error {
 }
 
 func (c Config) Address() string {
-	return fmt.Sprintf("%s:%d", c.Host, c.Port)
+	return net.JoinHostPort(c.Host, strconv.Itoa(c.Port))
 }

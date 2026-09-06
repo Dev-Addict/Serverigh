@@ -11,7 +11,9 @@ import (
 )
 
 func TestBrowseRendersShell(t *testing.T) {
-	h := testHandlers(t)
+	root := t.TempDir()
+	makeTestDir(t, root, "<script>")
+	h := testHandlersWithRoot(t, root)
 	app := fiber.New()
 	app.Get("/browse", h.Browse)
 
@@ -54,5 +56,27 @@ func TestBrowseShowsWriteMode(t *testing.T) {
 
 	if !strings.Contains(body, "write-enabled") {
 		t.Fatalf("expected write mode in response, got %q", body)
+	}
+}
+
+func TestBrowseUsesNormalizedPath(t *testing.T) {
+	root := t.TempDir()
+	makeTestDir(t, root, "docs")
+	h := testHandlersWithRoot(t, root)
+	app := fiber.New()
+	app.Get("/browse", h.Browse)
+
+	resp, body := testRequest(t, app, http.MethodGet, "/browse?path=/docs//")
+
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", resp.StatusCode)
+	}
+
+	if strings.Contains(body, "/docs//") {
+		t.Fatalf("expected normalized path, got %q", body)
+	}
+
+	if !strings.Contains(body, "/docs") {
+		t.Fatalf("expected normalized docs path, got %q", body)
 	}
 }

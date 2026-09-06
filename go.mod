@@ -5,6 +5,7 @@ go 1.23.0
 require (
 	github.com/gofiber/fiber/v2 v2.52.13
 	github.com/urfave/cli/v2 v2.27.7
+	golang.org/x/sys v0.28.0
 )
 
 require (
@@ -21,5 +22,4 @@ require (
 	github.com/valyala/fasthttp v1.51.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1 // indirect
-	golang.org/x/sys v0.28.0 // indirect
 )
