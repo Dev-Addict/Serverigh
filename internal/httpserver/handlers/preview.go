@@ -1,12 +1,16 @@
 package handlers
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+
+	"serverigh/internal/httpserver/view"
+)
 
 func (h Handlers) Preview(c *fiber.Ctx) error {
 	filePath := c.Query("path", "/")
 	if c.Get("HX-Request") != "true" {
 		return c.Redirect(
-			browseURLWithFile(folderForFile(filePath), filePath),
+			view.BrowseURLWithFile(view.FolderForFile(filePath), filePath),
 			fiber.StatusFound,
 		)
 	}

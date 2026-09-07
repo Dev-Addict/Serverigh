@@ -13,6 +13,8 @@ const (
 	CodeNotFound         Code = "not_found"
 	CodePermissionDenied Code = "permission_denied"
 	CodeFilesystem       Code = "filesystem"
+	CodeRequestCanceled  Code = "request_canceled"
+	CodeRequestTimeout   Code = "request_timeout"
 	CodeServer           Code = "server"
 )
 

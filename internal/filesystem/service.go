@@ -5,12 +5,14 @@ import (
 	"path/filepath"
 
 	"serverigh/internal/apperror"
+	"serverigh/internal/filesystem/searcher"
 )
 
 type Service struct {
 	root            string
 	showHidden      bool
 	maxPreviewBytes int64
+	searchIndex     *searcher.Index
 }
 
 func New(root string, showHidden bool, maxPreviewBytes int64) (Service, error) {
@@ -49,6 +51,7 @@ func New(root string, showHidden bool, maxPreviewBytes int64) (Service, error) {
 		root:            realRoot,
 		showHidden:      showHidden,
 		maxPreviewBytes: maxPreviewBytes,
+		searchIndex:     searcher.NewIndex(),
 	}, nil
 }
 

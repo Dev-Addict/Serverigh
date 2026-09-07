@@ -1,15 +1,10 @@
 package handlers
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
 
-type FilesUpdateView struct {
-	Listing     FilesView
-	PathSummary PathSummaryView
-	Breadcrumbs BreadcrumbsView
-	Search      SearchBoxView
-	EmptyState  EmptyPreviewView
-	Status      StatusView
-}
+	"serverigh/internal/httpserver/view"
+)
 
 func (h Handlers) Files(c *fiber.Ctx) error {
 	options := listOptionsFromRequest(c)
@@ -18,24 +13,24 @@ func (h Handlers) Files(c *fiber.Ctx) error {
 		return h.writeOperationalError(c, err)
 	}
 
-	files := filesView(listing)
+	files := view.Files(listing)
 
 	if c.Get("HX-Request") == "true" {
 		c.Set("HX-Push-Url", files.Controls.BrowseURL)
 
-		return h.render(c, "files_update.html", FilesUpdateView{
+		return h.render(c, "files_update.html", view.FilesUpdate{
 			Listing: files,
-			PathSummary: PathSummaryView{
+			PathSummary: view.PathSummaryView{
 				Root: h.config.Root,
 				Path: listing.Path,
 				OOB:  true,
 			},
-			Breadcrumbs: breadcrumbsView(listing.Path, true),
-			Search:      searchBoxView(listing.Path, listing.Options, true),
-			EmptyState: EmptyPreviewView{
+			Breadcrumbs: view.Breadcrumbs(listing.Path, true),
+			Search:      view.SearchBox(listing.Path, listing.Options, true),
+			EmptyState: view.EmptyPreviewView{
 				Path: listing.Path,
 			},
-			Status: statusView(listing, h.config.Write, true),
+			Status: view.Status(listing, h.config.Write, true),
 		})
 	}
 

@@ -6,6 +6,8 @@ import (
 	"testing"
 
 	"github.com/gofiber/fiber/v2"
+
+	"serverigh/internal/httpserver/view"
 )
 
 func TestBreadcrumbsRendersActivePath(t *testing.T) {
@@ -85,7 +87,7 @@ func TestParentPath(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := parentPath(tt.path); got != tt.want {
+			if got := view.ParentPath(tt.path); got != tt.want {
 				t.Fatalf("expected %q, got %q", tt.want, got)
 			}
 		})

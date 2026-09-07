@@ -5,9 +5,10 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 	"time"
+
+	"serverigh/internal/filesystem/fileinfo"
 )
 
 const (
@@ -93,7 +94,7 @@ func (s Service) list(
 		for _, entry := range entries {
 			name := entry.Name()
 			entryPath := filepath.Join(resolved.Absolute, name)
-			hidden := isHidden(entryPath, name)
+			hidden := fileinfo.IsHidden(entryPath, name)
 			if hidden && !s.showHidden {
 				continue
 			}
@@ -113,17 +114,17 @@ func (s Service) list(
 			}
 
 			path := displayPath(resolved.Path, name)
-			createdTime, createdKnown := creationTime(entryPath)
+			createdTime, createdKnown := fileinfo.CreationTime(entryPath)
 			listing.Entries = append(listing.Entries, Entry{
 				Name:         name,
 				Path:         path,
 				RelativePath: strings.TrimPrefix(path, "/"),
 				AbsolutePath: entryPath,
-				Kind:         entryKind(info),
+				Kind:         fileinfo.Kind(info),
 				Size:         info.Size(),
-				SizeLabel:    formatSize(info.Size()),
+				SizeLabel:    fileinfo.FormatSize(info.Size()),
 				CreatedTime:  createdTime,
-				CreatedLabel: formatOptionalTime(createdTime, createdKnown),
+				CreatedLabel: fileinfo.FormatOptionalTime(createdTime, createdKnown),
 				CreatedKnown: createdKnown,
 				Mode:         info.Mode().String(),
 				ModTime:      info.ModTime(),
@@ -139,102 +140,4 @@ func (s Service) list(
 	}
 
 	return sortedListing(listing), nil
-}
-
-func sortedListing(listing DirectoryListing) DirectoryListing {
-	sort.SliceStable(listing.Entries, func(i int, j int) bool {
-		left := listing.Entries[i]
-		right := listing.Entries[j]
-		if left.IsDir != right.IsDir {
-			return left.IsDir
-		}
-
-		return compareEntries(left, right, listing.Options) < 0
-	})
-
-	return listing
-}
-
-func compareEntries(left Entry, right Entry, options ListOptions) int {
-	result := 0
-	switch options.Sort {
-	case ListSortSize:
-		result = compareInt64(left.Size, right.Size)
-	case ListSortModified:
-		result = compareTimes(left.ModTime, right.ModTime)
-	case ListSortCreated:
-		result = compareOptionalTimes(
-			left.CreatedTime,
-			left.CreatedKnown,
-			right.CreatedTime,
-			right.CreatedKnown,
-		)
-	default:
-		result = compareNames(left.Name, right.Name)
-	}
-
-	if result == 0 {
-		result = compareNames(left.Name, right.Name)
-	}
-
-	if options.Direction == ListDirectionDesc {
-		return -result
-	}
-
-	return result
-}
-
-func compareNames(left string, right string) int {
-	return strings.Compare(strings.ToLower(left), strings.ToLower(right))
-}
-
-func compareInt64(left int64, right int64) int {
-	switch {
-	case left < right:
-		return -1
-	case left > right:
-		return 1
-	default:
-		return 0
-	}
-}
-
-func compareTimes(left time.Time, right time.Time) int {
-	switch {
-	case left.Before(right):
-		return -1
-	case left.After(right):
-		return 1
-	default:
-		return 0
-	}
-}
-
-func compareOptionalTimes(
-	left time.Time,
-	leftKnown bool,
-	right time.Time,
-	rightKnown bool,
-) int {
-	if leftKnown != rightKnown {
-		if leftKnown {
-			return -1
-		}
-
-		return 1
-	}
-
-	return compareTimes(left, right)
-}
-
-func entryKind(info os.FileInfo) string {
-	if info.IsDir() {
-		return "folder"
-	}
-
-	if info.Mode()&os.ModeSymlink != 0 {
-		return "symlink"
-	}
-
-	return "file"
 }

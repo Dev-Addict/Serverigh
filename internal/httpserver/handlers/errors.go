@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"context"
+	"errors"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -14,6 +16,24 @@ type ErrorView struct {
 }
 
 func (h Handlers) writeOperationalError(c *fiber.Ctx, err error) error {
+	if errors.Is(err, context.Canceled) {
+		return h.writeError(
+			c,
+			fiber.StatusRequestTimeout,
+			apperror.CodeRequestCanceled,
+			"request canceled",
+		)
+	}
+
+	if errors.Is(err, context.DeadlineExceeded) {
+		return h.writeError(
+			c,
+			fiber.StatusGatewayTimeout,
+			apperror.CodeRequestTimeout,
+			"request timed out",
+		)
+	}
+
 	opErr, ok := apperror.AsOperational(err)
 	if !ok {
 		return h.writeError(
@@ -79,6 +99,10 @@ func statusForOperationalCode(code apperror.Code) int {
 		status = fiber.StatusNotFound
 	case apperror.CodePermissionDenied:
 		status = fiber.StatusForbidden
+	case apperror.CodeRequestCanceled:
+		status = fiber.StatusRequestTimeout
+	case apperror.CodeRequestTimeout:
+		status = fiber.StatusGatewayTimeout
 	case apperror.CodeServer:
 		status = fiber.StatusInternalServerError
 	}

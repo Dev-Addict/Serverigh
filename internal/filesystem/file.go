@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"serverigh/internal/filesystem/fileinfo"
 )
 
 type OpenedFile struct {
@@ -107,7 +109,7 @@ func fileFromInfo(
 	info os.FileInfo,
 	mimeType string,
 ) File {
-	createdTime, creationTimeKnown := creationTime(resolved.Absolute)
+	createdTime, creationTimeKnown := fileinfo.CreationTime(resolved.Absolute)
 	modifiedTime := info.ModTime()
 
 	return File{
@@ -115,12 +117,12 @@ func fileFromInfo(
 		Path:              resolved.Path,
 		Absolute:          resolved.Absolute,
 		Size:              info.Size(),
-		SizeLabel:         formatSize(info.Size()),
+		SizeLabel:         fileinfo.FormatSize(info.Size()),
 		Mode:              info.Mode().String(),
 		CreatedTime:       createdTime,
-		CreatedTimeLabel:  formatOptionalTime(createdTime, creationTimeKnown),
+		CreatedTimeLabel:  fileinfo.FormatOptionalTime(createdTime, creationTimeKnown),
 		ModifiedTime:      modifiedTime,
-		ModifiedTimeLabel: formatTime(modifiedTime),
+		ModifiedTimeLabel: fileinfo.FormatTime(modifiedTime),
 		CreationTimeKnown: creationTimeKnown,
 		MIMEType:          mimeType,
 	}

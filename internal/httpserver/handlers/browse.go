@@ -4,20 +4,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 
 	"serverigh/internal/filesystem"
+	"serverigh/internal/httpserver/view"
 )
-
-type BrowseView struct {
-	Root        string
-	Path        string
-	Mode        string
-	Listing     FilesView
-	PathSummary PathSummaryView
-	Breadcrumbs BreadcrumbsView
-	Search      SearchBoxView
-	EmptyState  EmptyPreviewView
-	Status      StatusView
-	Preview     *filesystem.Preview
-}
 
 func (h Handlers) Browse(c *fiber.Ctx) error {
 	activePath := c.Query("path", "/")
@@ -27,7 +15,7 @@ func (h Handlers) Browse(c *fiber.Ctx) error {
 		return h.writeOperationalError(c, err)
 	}
 
-	files := filesView(listing)
+	files := view.Files(listing)
 
 	var preview *filesystem.Preview
 	selectedFile := c.Query("file")
@@ -40,50 +28,23 @@ func (h Handlers) Browse(c *fiber.Ctx) error {
 		preview = &selectedPreview
 	}
 
-	view := BrowseView{
+	page := view.BrowsePage{
 		Root:    h.config.Root,
 		Path:    listing.Path,
-		Mode:    modeLabel(h.config.Write),
+		Mode:    view.ModeLabel(h.config.Write),
 		Listing: files,
-		PathSummary: PathSummaryView{
+		PathSummary: view.PathSummaryView{
 			Root: h.config.Root,
 			Path: listing.Path,
 		},
-		Breadcrumbs: breadcrumbsView(listing.Path, false),
-		Search:      searchBoxView(listing.Path, listing.Options, false),
-		EmptyState: EmptyPreviewView{
+		Breadcrumbs: view.Breadcrumbs(listing.Path, false),
+		Search:      view.SearchBox(listing.Path, listing.Options, false),
+		EmptyState: view.EmptyPreviewView{
 			Path: listing.Path,
 		},
 		Preview: preview,
-		Status:  statusView(listing, h.config.Write, false),
+		Status:  view.Status(listing, h.config.Write, false),
 	}
 
-	return h.render(c, "browse.html", view)
-}
-
-func statusLabel(listing filesystem.DirectoryListing) string {
-	if listing.Truncated {
-		return "Showing first entries"
-	}
-
-	if len(listing.Entries) == 0 {
-		return "Folder empty"
-	}
-
-	return "Ready"
-}
-
-func statusView(
-	listing filesystem.DirectoryListing,
-	writeEnabled bool,
-	oob bool,
-) StatusView {
-	return StatusView{
-		Label:      statusLabel(listing),
-		ItemCount:  len(listing.Entries),
-		Mode:       modeLabel(writeEnabled),
-		Truncated:  listing.Truncated,
-		EntryLimit: listing.EntryLimit,
-		OOB:        oob,
-	}
+	return h.render(c, "browse.html", page)
 }

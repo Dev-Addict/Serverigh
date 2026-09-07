@@ -38,6 +38,14 @@ func TestStatusForOperationalCode(t *testing.T) {
 			status: fiber.StatusInternalServerError,
 		},
 		{
+			code:   apperror.CodeRequestCanceled,
+			status: fiber.StatusRequestTimeout,
+		},
+		{
+			code:   apperror.CodeRequestTimeout,
+			status: fiber.StatusGatewayTimeout,
+		},
+		{
 			code:   apperror.CodeServer,
 			status: fiber.StatusInternalServerError,
 		},
