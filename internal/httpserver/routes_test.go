@@ -55,6 +55,11 @@ func TestRoutesWireCoreHandlers(t *testing.T) {
 			status: http.StatusOK,
 		},
 		{
+			name:   "breadcrumbs",
+			path:   "/partials/breadcrumbs?path=/docs",
+			status: http.StatusOK,
+		},
+		{
 			name:   "preview",
 			path:   "/preview?path=/note.txt",
 			status: http.StatusOK,

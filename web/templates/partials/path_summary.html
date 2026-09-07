@@ -1,0 +1,10 @@
+<div
+	id="path-summary"
+	class="path-summary"
+	aria-label="Current filesystem location"
+	{{ if .OOB }}hx-swap-oob="true"{{ end }}>
+	<span class="label">Root</span>
+	<span class="path-value">{{ .Root }}</span>
+	<span class="label">Path</span>
+	<span class="path-value">{{ .Path }}</span>
+</div>

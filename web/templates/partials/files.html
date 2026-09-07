@@ -4,7 +4,15 @@
 			<h2>Files</h2>
 			<p>{{ len .Entries }} visible entries in {{ .Path }}</p>
 		</div>
-		<a class="quiet-link" href="/browse?path={{ .Path }}">Refresh</a>
+		<a
+			class="quiet-link"
+			href="/browse?path={{ .Path | urlquery }}"
+			hx-get="/partials/files?path={{ .Path | urlquery }}"
+			hx-target="#files-region"
+			hx-swap="innerHTML"
+			hx-push-url="/browse?path={{ .Path | urlquery }}">
+			Refresh
+		</a>
 	</header>
 	{{ if .Truncated }}
 	<p class="notice">
@@ -29,12 +37,24 @@
 			<tr>
 				<td class="name-cell">
 					{{ if .IsDir }}
-					<a class="entry-link folder-link" href="/browse?path={{ .Path }}">
+					<a
+						class="entry-link folder-link"
+						href="/browse?path={{ .Path | urlquery }}"
+						hx-get="/partials/files?path={{ .Path | urlquery }}"
+						hx-target="#files-region"
+						hx-swap="innerHTML"
+						hx-push-url="/browse?path={{ .Path | urlquery }}">
 						<span class="entry-icon" aria-hidden="true"></span>
 						<span>{{ .Name }}/</span>
 					</a>
 					{{ else }}
-					<a class="entry-link file-link" href="/preview?path={{ .Path }}">
+					<a
+						class="entry-link file-link"
+						href="/preview?path={{ .Path | urlquery }}"
+						hx-get="/preview?path={{ .Path | urlquery }}"
+						hx-target="#preview-region"
+						hx-swap="innerHTML"
+						hx-push-url="/browse?path={{ $.Path | urlquery }}&file={{ .Path | urlquery }}">
 						<span class="entry-icon" aria-hidden="true"></span>
 						<span>{{ .Name }}</span>
 					</a>

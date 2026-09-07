@@ -1,0 +1,7 @@
+{{ template "files.html" .Listing }}
+{{ template "path_summary.html" .PathSummary }}
+{{ template "breadcrumbs.html" .Breadcrumbs }}
+<aside id="preview-region" hx-swap-oob="innerHTML">
+	{{ template "empty_preview.html" .EmptyState }}
+</aside>
+{{ template "status.html" .Status }}

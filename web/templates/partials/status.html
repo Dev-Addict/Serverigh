@@ -1,0 +1,11 @@
+<footer
+	id="status-row"
+	class="status-row"
+	{{ if .OOB }}hx-swap-oob="true"{{ end }}>
+	<span>{{ .Label }}</span>
+	<span>{{ .ItemCount }} visible entries</span>
+	{{ if .Truncated }}
+	<span>Limited to {{ .EntryLimit }} entries</span>
+	{{ end }}
+	<span>{{ .Mode }}</span>
+</footer>

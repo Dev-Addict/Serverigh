@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Serverigh</title>
 	<link rel="stylesheet" href="/static/styles.css">
+	<script src="/static/htmx.min.js"></script>
 </head>
 <body>
 	<div class="app-shell">
@@ -13,40 +14,29 @@
 				<p class="brand-name">Serverigh</p>
 				<p class="brand-subtitle">{{ .Mode }}</p>
 			</div>
-			<div class="path-summary" aria-label="Current filesystem location">
-				<span class="label">Root</span>
-				<span class="path-value">{{ .Root }}</span>
-				<span class="label">Path</span>
-				<span class="path-value">{{ .Path }}</span>
-			</div>
+			{{ template "path_summary.html" .PathSummary }}
 		</header>
 
+		{{ template "breadcrumbs.html" .Breadcrumbs }}
+
 		<main class="explorer" aria-label="File explorer">
-			<section class="files-region" aria-label="Directory listing">
+			<section
+				id="files-region"
+				class="files-region"
+				aria-label="Directory listing">
 				{{ template "files.html" .Listing }}
 			</section>
 
-			<aside class="preview-region" aria-label="Preview">
-				<section class="empty-preview" data-path="{{ .Path }}">
-					<div>
-						<p class="empty-preview-title">No file selected</p>
-						<p class="empty-preview-copy">
-							Select a file from {{ .Path }} to inspect metadata and
-							preview supported content.
-						</p>
-					</div>
-				</section>
+			<aside id="preview-region" class="preview-region" aria-label="Preview">
+				{{ if .Preview }}
+				{{ template "preview.html" .Preview }}
+				{{ else }}
+				{{ template "empty_preview.html" .EmptyState }}
+				{{ end }}
 			</aside>
 		</main>
 
-		<footer class="status-row">
-			<span>{{ .StatusLabel }}</span>
-			<span>{{ .ItemCount }} visible entries</span>
-			{{ if .Listing.Truncated }}
-			<span>Limited to {{ .Listing.EntryLimit }} entries</span>
-			{{ end }}
-			<span>{{ .Mode }}</span>
-		</footer>
+		{{ template "status.html" .Status }}
 	</div>
 	<script src="/static/app.js"></script>
 </body>

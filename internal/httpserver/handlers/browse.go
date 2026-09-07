@@ -10,9 +10,12 @@ type BrowseView struct {
 	Root        string
 	Path        string
 	Mode        string
-	ItemCount   int
-	StatusLabel string
 	Listing     filesystem.DirectoryListing
+	PathSummary PathSummaryView
+	Breadcrumbs BreadcrumbsView
+	EmptyState  EmptyPreviewView
+	Status      StatusView
+	Preview     *filesystem.Preview
 }
 
 func (h Handlers) Browse(c *fiber.Ctx) error {
@@ -22,18 +25,34 @@ func (h Handlers) Browse(c *fiber.Ctx) error {
 		return h.writeOperationalError(c, err)
 	}
 
-	mode := "read-only"
-	if h.config.Write {
-		mode = "write-enabled"
+	var preview *filesystem.Preview
+	selectedFile := c.Query("file")
+	if selectedFile != "" {
+		selectedPreview, err := h.files.Preview(selectedFile)
+		if err != nil {
+			return h.writeOperationalError(c, err)
+		}
+
+		preview = &selectedPreview
 	}
 
 	view := BrowseView{
-		Root:        h.config.Root,
-		Path:        listing.Path,
-		Mode:        mode,
-		ItemCount:   len(listing.Entries),
-		StatusLabel: statusLabel(listing),
-		Listing:     listing,
+		Root:    h.config.Root,
+		Path:    listing.Path,
+		Mode:    modeLabel(h.config.Write),
+		Listing: listing,
+		PathSummary: PathSummaryView{
+			Root: h.config.Root,
+			Path: listing.Path,
+		},
+		Breadcrumbs: BreadcrumbsView{
+			Items: breadcrumbsForPath(listing.Path),
+		},
+		EmptyState: EmptyPreviewView{
+			Path: listing.Path,
+		},
+		Preview: preview,
+		Status:  statusView(listing, h.config.Write, false),
 	}
 
 	return h.render(c, "browse.html", view)
@@ -49,4 +68,19 @@ func statusLabel(listing filesystem.DirectoryListing) string {
 	}
 
 	return "Ready"
+}
+
+func statusView(
+	listing filesystem.DirectoryListing,
+	writeEnabled bool,
+	oob bool,
+) StatusView {
+	return StatusView{
+		Label:      statusLabel(listing),
+		ItemCount:  len(listing.Entries),
+		Mode:       modeLabel(writeEnabled),
+		Truncated:  listing.Truncated,
+		EntryLimit: listing.EntryLimit,
+		OOB:        oob,
+	}
 }

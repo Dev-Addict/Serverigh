@@ -27,7 +27,7 @@ a:hover {
 
 .app-shell {
 	display: grid;
-	grid-template-rows: auto minmax(0, 1fr) auto;
+	grid-template-rows: auto auto minmax(0, 1fr) auto;
 	min-height: 100vh;
 }
 
@@ -88,6 +88,62 @@ a:hover {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+}
+
+.breadcrumbs {
+	padding: 8px 20px;
+	border-bottom: 1px solid #dce3e6;
+	background: #f9fbfb;
+}
+
+.breadcrumbs ol {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	align-items: center;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.breadcrumbs li {
+	display: flex;
+	gap: 4px;
+	align-items: center;
+	min-width: 0;
+	color: #65727a;
+	font-size: 13px;
+}
+
+.breadcrumbs li + li::before {
+	color: #92a0a7;
+	content: "/";
+}
+
+.breadcrumbs a,
+.breadcrumbs span {
+	display: inline-block;
+	max-width: 28ch;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.breadcrumbs span[aria-current="page"] {
+	color: #263238;
+	font-weight: 700;
+}
+
+.htmx-request .entry-link,
+.htmx-request.quiet-link {
+	opacity: 0.65;
+}
+
+html[data-loading="true"] .status-row::after {
+	content: "Loading";
+	margin-left: auto;
+	color: #b8d7e0;
+	font-weight: 700;
 }
 
 .explorer {
@@ -365,6 +421,7 @@ a:hover {
 
 @media (max-width: 640px) {
 	.top-bar,
+	.breadcrumbs,
 	.file-panel,
 	.preview-panel,
 	.empty-preview,

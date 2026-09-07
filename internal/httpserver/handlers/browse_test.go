@@ -63,6 +63,55 @@ func TestBrowseShowsWriteMode(t *testing.T) {
 	}
 }
 
+func TestBrowseRestoresSelectedFilePreview(t *testing.T) {
+	root := t.TempDir()
+	writeTestFile(t, root, "note.txt", "hello from preview")
+	h := testHandlersWithRoot(t, root)
+	app := fiber.New()
+	app.Get("/browse", h.Browse)
+
+	resp, body := testRequest(
+		t,
+		app,
+		http.MethodGet,
+		"/browse?path=/&file=/note.txt",
+	)
+
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", resp.StatusCode)
+	}
+
+	if !strings.Contains(body, "hello from preview") {
+		t.Fatalf("expected selected file preview in response, got %q", body)
+	}
+
+	if strings.Contains(body, "No file selected") {
+		t.Fatalf("expected selected file to replace empty state, got %q", body)
+	}
+}
+
+func TestBrowseIncludesHtmxNavigation(t *testing.T) {
+	root := t.TempDir()
+	writeTestFile(t, root, "note.txt", "hello")
+	h := testHandlersWithRoot(t, root)
+	app := fiber.New()
+	app.Get("/browse", h.Browse)
+
+	resp, body := testRequest(t, app, http.MethodGet, "/browse?path=/")
+
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", resp.StatusCode)
+	}
+
+	if !strings.Contains(body, "/static/htmx.min.js") {
+		t.Fatalf("expected htmx script in response, got %q", body)
+	}
+
+	if !strings.Contains(body, `hx-target="#preview-region"`) {
+		t.Fatalf("expected preview htmx target in response, got %q", body)
+	}
+}
+
 func TestBrowseUsesNormalizedPath(t *testing.T) {
 	root := t.TempDir()
 	makeTestDir(t, root, "docs")

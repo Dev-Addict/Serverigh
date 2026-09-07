@@ -14,13 +14,13 @@ explicitly enabled.
 
 ## Current Status
 
-Serverigh is in early first-version development. The backend foundation is in
-place, including CLI configuration, filesystem browsing, safe path handling,
-bounded previews, raw/download responses, and operational errors.
+Serverigh is in early first-version development. The backend foundation and
+main explorer shell are in place, including CLI configuration, filesystem
+browsing, safe path handling, bounded previews, HTMX folder/file navigation,
+raw/download responses, and operational errors.
 
-The main explorer UI is still scaffold-level. Planned UI, HTMX, search,
-specialized previewers, and write workflows are tracked below as unchecked
-items.
+Specialized previewers, search, table controls, and write workflows are tracked
+below as unchecked items.
 
 ## Feature Checklist
 
@@ -37,14 +37,13 @@ Implemented:
 - [x] Bounded text preview with truncation and binary-file handling.
 - [x] Raw and download routes with validated file handles and safety headers.
 - [x] Operational error codes with JSON or HTML responses as appropriate.
+- [x] Explorer shell with top bar, file table, preview pane, and status row.
+- [x] HTMX navigation for folder browsing, file preview updates, and
+  breadcrumbs.
 - [x] Health endpoint, Makefile workflow, and backend test coverage.
 
 Planned for the first version:
 
-- [ ] Production explorer UI with top bar, file table, preview pane, and status
-  row.
-- [ ] HTMX navigation for folder browsing, file preview updates, and
-  breadcrumbs.
 - [ ] URL-backed state for reload, back, and forward navigation.
 - [ ] Table controls for sorting, filtering, hidden files, and copy-path
   actions.
@@ -133,6 +132,8 @@ Current routes:
   Renders the full browse page for a folder.
 - `GET /partials/files?path=...`
   Renders the directory listing partial.
+- `GET /partials/breadcrumbs?path=...`
+  Renders the breadcrumb partial.
 - `GET /preview?path=...`
   Renders the file preview partial.
 - `GET /raw?path=...`
@@ -144,7 +145,6 @@ Current routes:
 
 Reserved but not implemented yet:
 
-- `GET /partials/breadcrumbs?path=...`
 - `POST /actions/mkdir`
 - `POST /actions/rename`
 - `POST /actions/move`

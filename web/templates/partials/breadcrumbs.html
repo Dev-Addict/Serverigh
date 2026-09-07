@@ -1,0 +1,24 @@
+<nav
+	id="breadcrumbs-region"
+	class="breadcrumbs"
+	aria-label="Breadcrumbs"
+	{{ if .OOB }}hx-swap-oob="true"{{ end }}>
+	<ol>
+		{{ range .Items }}
+		<li>
+			{{ if .Current }}
+			<span aria-current="page">{{ .Name }}</span>
+			{{ else }}
+			<a
+				href="/browse?path={{ .Path | urlquery }}"
+				hx-get="/partials/files?path={{ .Path | urlquery }}"
+				hx-target="#files-region"
+				hx-swap="innerHTML"
+				hx-push-url="/browse?path={{ .Path | urlquery }}">
+				{{ .Name }}
+			</a>
+			{{ end }}
+		</li>
+		{{ end }}
+	</ol>
+</nav>

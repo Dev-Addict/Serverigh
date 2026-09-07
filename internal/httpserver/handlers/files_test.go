@@ -123,3 +123,38 @@ func TestFilesReturnsHtmlErrorForHtmx(t *testing.T) {
 		t.Fatalf("expected rendered operational error, got %q", body)
 	}
 }
+
+func TestFilesHtmxResponseIncludesOutOfBandRegions(t *testing.T) {
+	root := t.TempDir()
+	writeTestFile(t, root, "note.txt", "hello")
+	h := testHandlersWithRoot(t, root)
+
+	app := fiber.New()
+	app.Get("/partials/files", h.Files)
+
+	resp, body := testRequestWithHeaders(
+		t,
+		app,
+		http.MethodGet,
+		"/partials/files?path=/",
+		map[string]string{"HX-Request": "true"},
+	)
+
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", resp.StatusCode)
+	}
+
+	expected := []string{
+		`id="path-summary"`,
+		`id="breadcrumbs-region"`,
+		`id="preview-region"`,
+		`id="status-row"`,
+		`hx-swap-oob=`,
+	}
+
+	for _, part := range expected {
+		if !strings.Contains(body, part) {
+			t.Fatalf("expected %q in htmx response, got %q", part, body)
+		}
+	}
+}

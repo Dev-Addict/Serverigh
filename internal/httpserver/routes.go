@@ -21,7 +21,7 @@ func (s Server) registerRoutes(app *fiber.App) {
 	app.Get("/healthz", s.handlers.Health)
 
 	app.Get("/partials/files", s.handlers.Files)
-	app.Get("/partials/breadcrumbs", s.handlers.NotImplemented)
+	app.Get("/partials/breadcrumbs", s.handlers.Breadcrumbs)
 	app.Get("/preview", s.handlers.Preview)
 	app.Get("/download", s.handlers.Download)
 	app.Get("/raw", s.handlers.Raw)
