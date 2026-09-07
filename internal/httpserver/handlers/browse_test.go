@@ -28,8 +28,12 @@ func TestBrowseRendersShell(t *testing.T) {
 		t.Fatalf("expected status 200, got %d", resp.StatusCode)
 	}
 
-	if !strings.Contains(body, "Serverigh is running.") {
+	if !strings.Contains(body, `class="app-shell"`) {
 		t.Fatalf("expected browse shell in response, got %q", body)
+	}
+
+	if !strings.Contains(body, "No file selected") {
+		t.Fatalf("expected empty preview state in response, got %q", body)
 	}
 
 	if strings.Contains(body, "<script>") {

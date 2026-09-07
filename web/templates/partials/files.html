@@ -1,7 +1,10 @@
 <section class="file-panel" data-path="{{ .Path }}">
 	<header class="panel-header">
-		<h2>Files</h2>
-		<p>{{ len .Entries }} entries in {{ .Path }}</p>
+		<div>
+			<h2>Files</h2>
+			<p>{{ len .Entries }} visible entries in {{ .Path }}</p>
+		</div>
+		<a class="quiet-link" href="/browse?path={{ .Path }}">Refresh</a>
 	</header>
 	{{ if .Truncated }}
 	<p class="notice">
@@ -14,25 +17,31 @@
 	<table class="file-table">
 		<thead>
 			<tr>
-				<th>Name</th>
-				<th>Kind</th>
-				<th>Size</th>
-				<th>Modified</th>
-				<th>Mode</th>
+				<th scope="col">Name</th>
+				<th scope="col">Kind</th>
+				<th scope="col">Size</th>
+				<th scope="col">Modified</th>
+				<th scope="col">Mode</th>
 			</tr>
 		</thead>
 		<tbody>
 			{{ range .Entries }}
 			<tr>
-				<td>
+				<td class="name-cell">
 					{{ if .IsDir }}
-					<a href="/browse?path={{ .Path }}">{{ .Name }}/</a>
+					<a class="entry-link folder-link" href="/browse?path={{ .Path }}">
+						<span class="entry-icon" aria-hidden="true"></span>
+						<span>{{ .Name }}/</span>
+					</a>
 					{{ else }}
-					<a href="/preview?path={{ .Path }}">{{ .Name }}</a>
+					<a class="entry-link file-link" href="/preview?path={{ .Path }}">
+						<span class="entry-icon" aria-hidden="true"></span>
+						<span>{{ .Name }}</span>
+					</a>
 					{{ end }}
 				</td>
 				<td>{{ .Kind }}</td>
-				<td>{{ .SizeLabel }}</td>
+				<td class="numeric-cell">{{ .SizeLabel }}</td>
 				<td>{{ .ModTimeLabel }}</td>
 				<td><code>{{ .Mode }}</code></td>
 			</tr>
@@ -40,6 +49,8 @@
 		</tbody>
 	</table>
 	{{ else }}
-	<p>This folder is empty.</p>
+	<div class="empty-folder">
+		<p>This folder is empty.</p>
+	</div>
 	{{ end }}
 </section>

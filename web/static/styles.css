@@ -1,3 +1,7 @@
+* {
+	box-sizing: border-box;
+}
+
 body {
 	margin: 0;
 	font-family:
@@ -9,35 +13,117 @@ body {
 		"Segoe UI",
 		sans-serif;
 	color: #172026;
-	background: #f5f7f8;
+	background: #eef1f3;
 }
 
-main {
-	max-width: 720px;
-	margin: 64px auto;
-	padding: 24px;
-	border: 1px solid #d7dee2;
-	border-radius: 8px;
+a {
+	color: #125c72;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.app-shell {
+	display: grid;
+	grid-template-rows: auto minmax(0, 1fr) auto;
+	min-height: 100vh;
+}
+
+.top-bar {
+	display: grid;
+	grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+	gap: 24px;
+	align-items: center;
+	padding: 14px 20px;
+	border-bottom: 1px solid #cfd8dd;
 	background: #ffffff;
 }
 
-dl {
-	display: grid;
-	grid-template-columns: max-content 1fr;
-	gap: 8px 16px;
+.brand-block {
+	min-width: 0;
 }
 
-dt {
-	font-weight: 700;
-}
-
-dd {
+.brand-name,
+.brand-subtitle,
+.path-summary,
+.panel-header p,
+.empty-preview-title,
+.empty-preview-copy,
+.status-row,
+.notice,
+.empty-folder p {
 	margin: 0;
-	overflow-wrap: anywhere;
+}
+
+.brand-name {
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+.brand-subtitle {
+	margin-top: 3px;
+	color: #65727a;
+	font-size: 13px;
+}
+
+.path-summary {
+	display: grid;
+	grid-template-columns: max-content minmax(0, 1fr);
+	gap: 4px 12px;
+	min-width: 0;
+	font-size: 13px;
+}
+
+.label {
+	color: #65727a;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.path-value {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.explorer {
+	display: grid;
+	grid-template-columns: minmax(420px, 52%) minmax(320px, 1fr);
+	min-height: 0;
+}
+
+.files-region,
+.preview-region {
+	min-width: 0;
+	min-height: 0;
+	overflow: auto;
+}
+
+.files-region {
+	border-right: 1px solid #cfd8dd;
+	background: #ffffff;
+}
+
+.preview-region {
+	background: #f7f8f6;
+}
+
+.file-panel,
+.preview-panel {
+	min-width: 0;
+	padding: 18px 20px;
 }
 
 .panel-header {
-	margin-bottom: 16px;
+	display: flex;
+	gap: 16px;
+	align-items: flex-start;
+	justify-content: space-between;
+	margin-bottom: 14px;
 }
 
 .panel-header h2 {
@@ -45,22 +131,147 @@ dd {
 }
 
 .panel-header p {
-	margin: 0;
 	color: #5a6872;
+	font-size: 13px;
+	overflow-wrap: anywhere;
+}
+
+.quiet-link {
+	flex: 0 0 auto;
+	min-height: 32px;
+	padding: 7px 10px;
+	border: 1px solid #cfd8dd;
+	border-radius: 6px;
+	background: #ffffff;
+	color: #263238;
+	font-size: 13px;
+	line-height: 1.2;
 }
 
 .file-table {
 	width: 100%;
 	border-collapse: collapse;
 	font-size: 14px;
+	table-layout: fixed;
 }
 
 .file-table th,
 .file-table td {
-	padding: 8px;
-	border-bottom: 1px solid #d7dee2;
+	padding: 9px 10px;
+	border-bottom: 1px solid #e1e6e9;
 	text-align: left;
-	vertical-align: top;
+	vertical-align: middle;
+}
+
+.file-table th {
+	color: #5a6872;
+	font-size: 12px;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.file-table th:nth-child(1) {
+	width: 42%;
+}
+
+.file-table th:nth-child(2) {
+	width: 13%;
+}
+
+.file-table th:nth-child(3) {
+	width: 14%;
+}
+
+.file-table th:nth-child(4) {
+	width: 19%;
+}
+
+.file-table th:nth-child(5) {
+	width: 12%;
+}
+
+.file-table tbody tr:hover {
+	background: #f4f8f9;
+}
+
+.name-cell,
+.file-table code {
+	overflow-wrap: anywhere;
+}
+
+.entry-link {
+	display: inline-flex;
+	max-width: 100%;
+	gap: 8px;
+	align-items: center;
+	font-weight: 600;
+}
+
+.entry-link span:last-child {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.entry-icon {
+	display: inline-flex;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
+	width: 18px;
+	height: 20px;
+	position: relative;
+}
+
+.folder-link .entry-icon::before {
+	position: absolute;
+	top: 4px;
+	left: 1px;
+	width: 16px;
+	height: 12px;
+	border-radius: 2px;
+	background: #739b78;
+	content: "";
+}
+
+.folder-link .entry-icon::after {
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 8px;
+	height: 4px;
+	border-radius: 2px 2px 0 0;
+	background: #739b78;
+	content: "";
+}
+
+.file-link .entry-icon::before {
+	position: absolute;
+	top: 2px;
+	left: 3px;
+	width: 12px;
+	height: 16px;
+	border: 1px solid #77909c;
+	border-radius: 2px;
+	background: #ffffff;
+	content: "";
+}
+
+.file-link .entry-icon::after {
+	position: absolute;
+	top: 2px;
+	right: 3px;
+	width: 5px;
+	height: 5px;
+	border-left: 1px solid #77909c;
+	border-bottom: 1px solid #77909c;
+	background: #e8eef1;
+	content: "";
+}
+
+.numeric-cell {
+	font-variant-numeric: tabular-nums;
 }
 
 .file-actions {
@@ -73,7 +284,7 @@ dd {
 .error-panel {
 	padding: 12px;
 	border: 1px solid #d7dee2;
-	border-radius: 8px;
+	border-radius: 6px;
 	background: #ffffff;
 }
 
@@ -82,12 +293,91 @@ dd {
 	background: #fff7f5;
 }
 
+.empty-preview {
+	display: grid;
+	min-height: 100%;
+	padding: 24px;
+	place-items: center;
+	color: #65727a;
+	text-align: center;
+}
+
+.empty-preview-title {
+	color: #263238;
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.empty-preview-copy {
+	max-width: 46ch;
+	margin-top: 6px;
+	overflow-wrap: anywhere;
+	line-height: 1.5;
+}
+
+.empty-folder {
+	display: grid;
+	min-height: 220px;
+	place-items: center;
+	border: 1px dashed #cfd8dd;
+	border-radius: 6px;
+	color: #65727a;
+}
+
+.status-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 18px;
+	align-items: center;
+	min-height: 36px;
+	padding: 8px 20px;
+	border-top: 1px solid #cfd8dd;
+	background: #263238;
+	color: #edf2f4;
+	font-size: 12px;
+}
+
 .text-preview {
 	overflow: auto;
 	max-height: 70vh;
 	padding: 16px;
 	border: 1px solid #d7dee2;
-	border-radius: 8px;
+	border-radius: 6px;
 	background: #f8fafb;
 	white-space: pre-wrap;
+}
+
+@media (max-width: 900px) {
+	.top-bar,
+	.explorer {
+		grid-template-columns: 1fr;
+	}
+
+	.files-region {
+		border-right: 0;
+		border-bottom: 1px solid #cfd8dd;
+	}
+
+	.preview-region {
+		min-height: 320px;
+	}
+}
+
+@media (max-width: 640px) {
+	.top-bar,
+	.file-panel,
+	.preview-panel,
+	.empty-preview,
+	.status-row {
+		padding-right: 14px;
+		padding-left: 14px;
+	}
+
+	.file-table {
+		min-width: 720px;
+	}
+
+	.file-panel {
+		overflow-x: auto;
+	}
 }

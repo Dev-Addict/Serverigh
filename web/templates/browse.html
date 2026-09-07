@@ -7,19 +7,47 @@
 	<link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-	<main>
-		<p>Serverigh is running.</p>
-		<dl>
-			<dt>Root</dt>
-			<dd>{{ .Root }}</dd>
-			<dt>Path</dt>
-			<dd>{{ .Path }}</dd>
-			<dt>Mode</dt>
-			<dd>{{ .Mode }}</dd>
-		</dl>
+	<div class="app-shell">
+		<header class="top-bar">
+			<div class="brand-block">
+				<p class="brand-name">Serverigh</p>
+				<p class="brand-subtitle">{{ .Mode }}</p>
+			</div>
+			<div class="path-summary" aria-label="Current filesystem location">
+				<span class="label">Root</span>
+				<span class="path-value">{{ .Root }}</span>
+				<span class="label">Path</span>
+				<span class="path-value">{{ .Path }}</span>
+			</div>
+		</header>
 
-		{{ template "files.html" .Listing }}
-	</main>
+		<main class="explorer" aria-label="File explorer">
+			<section class="files-region" aria-label="Directory listing">
+				{{ template "files.html" .Listing }}
+			</section>
+
+			<aside class="preview-region" aria-label="Preview">
+				<section class="empty-preview" data-path="{{ .Path }}">
+					<div>
+						<p class="empty-preview-title">No file selected</p>
+						<p class="empty-preview-copy">
+							Select a file from {{ .Path }} to inspect metadata and
+							preview supported content.
+						</p>
+					</div>
+				</section>
+			</aside>
+		</main>
+
+		<footer class="status-row">
+			<span>{{ .StatusLabel }}</span>
+			<span>{{ .ItemCount }} visible entries</span>
+			{{ if .Listing.Truncated }}
+			<span>Limited to {{ .Listing.EntryLimit }} entries</span>
+			{{ end }}
+			<span>{{ .Mode }}</span>
+		</footer>
+	</div>
 	<script src="/static/app.js"></script>
 </body>
 </html>
