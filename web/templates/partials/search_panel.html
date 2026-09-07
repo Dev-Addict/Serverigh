@@ -1,0 +1,69 @@
+<section class="file-panel search-panel">
+	<header class="panel-header">
+		<div>
+			<h2>Search results</h2>
+			<p>{{ len .Results }} matches for "{{ .Query }}"</p>
+		</div>
+	</header>
+
+	{{ if .Results }}
+	<table class="file-table search-results-table">
+		<thead>
+			<tr>
+				<th scope="col">Name</th>
+				<th scope="col">Size</th>
+				<th scope="col">Modified</th>
+				<th scope="col">Created</th>
+				<th scope="col">Mode</th>
+				<th scope="col">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{ range .Results }}
+			<tr>
+				<td class="name-cell">
+					{{ if .IsDir }}
+					<a
+						class="entry-link folder-link"
+						href="{{ .BrowseURL }}"
+						hx-get="{{ .FilesURL }}"
+						hx-target="#files-region"
+						hx-swap="innerHTML"
+						hx-push-url="{{ .BrowseURL }}">
+						<span class="entry-icon" aria-hidden="true"></span>
+						<span>{{ .Name }}/</span>
+					</a>
+					{{ else }}
+					<a
+						class="entry-link file-link"
+						href="{{ .BrowseURL }}"
+						data-search-preview-link
+						data-preview-url="{{ .PreviewURL }}">
+						<span class="entry-icon" aria-hidden="true"></span>
+						<span>{{ .Name }}</span>
+					</a>
+					{{ end }}
+					<span class="search-entry-path">{{ .Kind }} in {{ .ParentPath }}</span>
+				</td>
+				<td class="numeric-cell">{{ .SizeLabel }}</td>
+				<td>{{ .ModTimeLabel }}</td>
+				<td>{{ .CreatedLabel }}</td>
+				<td><code>{{ .Mode }}</code></td>
+				<td>
+					<div class="path-actions" aria-label="Search result actions">
+						<a class="copy-button" href="{{ .BrowseURL }}" title="Go">Go</a>
+					</div>
+				</td>
+			</tr>
+			{{ end }}
+		</tbody>
+	</table>
+	{{ if .Truncated }}
+	<p class="notice">Showing top matches from the scanned entries.</p>
+	{{ end }}
+	{{ else }}
+	<div class="empty-folder">
+		<p>No matches.</p>
+	</div>
+	{{ end }}
+</section>

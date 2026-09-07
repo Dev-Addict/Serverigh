@@ -56,6 +56,8 @@ Ship these as required first-version capabilities:
 - Native previews for images, PDFs, audio, and video where browser support is
   enough.
 - Hidden-file behavior that is explicit and stable.
+- Fuzzy filename search with `fastwalk`, `sahilm/fuzzy`, and
+  current-folder/subtree ranking.
 - Health endpoint for smoke checks.
 - Focused tests for filesystem safety, handlers, previews, and URL behavior.
 
@@ -166,6 +168,7 @@ Tasks:
 - Add sorting by name, size, modified time, and created time when known.
 - Add client-visible sort state in URLs or HTMX request parameters.
 - Add copy actions for relative and absolute paths.
+- Add a search bar that ranks current-folder and subtree matches first.
 - Add keyboard basics: arrow navigation, enter to open, and backspace to parent.
 
 Acceptance criteria:
@@ -173,14 +176,15 @@ Acceptance criteria:
 - Sorting is deterministic and tested.
 - Hidden files are never shown by accident when the option is disabled.
 - Copy actions use small controls and work without a frontend build step.
+- File search results open the parent folder and selected file preview.
 
 ## Milestone 6: Search Within Root
 
-Goal: provide useful search while keeping safety and performance predictable.
+Goal: extend search while keeping safety and performance predictable.
 
 Tasks:
 
-- Start with filename search under the configured root.
+- Keep filename search bounded and ranked by the active folder.
 - Add result limits and clear truncation messaging.
 - Exclude hidden files unless hidden-file mode is enabled.
 - Add bounded text-content search only after filename search is stable.

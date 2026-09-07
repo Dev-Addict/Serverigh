@@ -6,6 +6,7 @@ type FilesUpdateView struct {
 	Listing     FilesView
 	PathSummary PathSummaryView
 	Breadcrumbs BreadcrumbsView
+	Search      SearchBoxView
 	EmptyState  EmptyPreviewView
 	Status      StatusView
 }
@@ -30,6 +31,7 @@ func (h Handlers) Files(c *fiber.Ctx) error {
 				OOB:  true,
 			},
 			Breadcrumbs: breadcrumbsView(listing.Path, true),
+			Search:      searchBoxView(listing.Path, listing.Options, true),
 			EmptyState: EmptyPreviewView{
 				Path: listing.Path,
 			},

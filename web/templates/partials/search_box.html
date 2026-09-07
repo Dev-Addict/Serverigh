@@ -1,0 +1,23 @@
+<div
+	id="search-region"
+	class="search-region"
+	role="search"
+	{{ if .OOB }}hx-swap-oob="true"{{ end }}>
+	<input type="hidden" name="path" value="{{ .Path }}">
+	<input type="hidden" name="sort" value="{{ .Sort }}">
+	<input type="hidden" name="dir" value="{{ .Direction }}">
+	<label class="search-label" for="global-search">Search</label>
+	<input
+		id="global-search"
+		class="search-input"
+		type="search"
+		name="q"
+		autocomplete="off"
+		placeholder="Search files"
+		hx-get="/partials/search"
+		hx-trigger="input changed delay:150ms, search"
+		hx-target="#files-region"
+		hx-include="#search-region input"
+		hx-swap="innerHTML"
+		hx-sync="#search-region:replace">
+</div>

@@ -43,13 +43,15 @@ Implemented:
 - [x] HTMX navigation for folder browsing, file preview updates, and
   breadcrumbs.
 - [x] URL-backed state for reload, back, and forward navigation.
+- [x] Fuzzy filename search with `fastwalk`, `sahilm/fuzzy`,
+  current-folder ranking, and preview links.
 - [x] Table sorting, config-driven hidden-file visibility, and copy-path
   actions.
 - [x] Health endpoint, Makefile workflow, and backend test coverage.
 
 Planned for the first version:
 
-- [ ] Search within the configured root, starting with filenames.
+- [ ] Limited text-content search within the configured root.
 - [ ] Keyboard navigation and improved metadata views.
 - [ ] Opt-in write-mode workflows with confirmations and trash-first delete.
 - [ ] Bulk selection, archive downloads, and file refresh behavior.
@@ -196,6 +198,7 @@ The current test suite covers:
 - Filesystem path safety.
 - Directory listing.
 - Hidden-file behavior.
+- Fuzzy filename search.
 - Creation-time behavior.
 - Bounded previews.
 - HTTP route wiring.

@@ -51,9 +51,12 @@ minimal client state, and no heavy frontend build step.
 - Copy path.
   Priority: should have. Copy relative and absolute paths from a compact icon
   button with a tooltip.
+- Fuzzy filename search.
+  Priority: must have. Search as the user types, rank current-folder matches
+  first, and open file results in their parent directory with preview selected.
 - Config-driven hidden-file visibility.
-  Priority: should have. Show or hide dotfiles and persist the preference per
-  browser session.
+  Priority: should have. Show or hide dotfiles based only on server
+  configuration.
 - Read-only mode.
   Priority: must have. Disable rename, delete, move, upload, and edit by
   default.
@@ -63,9 +66,8 @@ minimal client state, and no heavy frontend build step.
 
 ## Version 1 Features
 
-- Search within root.
-  Priority: high. Search filenames first, then add limited text-content search
-  under the configured root.
+- Text-content search.
+  Priority: high. Add limited text-content search under the configured root.
 - File metadata drawer.
   Priority: high. Show owner, permissions, mime type, line count, dimensions,
   and checksums where cheap. Compute expensive fields lazily.

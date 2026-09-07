@@ -106,7 +106,7 @@ Future write-mode routes:
 
 The main screen should be a dense file-explorer workspace:
 
-- Top bar: root selector, current path, search field, view controls.
+- Top bar: root selector, current path, search field, and view controls.
 - Left/sidebar area: folder tree or quick roots.
 - Main area: sortable file table.
 - Preview pane: selected file preview, metadata, and actions.
@@ -118,6 +118,9 @@ HTMX behavior:
 - Folder clicks update the file table, breadcrumbs, preview pane, and URL.
 - File clicks update the preview pane and URL.
 - Sorting updates the file table without full reload.
+- Search updates ranked result suggestions as the user types.
+- Filename search uses `fastwalk` for traversal and `sahilm/fuzzy` for fuzzy
+  matching.
 - Back and forward navigation restore the folder/file view.
 
 ## Preview Rules

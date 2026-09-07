@@ -40,6 +40,14 @@ func TestBrowseRendersShell(t *testing.T) {
 		t.Fatalf("expected toast region in response, got %q", body)
 	}
 
+	if !strings.Contains(body, `id="search-region"`) {
+		t.Fatalf("expected search region in response, got %q", body)
+	}
+
+	if strings.Contains(body, "<form") {
+		t.Fatalf("expected search control to be non-submittable, got %q", body)
+	}
+
 	if !strings.Contains(body, "No file selected") {
 		t.Fatalf("expected empty preview state in response, got %q", body)
 	}

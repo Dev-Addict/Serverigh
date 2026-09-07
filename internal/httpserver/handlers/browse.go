@@ -13,6 +13,7 @@ type BrowseView struct {
 	Listing     FilesView
 	PathSummary PathSummaryView
 	Breadcrumbs BreadcrumbsView
+	Search      SearchBoxView
 	EmptyState  EmptyPreviewView
 	Status      StatusView
 	Preview     *filesystem.Preview
@@ -49,6 +50,7 @@ func (h Handlers) Browse(c *fiber.Ctx) error {
 			Path: listing.Path,
 		},
 		Breadcrumbs: breadcrumbsView(listing.Path, false),
+		Search:      searchBoxView(listing.Path, listing.Options, false),
 		EmptyState: EmptyPreviewView{
 			Path: listing.Path,
 		},

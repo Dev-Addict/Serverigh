@@ -51,7 +51,7 @@
 }
 
 .file-table th:nth-child(1) {
-  width: 36%;
+  width: 32%;
 }
 
 .file-table th:nth-child(2) {
@@ -71,7 +71,7 @@
 }
 
 .file-table th:nth-child(6) {
-  width: 8%;
+  width: 12%;
 }
 
 .sort-link {

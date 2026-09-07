@@ -61,6 +61,11 @@ func TestRoutesWireCoreHandlers(t *testing.T) {
 			status: http.StatusOK,
 		},
 		{
+			name:   "search",
+			path:   "/partials/search?path=/&q=note",
+			status: http.StatusOK,
+		},
+		{
 			name:   "preview",
 			path:   "/preview?path=/note.txt",
 			header: map[string]string{"HX-Request": "true"},

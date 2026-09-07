@@ -160,6 +160,7 @@ func TestFilesHtmxResponseIncludesOutOfBandRegions(t *testing.T) {
 	expected := []string{
 		`id="path-summary"`,
 		`id="breadcrumbs-region"`,
+		`id="search-region"`,
 		`id="preview-region"`,
 		`id="status-row"`,
 		`hx-swap-oob=`,

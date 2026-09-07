@@ -8,7 +8,7 @@ GO_VERSION ?= 1.23.0
 GOCACHE ?= /tmp/serverigh-go-build
 GOMODCACHE ?= /tmp/serverigh-go-mod
 
-ROOT ?= /
+ROOT ?= /home/devaddict/Work
 HOST ?= 127.0.0.1
 PORT ?= 4173
 

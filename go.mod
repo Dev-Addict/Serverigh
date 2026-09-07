@@ -4,8 +4,10 @@ go 1.23.0
 
 require (
 	github.com/alecthomas/chroma/v2 v2.20.0
+	github.com/charlievieth/fastwalk v1.0.14
 	github.com/gofiber/fiber/v2 v2.52.13
 	github.com/russross/blackfriday/v2 v2.1.0
+	github.com/sahilm/fuzzy v0.1.1
 	github.com/urfave/cli/v2 v2.27.7
 	golang.org/x/sys v0.28.0
 )
@@ -16,6 +18,7 @@ require (
 	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
+	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
