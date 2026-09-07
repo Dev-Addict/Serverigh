@@ -3,6 +3,13 @@
 	class="breadcrumbs"
 	aria-label="Breadcrumbs"
 	{{ if .OOB }}hx-swap-oob="true"{{ end }}>
+	<a
+		id="breadcrumb-back"
+		href="/browse?path={{ .BackPath | urlquery }}"
+		data-history-back
+		role="button"
+		aria-label="Go back"
+		title="Go back">&larr;</a>
 	<ol>
 		{{ range .Items }}
 		<li>

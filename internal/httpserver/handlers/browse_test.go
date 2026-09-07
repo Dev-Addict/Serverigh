@@ -32,6 +32,10 @@ func TestBrowseRendersShell(t *testing.T) {
 		t.Fatalf("expected browse shell in response, got %q", body)
 	}
 
+	if !strings.Contains(body, `hx-history-elt`) {
+		t.Fatalf("expected htmx history element in response, got %q", body)
+	}
+
 	if !strings.Contains(body, "No file selected") {
 		t.Fatalf("expected empty preview state in response, got %q", body)
 	}
@@ -109,6 +113,14 @@ func TestBrowseIncludesHtmxNavigation(t *testing.T) {
 
 	if !strings.Contains(body, `hx-target="#preview-region"`) {
 		t.Fatalf("expected preview htmx target in response, got %q", body)
+	}
+
+	if !strings.Contains(body, `href="/browse?path=%2F&file=%2Fnote.txt"`) {
+		t.Fatalf("expected file link to preserve browse URL state, got %q", body)
+	}
+
+	if !strings.Contains(body, `hx-get="/preview?path=%2Fnote.txt"`) {
+		t.Fatalf("expected file link to fetch preview partial, got %q", body)
 	}
 }
 

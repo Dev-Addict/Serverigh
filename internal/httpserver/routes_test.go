@@ -32,6 +32,7 @@ func TestRoutesWireCoreHandlers(t *testing.T) {
 	tests := []struct {
 		name   string
 		path   string
+		header map[string]string
 		status int
 	}{
 		{
@@ -62,6 +63,7 @@ func TestRoutesWireCoreHandlers(t *testing.T) {
 		{
 			name:   "preview",
 			path:   "/preview?path=/note.txt",
+			header: map[string]string{"HX-Request": "true"},
 			status: http.StatusOK,
 		},
 		{
@@ -89,6 +91,10 @@ func TestRoutesWireCoreHandlers(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			req := httptest.NewRequest(http.MethodGet, tt.path, nil)
+			for key, value := range tt.header {
+				req.Header.Set(key, value)
+			}
+
 			resp, err := app.Test(req)
 			if err != nil {
 				t.Fatalf("test request: %v", err)

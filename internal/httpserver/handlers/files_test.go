@@ -91,9 +91,16 @@ func TestFilesEscapesEntryLinks(t *testing.T) {
 
 	if !strings.Contains(
 		strings.ToLower(body),
-		"/preview?path=%2fa%3fb%23c%26d.txt",
+		"/browse?path=%2f&file=%2fa%3fb%23c%26d.txt",
 	) {
-		t.Fatalf("expected escaped preview path, got %q", body)
+		t.Fatalf("expected escaped browse file path, got %q", body)
+	}
+
+	if !strings.Contains(
+		strings.ToLower(body),
+		`hx-get="/preview?path=%2fa%3fb%23c%26d.txt"`,
+	) {
+		t.Fatalf("expected escaped htmx preview path, got %q", body)
 	}
 }
 

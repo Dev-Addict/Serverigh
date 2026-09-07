@@ -63,11 +63,14 @@
 }
 
 .breadcrumbs {
+  display: flex;
   position: fixed;
   z-index: 29;
   top: var(--serverigh-top-bar-height);
   right: 0;
   left: 0;
+  gap: 10px;
+  align-items: center;
   padding: 8px 20px;
   border-bottom: 1px solid #dce3e6;
   background: #f9fbfb;
@@ -75,9 +78,11 @@
 
 .breadcrumbs ol {
   display: flex;
+  flex: 1 1 auto;
   flex-wrap: wrap;
   gap: 4px;
   align-items: center;
+  min-width: 0;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -109,6 +114,21 @@
 .breadcrumbs span[aria-current="page"] {
   color: #263238;
   font-weight: 700;
+}
+
+#breadcrumb-back {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #cfd8dd;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #263238;
+  font-size: 18px;
+  line-height: 1;
 }
 
 .htmx-request .entry-link,

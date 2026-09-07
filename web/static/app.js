@@ -80,5 +80,26 @@
     }
   });
 
+  document.addEventListener("click", (event) => {
+    if (!(event.target instanceof Element)) {
+      return;
+    }
+
+    const backLink = event.target.closest("[data-history-back]");
+    if (!backLink) {
+      return;
+    }
+
+    event.preventDefault();
+    if (window.history.length > 1) {
+      window.history.back();
+
+      return;
+    }
+
+    window.location.assign(backLink.href);
+  });
+
   document.addEventListener("htmx:afterSettle", queuePreviewOffsetUpdate);
+  document.addEventListener("htmx:historyRestore", queuePreviewOffsetUpdate);
 })();

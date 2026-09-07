@@ -20,7 +20,7 @@ func TestPreviewRendersBoundedFilePreview(t *testing.T) {
 	app := fiber.New()
 	app.Get("/preview", h.Preview)
 
-	resp, body := testRequest(t, app, http.MethodGet, "/preview?path=/note.txt")
+	resp, body := previewRequest(t, app, "/preview?path=/note.txt")
 
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("expected status 200, got %d", resp.StatusCode)
@@ -52,7 +52,7 @@ func TestPreviewRejectsDirectory(t *testing.T) {
 	app := fiber.New()
 	app.Get("/preview", h.Preview)
 
-	resp, _ := testRequest(t, app, http.MethodGet, "/preview?path=/")
+	resp, _ := previewRequest(t, app, "/preview?path=/")
 
 	if resp.StatusCode != http.StatusBadRequest {
 		t.Fatalf("expected status 400, got %d", resp.StatusCode)
@@ -64,13 +64,13 @@ func TestPreviewReturnsOperationalErrorCode(t *testing.T) {
 	app := fiber.New()
 	app.Get("/preview", h.Preview)
 
-	resp, body := testRequest(t, app, http.MethodGet, "/preview?path=/")
+	resp, body := previewRequest(t, app, "/preview?path=/")
 
 	if resp.StatusCode != http.StatusBadRequest {
 		t.Fatalf("expected status 400, got %d", resp.StatusCode)
 	}
 
-	if !strings.Contains(body, `"code":"is_directory"`) {
+	if !strings.Contains(body, `data-error-code="is_directory"`) {
 		t.Fatalf("expected is directory code, got %q", body)
 	}
 }
@@ -83,12 +83,7 @@ func TestPreviewEscapesActionLinks(t *testing.T) {
 	app := fiber.New()
 	app.Get("/preview", h.Preview)
 
-	resp, body := testRequest(
-		t,
-		app,
-		http.MethodGet,
-		"/preview?path=%2Fa%3Fb%23c%26d.txt",
-	)
+	resp, body := previewRequest(t, app, "/preview?path=%2Fa%3Fb%23c%26d.txt")
 
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("expected status 200, got %d", resp.StatusCode)
@@ -120,7 +115,7 @@ func TestPreviewRendersMarkdownHTML(t *testing.T) {
 	app := fiber.New()
 	app.Get("/preview", h.Preview)
 
-	resp, body := testRequest(t, app, http.MethodGet, "/preview?path=/README.md")
+	resp, body := previewRequest(t, app, "/preview?path=/README.md")
 
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("expected status 200, got %d", resp.StatusCode)
@@ -147,7 +142,7 @@ func TestPreviewRendersCSVTable(t *testing.T) {
 	app := fiber.New()
 	app.Get("/preview", h.Preview)
 
-	resp, body := testRequest(t, app, http.MethodGet, "/preview?path=/data.csv")
+	resp, body := previewRequest(t, app, "/preview?path=/data.csv")
 
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("expected status 200, got %d", resp.StatusCode)
@@ -170,7 +165,7 @@ func TestPreviewRendersPrettyJSON(t *testing.T) {
 	app := fiber.New()
 	app.Get("/preview", h.Preview)
 
-	resp, body := testRequest(t, app, http.MethodGet, "/preview?path=/data.json")
+	resp, body := previewRequest(t, app, "/preview?path=/data.json")
 
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("expected status 200, got %d", resp.StatusCode)
@@ -193,7 +188,7 @@ func TestPreviewRendersHighlightedCode(t *testing.T) {
 	app := fiber.New()
 	app.Get("/preview", h.Preview)
 
-	resp, body := testRequest(t, app, http.MethodGet, "/preview?path=/main.go")
+	resp, body := previewRequest(t, app, "/preview?path=/main.go")
 
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("expected status 200, got %d", resp.StatusCode)
@@ -225,7 +220,7 @@ func TestPreviewRendersImagePreview(t *testing.T) {
 	app := fiber.New()
 	app.Get("/preview", h.Preview)
 
-	resp, body := testRequest(t, app, http.MethodGet, "/preview?path=/image.png")
+	resp, body := previewRequest(t, app, "/preview?path=/image.png")
 
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("expected status 200, got %d", resp.StatusCode)
@@ -255,7 +250,7 @@ func TestPreviewHidesReadLimitNoticeForLargeImage(t *testing.T) {
 	app := fiber.New()
 	app.Get("/preview", h.Preview)
 
-	resp, body := testRequest(t, app, http.MethodGet, "/preview?path=/image.png")
+	resp, body := previewRequest(t, app, "/preview?path=/image.png")
 
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("expected status 200, got %d", resp.StatusCode)
@@ -280,7 +275,7 @@ func TestPreviewHidesReadLimitNoticeForLargeVideo(t *testing.T) {
 	app := fiber.New()
 	app.Get("/preview", h.Preview)
 
-	resp, body := testRequest(t, app, http.MethodGet, "/preview?path=/movie.mp4")
+	resp, body := previewRequest(t, app, "/preview?path=/movie.mp4")
 
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("expected status 200, got %d", resp.StatusCode)
@@ -303,7 +298,7 @@ func TestPreviewRendersBinaryDetails(t *testing.T) {
 	app := fiber.New()
 	app.Get("/preview", h.Preview)
 
-	resp, body := testRequest(t, app, http.MethodGet, "/preview?path=/archive.bin")
+	resp, body := previewRequest(t, app, "/preview?path=/archive.bin")
 
 	if resp.StatusCode != http.StatusOK {
 		t.Fatalf("expected status 200, got %d", resp.StatusCode)
@@ -316,4 +311,42 @@ func TestPreviewRendersBinaryDetails(t *testing.T) {
 	if !strings.Contains(body, "Preview is not available") {
 		t.Fatalf("expected binary message, got %q", body)
 	}
+}
+
+func TestPreviewRedirectsDirectRequestsToBrowseState(t *testing.T) {
+	h := testHandlers(t)
+	app := fiber.New()
+	app.Get("/preview", h.Preview)
+
+	resp, _ := testRequest(
+		t,
+		app,
+		http.MethodGet,
+		"/preview?path=/docs/note.txt",
+	)
+
+	if resp.StatusCode != http.StatusFound {
+		t.Fatalf("expected status 302, got %d", resp.StatusCode)
+	}
+
+	expected := "/browse?path=%2Fdocs&file=%2Fdocs%2Fnote.txt"
+	if location := resp.Header.Get("Location"); location != expected {
+		t.Fatalf("expected redirect %q, got %q", expected, location)
+	}
+}
+
+func previewRequest(
+	t *testing.T,
+	app *fiber.App,
+	path string,
+) (*http.Response, string) {
+	t.Helper()
+
+	return testRequestWithHeaders(
+		t,
+		app,
+		http.MethodGet,
+		path,
+		map[string]string{"HX-Request": "true"},
+	)
 }

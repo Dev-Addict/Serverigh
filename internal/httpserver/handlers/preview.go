@@ -3,7 +3,15 @@ package handlers
 import "github.com/gofiber/fiber/v2"
 
 func (h Handlers) Preview(c *fiber.Ctx) error {
-	preview, err := h.files.Preview(c.Query("path", "/"))
+	filePath := c.Query("path", "/")
+	if c.Get("HX-Request") != "true" {
+		return c.Redirect(
+			browseURLWithFile(folderForFile(filePath), filePath),
+			fiber.StatusFound,
+		)
+	}
+
+	preview, err := h.files.Preview(filePath)
 	if err != nil {
 		return h.writeOperationalError(c, err)
 	}

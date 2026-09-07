@@ -49,7 +49,7 @@
 					{{ else }}
 					<a
 						class="entry-link file-link"
-						href="/preview?path={{ .Path | urlquery }}"
+						href="/browse?path={{ $.Path | urlquery }}&file={{ .Path | urlquery }}"
 						hx-get="/preview?path={{ .Path | urlquery }}"
 						hx-target="#preview-region"
 						hx-swap="innerHTML"

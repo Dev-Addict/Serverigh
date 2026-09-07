@@ -42,11 +42,11 @@ Implemented:
 - [x] Explorer shell with top bar, file table, preview pane, and status row.
 - [x] HTMX navigation for folder browsing, file preview updates, and
   breadcrumbs.
+- [x] URL-backed state for reload, back, and forward navigation.
 - [x] Health endpoint, Makefile workflow, and backend test coverage.
 
 Planned for the first version:
 
-- [ ] URL-backed state for reload, back, and forward navigation.
 - [ ] Table controls for sorting, filtering, hidden files, and copy-path
   actions.
 - [ ] Search within the configured root, starting with filenames.

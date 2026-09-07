@@ -28,10 +28,7 @@ func (h Handlers) Files(c *fiber.Ctx) error {
 				Path: listing.Path,
 				OOB:  true,
 			},
-			Breadcrumbs: BreadcrumbsView{
-				Items: breadcrumbsForPath(listing.Path),
-				OOB:   true,
-			},
+			Breadcrumbs: breadcrumbsView(listing.Path, true),
 			EmptyState: EmptyPreviewView{
 				Path: listing.Path,
 			},

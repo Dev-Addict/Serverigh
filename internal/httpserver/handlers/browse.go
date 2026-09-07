@@ -45,9 +45,7 @@ func (h Handlers) Browse(c *fiber.Ctx) error {
 			Root: h.config.Root,
 			Path: listing.Path,
 		},
-		Breadcrumbs: BreadcrumbsView{
-			Items: breadcrumbsForPath(listing.Path),
-		},
+		Breadcrumbs: breadcrumbsView(listing.Path, false),
 		EmptyState: EmptyPreviewView{
 			Path: listing.Path,
 		},

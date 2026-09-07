@@ -10,8 +10,9 @@ import (
 )
 
 type BreadcrumbsView struct {
-	Items []Breadcrumb
-	OOB   bool
+	BackPath string
+	Items    []Breadcrumb
+	OOB      bool
 }
 
 type Breadcrumb struct {
@@ -31,8 +32,17 @@ func (h Handlers) Breadcrumbs(c *fiber.Ctx) error {
 	}
 
 	return h.render(c, "breadcrumbs.html", BreadcrumbsView{
-		Items: breadcrumbsForPath(resolved.Path),
+		BackPath: parentPath(resolved.Path),
+		Items:    breadcrumbsForPath(resolved.Path),
 	})
+}
+
+func breadcrumbsView(activePath string, oob bool) BreadcrumbsView {
+	return BreadcrumbsView{
+		BackPath: parentPath(activePath),
+		Items:    breadcrumbsForPath(activePath),
+		OOB:      oob,
+	}
 }
 
 func breadcrumbsForPath(activePath string) []Breadcrumb {
