@@ -1,31 +1,111 @@
 <section class="preview-panel" data-path="{{ .Path }}">
-	<header class="panel-header">
-		<h2>{{ .Name }}</h2>
-		<p>
-			{{ .SizeLabel }}
-			<span aria-hidden="true">/</span>
-			{{ .MIMEType }}
-			<span aria-hidden="true">/</span>
-			Created {{ .CreatedTimeLabel }}
-			<span aria-hidden="true">/</span>
-			Modified {{ .ModifiedTimeLabel }}
+	<div class="preview-chrome">
+		<header class="panel-header">
+			<h2>{{ .Name }}</h2>
+			<p>
+				{{ .SizeLabel }}
+				<span aria-hidden="true">/</span>
+				{{ .MIMEType }}
+				<span aria-hidden="true">/</span>
+				Created {{ .CreatedTimeLabel }}
+				<span aria-hidden="true">/</span>
+				Modified {{ .ModifiedTimeLabel }}
+			</p>
+		</header>
+
+		<nav class="file-actions" aria-label="File actions">
+			<a href="/raw?path={{ .Path | urlquery }}">Raw</a>
+			<a href="/download?path={{ .Path | urlquery }}">Download</a>
+		</nav>
+	</div>
+
+	<div class="preview-body preview-body-{{ .Kind }}">
+		{{ if .ShowTruncated }}
+		<p class="notice">
+			Preview truncated after {{ .BytesRead }} bytes. Use raw or download
+			to read the whole file.
 		</p>
-	</header>
+		{{ end }}
 
-	<nav class="file-actions" aria-label="File actions">
-		<a href="/raw?path={{ .Path }}">Raw</a>
-		<a href="/download?path={{ .Path }}">Download</a>
-	</nav>
-
-	{{ if .IsBinary }}
-	<p>Binary files cannot be previewed as text.</p>
-	{{ else }}
-	{{ if .Truncated }}
-	<p>
-		Preview truncated after {{ .BytesRead }} bytes. Use raw or download to
-		read the whole file.
-	</p>
-	{{ end }}
-	<pre class="text-preview"><code>{{ .Content }}</code></pre>
-	{{ end }}
+		{{ if eq .Kind "markdown" }}
+		<article class="markdown-preview">
+			{{ .HTMLContent }}
+		</article>
+		{{ else if eq .Kind "csv" }}
+		{{ if .ParseError }}
+		<p class="notice">
+			CSV parsing stopped: {{ .ParseError }}. Showing text fallback.
+		</p>
+		<pre class="text-preview"><code>{{ .Content }}</code></pre>
+		{{ else if .CSVRows }}
+		{{ if .CSVTruncated }}
+		<p class="notice">
+			Showing the first {{ .CSVRowLimit }} CSV rows. Use raw or download to
+			read the whole file.
+		</p>
+		{{ end }}
+		<div class="csv-preview" role="region" aria-label="CSV preview" tabindex="0">
+			<table>
+				<tbody>
+					{{ range .CSVRows }}
+					<tr>
+						{{ range . }}
+						<td>{{ . }}</td>
+						{{ end }}
+					</tr>
+					{{ end }}
+				</tbody>
+			</table>
+		</div>
+		{{ else }}
+		<p class="notice">This CSV file is empty.</p>
+		{{ end }}
+		{{ else if eq .Kind "json" }}
+		{{ if .ParseError }}
+		<p class="notice">
+			JSON parsing failed: {{ .ParseError }}. Showing text fallback.
+		</p>
+		{{ end }}
+		<pre class="text-preview code-preview"><code>{{ .Content }}</code></pre>
+		{{ else if eq .Kind "image" }}
+		<img
+			class="media-source image-source"
+			src="/raw?path={{ .Path | urlquery }}"
+			alt="{{ .Name }}">
+		{{ else if eq .Kind "pdf" }}
+		<iframe
+			class="media-source document-source"
+			src="/raw?path={{ .Path | urlquery }}"
+			title="{{ .Name }}">
+		</iframe>
+		{{ else if eq .Kind "audio" }}
+		<audio
+			class="media-source audio-source"
+			controls
+			src="/raw?path={{ .Path | urlquery }}">
+			<a href="/download?path={{ .Path | urlquery }}">Download audio</a>
+		</audio>
+		{{ else if eq .Kind "video" }}
+		<video
+			class="media-source video-source"
+			controls
+			src="/raw?path={{ .Path | urlquery }}">
+			<a href="/download?path={{ .Path | urlquery }}">Download video</a>
+		</video>
+		{{ else if .IsUnsupported }}
+		<div class="binary-preview">
+			<p>Preview is not available for this binary file.</p>
+			<dl>
+				<dt>Type</dt>
+				<dd>{{ .MIMEType }}</dd>
+				<dt>Size</dt>
+				<dd>{{ .SizeLabel }}</dd>
+				<dt>Mode</dt>
+				<dd><code>{{ .Mode }}</code></dd>
+			</dl>
+		</div>
+		{{ else }}
+		<pre class="text-preview code-preview"><code>{{ .Content }}</code></pre>
+		{{ end }}
+	</div>
 </section>

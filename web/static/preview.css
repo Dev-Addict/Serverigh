@@ -1,0 +1,255 @@
+.preview-panel {
+	display: block;
+	min-width: 0;
+	min-height: 0;
+	padding: 0;
+}
+
+.preview-chrome {
+	position: sticky;
+	top: 0;
+	z-index: 2;
+	padding: 18px 20px 12px;
+	border-bottom: 1px solid #d7dee2;
+	background: #f7f8f6;
+}
+
+.preview-chrome .panel-header {
+	margin-bottom: 12px;
+}
+
+.file-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-bottom: 0;
+}
+
+.file-actions a {
+	min-height: 32px;
+	padding: 7px 10px;
+	border: 1px solid #cfd8dd;
+	border-radius: 6px;
+	background: #ffffff;
+	color: #263238;
+	font-size: 13px;
+	line-height: 1.2;
+}
+
+.preview-body {
+	min-height: 0;
+	padding: 18px 20px;
+	overflow: visible;
+}
+
+.preview-body-csv {
+	display: grid;
+	height: calc(
+		100vh - var(--serverigh-preview-offset) -
+			var(--serverigh-footer-height) -
+			var(--serverigh-preview-chrome-height)
+	);
+	padding: 0;
+	overflow: hidden;
+}
+
+.preview-body-image,
+.preview-body-pdf,
+.preview-body-audio,
+.preview-body-video {
+	display: grid;
+	place-items: center;
+	height: calc(
+		100vh - var(--serverigh-preview-offset) -
+			var(--serverigh-footer-height) -
+			var(--serverigh-preview-chrome-height)
+	);
+}
+
+.notice,
+.error-panel {
+	padding: 12px;
+	border: 1px solid #d7dee2;
+	border-radius: 6px;
+	background: #ffffff;
+}
+
+.error-panel {
+	border-color: #d89a8d;
+	background: #fff7f5;
+}
+
+.empty-preview {
+	display: grid;
+	min-height: 100%;
+	padding: 24px;
+	place-items: center;
+	color: #65727a;
+	text-align: center;
+}
+
+.empty-preview-title {
+	color: #263238;
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.empty-preview-copy {
+	max-width: 46ch;
+	margin-top: 6px;
+	overflow-wrap: anywhere;
+	line-height: 1.5;
+}
+
+.text-preview {
+	overflow: auto;
+	max-height: none;
+	margin: 0;
+	padding: 16px;
+	border: 1px solid #d7dee2;
+	border-radius: 6px;
+	background: #f8fafb;
+	white-space: pre-wrap;
+}
+
+.code-preview {
+	font-size: 13px;
+	line-height: 1.5;
+	tab-size: 4;
+}
+
+.markdown-preview {
+	max-width: 82ch;
+	line-height: 1.6;
+}
+
+.markdown-preview h1,
+.markdown-preview h2,
+.markdown-preview h3 {
+	margin: 1.2em 0 0.45em;
+	line-height: 1.25;
+}
+
+.markdown-preview h1:first-child,
+.markdown-preview h2:first-child,
+.markdown-preview h3:first-child {
+	margin-top: 0;
+}
+
+.markdown-preview p,
+.markdown-preview ul,
+.markdown-preview ol,
+.markdown-preview blockquote,
+.markdown-preview pre,
+.markdown-preview table {
+	margin: 0 0 1em;
+}
+
+.markdown-preview blockquote {
+	padding-left: 14px;
+	border-left: 3px solid #9ab0b8;
+	color: #4f5f67;
+}
+
+.markdown-preview code {
+	padding: 1px 4px;
+	border-radius: 4px;
+	background: #e9eef0;
+	font-size: 0.92em;
+}
+
+.markdown-preview pre {
+	overflow: auto;
+	padding: 14px;
+	border: 1px solid #d7dee2;
+	border-radius: 6px;
+	background: #f8fafb;
+}
+
+.markdown-preview pre code {
+	padding: 0;
+	background: transparent;
+}
+
+.markdown-preview table,
+.csv-preview table {
+	width: max-content;
+	min-width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+}
+
+.markdown-preview th,
+.markdown-preview td,
+.csv-preview td {
+	max-width: 42ch;
+	padding: 8px 10px;
+	border: 1px solid #d7dee2;
+	vertical-align: top;
+	overflow-wrap: anywhere;
+}
+
+.markdown-preview th,
+.csv-preview tr:first-child td {
+	background: #edf3f4;
+	font-weight: 700;
+}
+
+.csv-preview {
+	overflow: auto;
+	width: 100%;
+	height: 100%;
+	min-height: 0;
+	max-width: 100%;
+	border: 0;
+	border-radius: 0;
+	background: #ffffff;
+}
+
+.media-source {
+	display: block;
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.image-source,
+.video-source {
+	object-fit: contain;
+}
+
+.document-source {
+	width: 100%;
+	height: 100%;
+	min-height: 420px;
+	border: 0;
+}
+
+.audio-source,
+.video-source {
+	width: min(100%, 840px);
+}
+
+.binary-preview {
+	align-self: start;
+	padding: 16px;
+	border: 1px solid #d7dee2;
+	border-radius: 6px;
+	background: #ffffff;
+}
+
+.binary-preview dl {
+	display: grid;
+	grid-template-columns: max-content minmax(0, 1fr);
+	gap: 8px 16px;
+	margin: 16px 0 0;
+}
+
+.binary-preview dt {
+	color: #65727a;
+	font-weight: 700;
+}
+
+.binary-preview dd {
+	margin: 0;
+	overflow-wrap: anywhere;
+}

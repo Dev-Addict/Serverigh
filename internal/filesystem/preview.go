@@ -2,15 +2,39 @@ package filesystem
 
 import (
 	"bytes"
+	"html/template"
 	"io"
+)
+
+type PreviewKind string
+
+const (
+	PreviewKindText     PreviewKind = "text"
+	PreviewKindMarkdown PreviewKind = "markdown"
+	PreviewKindCSV      PreviewKind = "csv"
+	PreviewKindJSON     PreviewKind = "json"
+	PreviewKindImage    PreviewKind = "image"
+	PreviewKindPDF      PreviewKind = "pdf"
+	PreviewKindAudio    PreviewKind = "audio"
+	PreviewKindVideo    PreviewKind = "video"
+	PreviewKindBinary   PreviewKind = "binary"
 )
 
 type Preview struct {
 	File
-	Content   string
-	BytesRead int64
-	Truncated bool
-	IsBinary  bool
+	Kind          PreviewKind
+	Content       string
+	HTMLContent   template.HTML
+	CSVRows       [][]string
+	CSVRowLimit   int
+	CSVTruncated  bool
+	ParseError    string
+	BytesRead     int64
+	Truncated     bool
+	ShowTruncated bool
+	IsBinary      bool
+	IsMedia       bool
+	IsUnsupported bool
 }
 
 func (s Service) Preview(requestPath string) (Preview, error) {
@@ -19,6 +43,14 @@ func (s Service) Preview(requestPath string) (Preview, error) {
 		return Preview{}, err
 	}
 	defer file.Close()
+
+	if mediaKind := mediaPreviewKind(file.Name, file.MIMEType); mediaKind != "" {
+		return Preview{
+			File:    file.File,
+			Kind:    mediaKind,
+			IsMedia: true,
+		}, nil
+	}
 
 	data, err := io.ReadAll(io.LimitReader(file.Handle, s.maxPreviewBytes+1))
 	if err != nil {
@@ -36,11 +68,43 @@ func (s Service) Preview(requestPath string) (Preview, error) {
 		content = string(bytes.ToValidUTF8(data, []byte("?")))
 	}
 
-	return Preview{
-		File:      file.File,
-		Content:   content,
-		BytesRead: int64(len(data)),
-		Truncated: truncated,
-		IsBinary:  isBinary,
-	}, nil
+	preview := Preview{
+		File:          file.File,
+		Content:       content,
+		BytesRead:     int64(len(data)),
+		Truncated:     truncated,
+		ShowTruncated: truncated,
+		IsBinary:      isBinary,
+	}
+
+	preview.classify()
+
+	return preview, nil
+}
+
+func (p *Preview) classify() {
+	if p.IsBinary {
+		p.Kind = PreviewKindBinary
+		p.IsUnsupported = true
+
+		return
+	}
+
+	switch previewKindFromName(p.Name) {
+	case PreviewKindMarkdown:
+		p.Kind = PreviewKindMarkdown
+		p.HTMLContent = renderMarkdown([]byte(p.Content))
+	case PreviewKindCSV:
+		p.Kind = PreviewKindCSV
+		p.CSVRows, p.CSVTruncated, p.ParseError = parseCSVPreview(
+			p.Name,
+			p.Content,
+		)
+		p.CSVRowLimit = maxCSVPreviewRows
+	case PreviewKindJSON:
+		p.Kind = PreviewKindJSON
+		p.Content, p.ParseError = prettyJSON(p.Content)
+	default:
+		p.Kind = PreviewKindText
+	}
 }

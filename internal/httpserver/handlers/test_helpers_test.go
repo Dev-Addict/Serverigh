@@ -102,12 +102,23 @@ func testRequestWithHeaders(
 func writeTestFile(t *testing.T, root string, name string, content string) {
 	t.Helper()
 
+	writeBytesTestFile(t, root, name, []byte(content))
+}
+
+func writeBytesTestFile(
+	t *testing.T,
+	root string,
+	name string,
+	content []byte,
+) {
+	t.Helper()
+
 	filename := filepath.Join(root, name)
 	if err := os.MkdirAll(filepath.Dir(filename), 0o755); err != nil {
 		t.Fatalf("create test directory: %v", err)
 	}
 
-	if err := os.WriteFile(filename, []byte(content), 0o644); err != nil {
+	if err := os.WriteFile(filename, content, 0o644); err != nil {
 		t.Fatalf("write test file: %v", err)
 	}
 }
