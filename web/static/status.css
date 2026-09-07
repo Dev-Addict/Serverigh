@@ -1,17 +1,17 @@
 .status-row {
-	display: flex;
-	position: fixed;
-	z-index: 30;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	flex-wrap: wrap;
-	gap: 8px 18px;
-	align-items: center;
-	min-height: 36px;
-	padding: 8px 20px;
-	border-top: 1px solid #cfd8dd;
-	background: #263238;
-	color: #edf2f4;
-	font-size: 12px;
+  display: flex;
+  position: fixed;
+  z-index: 30;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  align-items: center;
+  min-height: 36px;
+  padding: 8px 20px;
+  border-top: 1px solid #cfd8dd;
+  background: #263238;
+  color: #edf2f4;
+  font-size: 12px;
 }

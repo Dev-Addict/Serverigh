@@ -66,7 +66,17 @@
 			JSON parsing failed: {{ .ParseError }}. Showing text fallback.
 		</p>
 		{{ end }}
+		{{ if .HTMLContent }}
+		<div class="syntax-preview code-preview">
+			{{ .HTMLContent }}
+		</div>
+		{{ else }}
 		<pre class="text-preview code-preview"><code>{{ .Content }}</code></pre>
+		{{ end }}
+		{{ else if eq .Kind "code" }}
+		<div class="syntax-preview code-preview" data-language="{{ .Language }}">
+			{{ .HTMLContent }}
+		</div>
 		{{ else if eq .Kind "image" }}
 		<img
 			class="media-source image-source"

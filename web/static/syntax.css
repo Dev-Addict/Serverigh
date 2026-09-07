@@ -1,0 +1,22 @@
+.syntax-preview {
+  overflow: auto;
+  max-height: none;
+  border: 1px solid #d7dee2;
+  background: #ffffff;
+}
+
+.syntax-preview pre {
+  margin: 0;
+  padding: 16px;
+  background: transparent;
+}
+
+.syntax-preview code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+.syntax-preview table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+}

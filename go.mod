@@ -3,6 +3,7 @@ module serverigh
 go 1.23.0
 
 require (
+	github.com/alecthomas/chroma/v2 v2.20.0
 	github.com/gofiber/fiber/v2 v2.52.13
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/urfave/cli/v2 v2.27.7
@@ -12,6 +13,7 @@ require (
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect
+	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect

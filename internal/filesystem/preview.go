@@ -10,6 +10,7 @@ type PreviewKind string
 
 const (
 	PreviewKindText     PreviewKind = "text"
+	PreviewKindCode     PreviewKind = "code"
 	PreviewKindMarkdown PreviewKind = "markdown"
 	PreviewKindCSV      PreviewKind = "csv"
 	PreviewKindJSON     PreviewKind = "json"
@@ -23,6 +24,7 @@ const (
 type Preview struct {
 	File
 	Kind          PreviewKind
+	Language      string
 	Content       string
 	HTMLContent   template.HTML
 	CSVRows       [][]string
@@ -104,7 +106,26 @@ func (p *Preview) classify() {
 	case PreviewKindJSON:
 		p.Kind = PreviewKindJSON
 		p.Content, p.ParseError = prettyJSON(p.Content)
+		p.setHighlightedContent()
 	default:
+		if p.setHighlightedContent() {
+			p.Kind = PreviewKindCode
+
+			return
+		}
+
 		p.Kind = PreviewKindText
 	}
+}
+
+func (p *Preview) setHighlightedContent() bool {
+	html, language, ok := highlightCode(p.Name, p.MIMEType, p.Content)
+	if !ok {
+		return false
+	}
+
+	p.HTMLContent = html
+	p.Language = language
+
+	return true
 }

@@ -17,8 +17,8 @@ explicitly enabled.
 Serverigh is in early first-version development. The backend foundation and
 main explorer shell are in place, including CLI configuration, filesystem
 browsing, safe path handling, bounded previews, HTMX folder/file navigation,
-Markdown/CSV/JSON/media previewers, raw/download responses, and operational
-errors.
+Markdown/CSV/JSON/code/media previewers, raw/download responses, and
+operational errors.
 
 Search, table controls, and write workflows are tracked below as unchecked
 items.
@@ -36,7 +36,7 @@ Implemented:
 - [x] File metadata, including size, mode, MIME type, creation time, and
   modification time.
 - [x] Bounded text preview with truncation and binary-file handling.
-- [x] Markdown, CSV, JSON, image, PDF, audio, video, and binary preview states.
+- [x] Markdown, CSV, JSON, code/config, media, and binary preview states.
 - [x] Raw and download routes with validated file handles and safety headers.
 - [x] Operational error codes with JSON or HTML responses as appropriate.
 - [x] Explorer shell with top bar, file table, preview pane, and status row.

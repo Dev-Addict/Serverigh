@@ -176,8 +176,39 @@ func TestPreviewRendersPrettyJSON(t *testing.T) {
 		t.Fatalf("expected status 200, got %d", resp.StatusCode)
 	}
 
-	if !strings.Contains(body, "&#34;name&#34;: &#34;one&#34;") {
+	if !strings.Contains(body, "&#34;name&#34;") {
 		t.Fatalf("expected escaped pretty json, got %q", body)
+	}
+
+	if !strings.Contains(body, `class="syntax-preview code-preview"`) {
+		t.Fatalf("expected highlighted json preview, got %q", body)
+	}
+}
+
+func TestPreviewRendersHighlightedCode(t *testing.T) {
+	root := t.TempDir()
+	writeTestFile(t, root, "main.go", "package main\n\nfunc main() {}\n")
+	h := testHandlersWithRoot(t, root)
+
+	app := fiber.New()
+	app.Get("/preview", h.Preview)
+
+	resp, body := testRequest(t, app, http.MethodGet, "/preview?path=/main.go")
+
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", resp.StatusCode)
+	}
+
+	if !strings.Contains(body, `class="preview-body preview-body-code"`) {
+		t.Fatalf("expected code preview body, got %q", body)
+	}
+
+	if !strings.Contains(body, `class="syntax-preview code-preview"`) {
+		t.Fatalf("expected highlighted code wrapper, got %q", body)
+	}
+
+	if !strings.Contains(body, "<span") {
+		t.Fatalf("expected highlighted spans, got %q", body)
 	}
 }
 

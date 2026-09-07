@@ -221,6 +221,61 @@ func TestPreviewPrettyPrintsJSON(t *testing.T) {
 	if !strings.Contains(preview.Content, "\n  \"name\": \"one\"") {
 		t.Fatalf("expected pretty json, got %q", preview.Content)
 	}
+
+	if preview.HTMLContent == "" {
+		t.Fatalf("expected highlighted json content")
+	}
+}
+
+func TestPreviewHighlightsCodeFile(t *testing.T) {
+	root := t.TempDir()
+	writeFile(
+		t,
+		filepath.Join(root, "main.go"),
+		"package main\n\nfunc main() {\n\tprintln(\"hello\")\n}\n",
+	)
+
+	files := newTestService(t, root, false, 1024)
+	preview, err := files.Preview("/main.go")
+	if err != nil {
+		t.Fatalf("preview go file: %v", err)
+	}
+
+	if preview.Kind != PreviewKindCode {
+		t.Fatalf("expected code preview, got %q", preview.Kind)
+	}
+
+	if preview.Language == "" {
+		t.Fatalf("expected syntax language")
+	}
+
+	html := string(preview.HTMLContent)
+	if !strings.Contains(html, "<span") {
+		t.Fatalf("expected highlighted html, got %q", html)
+	}
+
+	if !strings.Contains(html, "package") {
+		t.Fatalf("expected highlighted source, got %q", html)
+	}
+}
+
+func TestPreviewHighlightsConfigFile(t *testing.T) {
+	root := t.TempDir()
+	writeFile(t, filepath.Join(root, "Dockerfile"), "FROM alpine\nRUN echo ok\n")
+
+	files := newTestService(t, root, false, 1024)
+	preview, err := files.Preview("/Dockerfile")
+	if err != nil {
+		t.Fatalf("preview config file: %v", err)
+	}
+
+	if preview.Kind != PreviewKindCode {
+		t.Fatalf("expected code preview, got %q", preview.Kind)
+	}
+
+	if preview.HTMLContent == "" {
+		t.Fatalf("expected highlighted config content")
+	}
 }
 
 func TestPreviewFallsBackForInvalidJSON(t *testing.T) {
@@ -319,8 +374,8 @@ func TestPreviewDoesNotRenderSVGAsMedia(t *testing.T) {
 		t.Fatalf("preview svg: %v", err)
 	}
 
-	if preview.Kind != PreviewKindText {
-		t.Fatalf("expected active svg to use text preview, got %q", preview.Kind)
+	if preview.Kind != PreviewKindCode {
+		t.Fatalf("expected active svg to use code preview, got %q", preview.Kind)
 	}
 }
 

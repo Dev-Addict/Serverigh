@@ -4,10 +4,11 @@ BIN_DIR := bin
 BIN := $(BIN_DIR)/$(APP_NAME)
 
 GO ?= go
+GO_VERSION ?= 1.23.0
 GOCACHE ?= /tmp/serverigh-go-build
 GOMODCACHE ?= /tmp/serverigh-go-mod
 
-ROOT ?= .
+ROOT ?= /
 HOST ?= 127.0.0.1
 PORT ?= 4173
 
@@ -21,7 +22,7 @@ help: ## Show available commands.
 	}' $(MAKEFILE_LIST)
 
 tidy: ## Sync Go module metadata.
-	$(GO_ENV) $(GO) mod tidy
+	$(GO_ENV) $(GO) mod tidy -go=$(GO_VERSION)
 
 fmt: ## Format Go source files.
 	@find cmd internal web -name '*.go' -print0 | xargs -0 gofmt -w
