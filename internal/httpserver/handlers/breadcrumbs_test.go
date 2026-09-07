@@ -41,7 +41,7 @@ func TestBreadcrumbsRendersActivePath(t *testing.T) {
 		t.Fatalf("expected htmx breadcrumb link, got %q", body)
 	}
 
-	if !strings.Contains(body, `class="breadcrumb-back"`) {
+	if !strings.Contains(body, `id="breadcrumb-back"`) {
 		t.Fatalf("expected breadcrumb back control, got %q", body)
 	}
 

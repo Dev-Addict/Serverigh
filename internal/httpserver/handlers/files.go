@@ -1,13 +1,9 @@
 package handlers
 
-import (
-	"github.com/gofiber/fiber/v2"
-
-	"serverigh/internal/filesystem"
-)
+import "github.com/gofiber/fiber/v2"
 
 type FilesUpdateView struct {
-	Listing     filesystem.DirectoryListing
+	Listing     FilesView
 	PathSummary PathSummaryView
 	Breadcrumbs BreadcrumbsView
 	EmptyState  EmptyPreviewView
@@ -15,14 +11,19 @@ type FilesUpdateView struct {
 }
 
 func (h Handlers) Files(c *fiber.Ctx) error {
-	listing, err := h.files.List(c.Query("path", "/"))
+	options := listOptionsFromRequest(c)
+	listing, err := h.files.ListWithOptions(c.Query("path", "/"), options)
 	if err != nil {
 		return h.writeOperationalError(c, err)
 	}
 
+	files := filesView(listing)
+
 	if c.Get("HX-Request") == "true" {
+		c.Set("HX-Push-Url", files.Controls.BrowseURL)
+
 		return h.render(c, "files_update.html", FilesUpdateView{
-			Listing: listing,
+			Listing: files,
 			PathSummary: PathSummaryView{
 				Root: h.config.Root,
 				Path: listing.Path,
@@ -36,5 +37,5 @@ func (h Handlers) Files(c *fiber.Ctx) error {
 		})
 	}
 
-	return h.render(c, "files.html", listing)
+	return h.render(c, "files.html", files)
 }

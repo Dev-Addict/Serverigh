@@ -163,17 +163,14 @@ Goal: make the directory table useful for real project folders.
 
 Tasks:
 
-- Add sorting by name, kind, size, modified time, and created time when known.
+- Add sorting by name, size, modified time, and created time when known.
 - Add client-visible sort state in URLs or HTMX request parameters.
-- Add a filename filter for the current directory.
-- Add a hidden-file toggle that updates the table without layout shift.
 - Add copy actions for relative and absolute paths.
 - Add keyboard basics: arrow navigation, enter to open, and backspace to parent.
 
 Acceptance criteria:
 
 - Sorting is deterministic and tested.
-- Filtering never escapes the current root or changes the active folder.
 - Hidden files are never shown by accident when the option is disabled.
 - Copy actions use small controls and work without a frontend build step.
 

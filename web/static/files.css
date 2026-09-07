@@ -51,23 +51,40 @@
 }
 
 .file-table th:nth-child(1) {
-  width: 42%;
+  width: 36%;
 }
 
 .file-table th:nth-child(2) {
-  width: 13%;
+  width: 11%;
 }
 
 .file-table th:nth-child(3) {
-  width: 14%;
+  width: 17%;
 }
 
 .file-table th:nth-child(4) {
-  width: 19%;
+  width: 17%;
 }
 
 .file-table th:nth-child(5) {
-  width: 12%;
+  width: 11%;
+}
+
+.file-table th:nth-child(6) {
+  width: 8%;
+}
+
+.sort-link {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  max-width: 100%;
+  color: inherit;
+}
+
+.sort-link span {
+  color: #125c72;
+  font-size: 11px;
 }
 
 .file-table tbody tr:hover {
@@ -152,6 +169,31 @@
 
 .numeric-cell {
   font-variant-numeric: tabular-nums;
+}
+
+.path-actions {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.copy-button {
+  min-width: 34px;
+  min-height: 28px;
+  padding: 5px 7px;
+  border: 1px solid #cfd8dd;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #263238;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.1;
+}
+
+.copy-button[data-copied="true"] {
+  border-color: #739b78;
+  color: #2f6b38;
 }
 
 .empty-folder {

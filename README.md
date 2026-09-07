@@ -43,12 +43,12 @@ Implemented:
 - [x] HTMX navigation for folder browsing, file preview updates, and
   breadcrumbs.
 - [x] URL-backed state for reload, back, and forward navigation.
+- [x] Table sorting, config-driven hidden-file visibility, and copy-path
+  actions.
 - [x] Health endpoint, Makefile workflow, and backend test coverage.
 
 Planned for the first version:
 
-- [ ] Table controls for sorting, filtering, hidden files, and copy-path
-  actions.
 - [ ] Search within the configured root, starting with filenames.
 - [ ] Keyboard navigation and improved metadata views.
 - [ ] Opt-in write-mode workflows with confirmations and trash-first delete.

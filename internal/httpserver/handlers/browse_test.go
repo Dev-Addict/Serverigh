@@ -36,6 +36,10 @@ func TestBrowseRendersShell(t *testing.T) {
 		t.Fatalf("expected htmx history element in response, got %q", body)
 	}
 
+	if !strings.Contains(body, `id="toast-region"`) {
+		t.Fatalf("expected toast region in response, got %q", body)
+	}
+
 	if !strings.Contains(body, "No file selected") {
 		t.Fatalf("expected empty preview state in response, got %q", body)
 	}
@@ -115,7 +119,9 @@ func TestBrowseIncludesHtmxNavigation(t *testing.T) {
 		t.Fatalf("expected preview htmx target in response, got %q", body)
 	}
 
-	if !strings.Contains(body, `href="/browse?path=%2F&file=%2Fnote.txt"`) {
+	if !strings.Contains(body, `href="/browse?`) ||
+		!strings.Contains(body, `file=%2Fnote.txt`) ||
+		!strings.Contains(body, `path=%2F`) {
 		t.Fatalf("expected file link to preserve browse URL state, got %q", body)
 	}
 

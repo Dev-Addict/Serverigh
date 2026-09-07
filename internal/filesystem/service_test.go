@@ -61,7 +61,7 @@ func TestListMarksTruncatedDirectory(t *testing.T) {
 	writeFile(t, filepath.Join(root, "c.txt"), "c")
 
 	files := newTestService(t, root, false, 1024)
-	listing, err := files.list("/", 2)
+	listing, err := files.list("/", 2, DefaultListOptions())
 	if err != nil {
 		t.Fatalf("list root: %v", err)
 	}
@@ -76,6 +76,50 @@ func TestListMarksTruncatedDirectory(t *testing.T) {
 
 	if len(listing.Entries) != 2 {
 		t.Fatalf("expected 2 listed entries, got %d", len(listing.Entries))
+	}
+}
+
+func TestListSortsFilesBySize(t *testing.T) {
+	root := t.TempDir()
+	writeFile(t, filepath.Join(root, "small.txt"), "a")
+	writeFile(t, filepath.Join(root, "large.txt"), "abc")
+
+	files := newTestService(t, root, false, 1024)
+	listing, err := files.ListWithOptions("/", ListOptions{
+		Sort:      ListSortSize,
+		Direction: ListDirectionDesc,
+	})
+	if err != nil {
+		t.Fatalf("list root: %v", err)
+	}
+
+	if listing.Entries[0].Name != "large.txt" {
+		t.Fatalf("expected largest file first, got %#v", listing.Entries)
+	}
+}
+
+func TestListWithOptionsUsesConfiguredHiddenVisibility(t *testing.T) {
+	root := t.TempDir()
+	writeFile(t, filepath.Join(root, ".env"), "secret")
+
+	hiddenFilesDisabled := newTestService(t, root, false, 1024)
+	hiddenListing, err := hiddenFilesDisabled.ListWithOptions("/", ListOptions{})
+	if err != nil {
+		t.Fatalf("list root: %v", err)
+	}
+
+	if len(hiddenListing.Entries) != 0 {
+		t.Fatalf("expected hidden file to be excluded, got %#v", hiddenListing)
+	}
+
+	hiddenFilesEnabled := newTestService(t, root, true, 1024)
+	visibleListing, err := hiddenFilesEnabled.ListWithOptions("/", ListOptions{})
+	if err != nil {
+		t.Fatalf("list root with hidden files: %v", err)
+	}
+
+	if len(visibleListing.Entries) != 1 || !visibleListing.Entries[0].IsHidden {
+		t.Fatalf("expected hidden file to be listed, got %#v", visibleListing)
 	}
 }
 

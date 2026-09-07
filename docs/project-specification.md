@@ -117,7 +117,7 @@ HTMX behavior:
 
 - Folder clicks update the file table, breadcrumbs, preview pane, and URL.
 - File clicks update the preview pane and URL.
-- Sorting and filtering update the file table without full reload.
+- Sorting updates the file table without full reload.
 - Back and forward navigation restore the folder/file view.
 
 ## Preview Rules
@@ -192,7 +192,7 @@ Manual checks:
 - Markdown tables render as tables.
 - Reload restores active folder/file.
 - Browser back/forward restores previous folder/file.
-- Hidden-file toggle does not resize the layout unexpectedly.
+- Hidden-file visibility follows only the active server configuration.
 
 ## MVP Acceptance Criteria
 

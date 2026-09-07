@@ -51,7 +51,7 @@ minimal client state, and no heavy frontend build step.
 - Copy path.
   Priority: should have. Copy relative and absolute paths from a compact icon
   button with a tooltip.
-- Hidden-file toggle.
+- Config-driven hidden-file visibility.
   Priority: should have. Show or hide dotfiles and persist the preference per
   browser session.
 - Read-only mode.

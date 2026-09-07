@@ -6,18 +6,18 @@
 		</div>
 		<a
 			class="quiet-link"
-			href="/browse?path={{ .Path | urlquery }}"
-			hx-get="/partials/files?path={{ .Path | urlquery }}"
+			href="{{ .Controls.BrowseURL }}"
+			hx-get="{{ .Controls.FilesURL }}"
 			hx-target="#files-region"
-			hx-swap="innerHTML"
-			hx-push-url="/browse?path={{ .Path | urlquery }}">
+			hx-swap="innerHTML">
 			Refresh
 		</a>
 	</header>
+
 	{{ if .Truncated }}
 	<p class="notice">
 		Showing the first {{ .EntryLimit }} visible entries. Narrow the folder
-		or use search when available.
+		when needed.
 	</p>
 	{{ end }}
 
@@ -25,10 +25,60 @@
 	<table class="file-table">
 		<thead>
 			<tr>
-				<th scope="col">Name</th>
-				<th scope="col">Size</th>
-				<th scope="col">Modified</th>
+				<th scope="col" aria-sort="{{ .Controls.NameSort.AriaSort }}">
+					<a
+						class="sort-link"
+						href="{{ .Controls.NameSort.BrowseURL }}"
+						hx-get="{{ .Controls.NameSort.FilesURL }}"
+						hx-target="#files-region"
+						hx-swap="innerHTML">
+						Name
+						{{ if .Controls.NameSort.Indicator }}
+						<span>{{ .Controls.NameSort.Indicator }}</span>
+						{{ end }}
+					</a>
+				</th>
+				<th scope="col" aria-sort="{{ .Controls.SizeSort.AriaSort }}">
+					<a
+						class="sort-link"
+						href="{{ .Controls.SizeSort.BrowseURL }}"
+						hx-get="{{ .Controls.SizeSort.FilesURL }}"
+						hx-target="#files-region"
+						hx-swap="innerHTML">
+						Size
+						{{ if .Controls.SizeSort.Indicator }}
+						<span>{{ .Controls.SizeSort.Indicator }}</span>
+						{{ end }}
+					</a>
+				</th>
+				<th scope="col" aria-sort="{{ .Controls.ModifiedSort.AriaSort }}">
+					<a
+						class="sort-link"
+						href="{{ .Controls.ModifiedSort.BrowseURL }}"
+						hx-get="{{ .Controls.ModifiedSort.FilesURL }}"
+						hx-target="#files-region"
+						hx-swap="innerHTML">
+						Modified
+						{{ if .Controls.ModifiedSort.Indicator }}
+						<span>{{ .Controls.ModifiedSort.Indicator }}</span>
+						{{ end }}
+					</a>
+				</th>
+				<th scope="col" aria-sort="{{ .Controls.CreatedSort.AriaSort }}">
+					<a
+						class="sort-link"
+						href="{{ .Controls.CreatedSort.BrowseURL }}"
+						hx-get="{{ .Controls.CreatedSort.FilesURL }}"
+						hx-target="#files-region"
+						hx-swap="innerHTML">
+						Created
+						{{ if .Controls.CreatedSort.Indicator }}
+						<span>{{ .Controls.CreatedSort.Indicator }}</span>
+						{{ end }}
+					</a>
+				</th>
 				<th scope="col">Mode</th>
+				<th scope="col">Actions</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -38,22 +88,21 @@
 					{{ if .IsDir }}
 					<a
 						class="entry-link folder-link"
-						href="/browse?path={{ .Path | urlquery }}"
-						hx-get="/partials/files?path={{ .Path | urlquery }}"
+						href="{{ $.BrowseURL .Path }}"
+						hx-get="{{ $.FilesURL .Path }}"
 						hx-target="#files-region"
-						hx-swap="innerHTML"
-						hx-push-url="/browse?path={{ .Path | urlquery }}">
+						hx-swap="innerHTML">
 						<span class="entry-icon" aria-hidden="true"></span>
 						<span>{{ .Name }}/</span>
 					</a>
 					{{ else }}
 					<a
 						class="entry-link file-link"
-						href="/browse?path={{ $.Path | urlquery }}&file={{ .Path | urlquery }}"
+						href="{{ $.FileBrowseURL .Path }}"
 						hx-get="/preview?path={{ .Path | urlquery }}"
 						hx-target="#preview-region"
 						hx-swap="innerHTML"
-						hx-push-url="/browse?path={{ $.Path | urlquery }}&file={{ .Path | urlquery }}">
+						hx-push-url="{{ $.FileBrowseURL .Path }}">
 						<span class="entry-icon" aria-hidden="true"></span>
 						<span>{{ .Name }}</span>
 					</a>
@@ -61,7 +110,22 @@
 				</td>
 				<td class="numeric-cell">{{ .SizeLabel }}</td>
 				<td>{{ .ModTimeLabel }}</td>
+				<td>{{ .CreatedLabel }}</td>
 				<td><code>{{ .Mode }}</code></td>
+				<td>
+					<div class="path-actions" aria-label="Copy path actions">
+						<button
+							class="copy-button"
+							type="button"
+							data-copy-text="{{ .RelativePath }}"
+							title="Copy relative path">Rel</button>
+						<button
+							class="copy-button"
+							type="button"
+							data-copy-text="{{ .AbsolutePath }}"
+							title="Copy absolute path">Abs</button>
+					</div>
+				</td>
 			</tr>
 			{{ end }}
 		</tbody>

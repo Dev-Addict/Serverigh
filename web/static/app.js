@@ -37,6 +37,21 @@
     window.requestAnimationFrame(updatePreviewOffset);
   };
 
+  let toastTimeout;
+  const showToast = (message) => {
+    const toast = document.querySelector("#toast-region");
+    if (!(toast instanceof HTMLElement)) {
+      return;
+    }
+
+    window.clearTimeout(toastTimeout);
+    toast.textContent = message;
+    toast.dataset.visible = "true";
+    toastTimeout = window.setTimeout(() => {
+      delete toast.dataset.visible;
+    }, 1800);
+  };
+
   queuePreviewOffsetUpdate();
   window.addEventListener("resize", queuePreviewOffsetUpdate);
   window.addEventListener("load", queuePreviewOffsetUpdate);
@@ -85,6 +100,24 @@
       return;
     }
 
+    const copyButton = event.target.closest("[data-copy-text]");
+    if (copyButton) {
+      event.preventDefault();
+      if (!(copyButton instanceof HTMLElement) || !navigator.clipboard) {
+        return;
+      }
+
+      navigator.clipboard.writeText(copyButton.dataset.copyText || "").then(() => {
+        copyButton.dataset.copied = "true";
+        showToast("Path copied");
+        window.setTimeout(() => {
+          delete copyButton.dataset.copied;
+        }, 1200);
+      });
+
+      return;
+    }
+
     const backLink = event.target.closest("[data-history-back]");
     if (!backLink) {
       return;
@@ -97,7 +130,9 @@
       return;
     }
 
-    window.location.assign(backLink.href);
+    if (backLink instanceof HTMLAnchorElement) {
+      window.location.assign(backLink.href);
+    }
   });
 
   document.addEventListener("htmx:afterSettle", queuePreviewOffsetUpdate);

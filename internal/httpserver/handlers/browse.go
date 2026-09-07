@@ -10,7 +10,7 @@ type BrowseView struct {
 	Root        string
 	Path        string
 	Mode        string
-	Listing     filesystem.DirectoryListing
+	Listing     FilesView
 	PathSummary PathSummaryView
 	Breadcrumbs BreadcrumbsView
 	EmptyState  EmptyPreviewView
@@ -20,10 +20,13 @@ type BrowseView struct {
 
 func (h Handlers) Browse(c *fiber.Ctx) error {
 	activePath := c.Query("path", "/")
-	listing, err := h.files.List(activePath)
+	options := listOptionsFromRequest(c)
+	listing, err := h.files.ListWithOptions(activePath, options)
 	if err != nil {
 		return h.writeOperationalError(c, err)
 	}
+
+	files := filesView(listing)
 
 	var preview *filesystem.Preview
 	selectedFile := c.Query("file")
@@ -40,7 +43,7 @@ func (h Handlers) Browse(c *fiber.Ctx) error {
 		Root:    h.config.Root,
 		Path:    listing.Path,
 		Mode:    modeLabel(h.config.Write),
-		Listing: listing,
+		Listing: files,
 		PathSummary: PathSummaryView{
 			Root: h.config.Root,
 			Path: listing.Path,
