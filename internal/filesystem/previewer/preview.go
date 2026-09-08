@@ -24,20 +24,21 @@ const (
 
 type Preview struct {
 	File
-	Kind          PreviewKind
-	Language      string
-	Content       string
-	HTMLContent   template.HTML
-	CSVRows       [][]string
-	CSVRowLimit   int
-	CSVTruncated  bool
-	ParseError    string
-	BytesRead     int64
-	Truncated     bool
-	ShowTruncated bool
-	IsBinary      bool
-	IsMedia       bool
-	IsUnsupported bool
+	Kind            PreviewKind
+	Language        string
+	Content         string
+	HTMLContent     template.HTML
+	DarkHTMLContent template.HTML
+	CSVRows         [][]string
+	CSVRowLimit     int
+	CSVTruncated    bool
+	ParseError      string
+	BytesRead       int64
+	Truncated       bool
+	ShowTruncated   bool
+	IsBinary        bool
+	IsMedia         bool
+	IsUnsupported   bool
 }
 
 type File struct {
@@ -129,12 +130,13 @@ func (p *Preview) classify() {
 }
 
 func (p *Preview) setHighlightedContent() bool {
-	html, language, ok := highlightCode(p.Name, p.MIMEType, p.Content)
+	html, darkHTML, language, ok := highlightCode(p.Name, p.MIMEType, p.Content)
 	if !ok {
 		return false
 	}
 
 	p.HTMLContent = html
+	p.DarkHTMLContent = darkHTML
 	p.Language = language
 
 	return true

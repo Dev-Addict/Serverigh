@@ -9,8 +9,8 @@
   gap: 24px;
   align-items: center;
   padding: 14px 20px;
-  border-bottom: 1px solid #cfd8dd;
-  background: #ffffff;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
 .brand-block {
@@ -37,7 +37,7 @@
 
 .brand-subtitle {
   margin-top: 3px;
-  color: #65727a;
+  color: var(--color-text-muted);
   font-size: 13px;
 }
 
@@ -50,7 +50,7 @@
 }
 
 .label {
-  color: #65727a;
+  color: var(--color-text-muted);
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -72,8 +72,8 @@
   gap: 10px;
   align-items: center;
   padding: 8px 20px;
-  border-bottom: 1px solid #dce3e6;
-  background: #f9fbfb;
+  border-bottom: 1px solid var(--color-border-subtle);
+  background: var(--color-surface-subtle);
 }
 
 .breadcrumbs ol {
@@ -93,12 +93,12 @@
   gap: 4px;
   align-items: center;
   min-width: 0;
-  color: #65727a;
+  color: var(--color-text-muted);
   font-size: 13px;
 }
 
 .breadcrumbs li+li::before {
-  color: #92a0a7;
+  color: var(--color-file-border);
   content: "/";
 }
 
@@ -112,7 +112,7 @@
 }
 
 .breadcrumbs span[aria-current="page"] {
-  color: #263238;
+  color: var(--color-text-strong);
   font-weight: 700;
 }
 
@@ -123,10 +123,10 @@
   justify-content: center;
   width: 30px;
   height: 30px;
-  border: 1px solid #cfd8dd;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
-  background: #ffffff;
-  color: #263238;
+  background: var(--color-surface);
+  color: var(--color-text-strong);
   font-size: 18px;
   line-height: 1;
 }
@@ -139,7 +139,7 @@
 html[data-loading="true"] .status-row::after {
   content: "Loading";
   margin-left: auto;
-  color: #b8d7e0;
+  color: var(--color-focus-ring);
   font-weight: 700;
 }
 
@@ -160,8 +160,8 @@ html[data-loading="true"] .status-row::after {
 
 .files-region {
   overflow: visible;
-  border-right: 1px solid #cfd8dd;
-  background: #ffffff;
+  border-right: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
 .preview-region {
@@ -171,7 +171,7 @@ html[data-loading="true"] .status-row::after {
   height: calc(100vh - var(--serverigh-preview-offset) - var(--serverigh-footer-height));
   max-height: calc(100vh - var(--serverigh-preview-offset) - var(--serverigh-footer-height));
   overflow: auto;
-  background: #f7f8f6;
+  background: var(--color-panel);
 }
 
 .file-panel {
@@ -185,6 +185,6 @@ html[data-loading="true"] .status-row::after {
   top: var(--serverigh-preview-offset);
   margin: -18px -20px 14px;
   padding: 18px 20px 14px;
-  border-bottom: 1px solid #e1e6e9;
-  background: #ffffff;
+  border-bottom: 1px solid var(--color-border-muted);
+  background: var(--color-surface);
 }

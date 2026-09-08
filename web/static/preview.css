@@ -10,8 +10,8 @@
   top: 0;
   z-index: 2;
   padding: 18px 20px 12px;
-  border-bottom: 1px solid #d7dee2;
-  background: #f7f8f6;
+  border-bottom: 1px solid var(--color-border-subtle);
+  background: var(--color-panel);
 }
 
 .preview-chrome .panel-header {
@@ -28,10 +28,10 @@
 .file-actions a {
   min-height: 32px;
   padding: 7px 10px;
-  border: 1px solid #cfd8dd;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
-  background: #ffffff;
-  color: #263238;
+  background: var(--color-surface);
+  color: var(--color-text-strong);
   font-size: 13px;
   line-height: 1.2;
 }
@@ -63,14 +63,14 @@
 .notice,
 .error-panel {
   padding: 12px;
-  border: 1px solid #d7dee2;
+  border: 1px solid var(--color-border-subtle);
   border-radius: 6px;
-  background: #ffffff;
+  background: var(--color-surface);
 }
 
 .error-panel {
-  border-color: #d89a8d;
-  background: #fff7f5;
+  border-color: var(--color-error-border);
+  background: var(--color-error-bg);
 }
 
 .empty-preview {
@@ -78,12 +78,12 @@
   min-height: 100%;
   padding: 24px;
   place-items: center;
-  color: #65727a;
+  color: var(--color-text-muted);
   text-align: center;
 }
 
 .empty-preview-title {
-  color: #263238;
+  color: var(--color-text-strong);
   font-size: 18px;
   font-weight: 700;
 }
@@ -100,9 +100,9 @@
   max-height: none;
   margin: 0;
   padding: 16px;
-  border: 1px solid #d7dee2;
+  border: 1px solid var(--color-border-subtle);
   border-radius: 6px;
-  background: #f8fafb;
+  background: var(--color-panel-muted);
   white-space: pre-wrap;
 }
 
@@ -141,23 +141,23 @@
 
 .markdown-preview blockquote {
   padding-left: 14px;
-  border-left: 3px solid #9ab0b8;
-  color: #4f5f67;
+  border-left: 3px solid var(--color-markdown-border);
+  color: var(--color-markdown-muted);
 }
 
 .markdown-preview code {
   padding: 1px 4px;
   border-radius: 4px;
-  background: #e9eef0;
+  background: var(--color-code-bg);
   font-size: 0.92em;
 }
 
 .markdown-preview pre {
   overflow: auto;
   padding: 14px;
-  border: 1px solid #d7dee2;
+  border: 1px solid var(--color-border-subtle);
   border-radius: 6px;
-  background: #f8fafb;
+  background: var(--color-panel-muted);
 }
 
 .markdown-preview pre code {
@@ -178,14 +178,14 @@
 .csv-preview td {
   max-width: 42ch;
   padding: 8px 10px;
-  border: 1px solid #d7dee2;
+  border: 1px solid var(--color-border-subtle);
   vertical-align: top;
   overflow-wrap: anywhere;
 }
 
 .markdown-preview th,
 .csv-preview tr:first-child td {
-  background: #edf3f4;
+  background: var(--color-table-head);
   font-weight: 700;
 }
 
@@ -197,7 +197,7 @@
   max-width: 100%;
   border: 0;
   border-radius: 0;
-  background: #ffffff;
+  background: var(--color-surface);
 }
 
 .media-source {
@@ -226,9 +226,9 @@
 .binary-preview {
   align-self: start;
   padding: 16px;
-  border: 1px solid #d7dee2;
+  border: 1px solid var(--color-border-subtle);
   border-radius: 6px;
-  background: #ffffff;
+  background: var(--color-surface);
 }
 
 .binary-preview dl {
@@ -239,7 +239,7 @@
 }
 
 .binary-preview dt {
-  color: #65727a;
+  color: var(--color-text-muted);
   font-weight: 700;
 }
 

@@ -10,24 +10,45 @@ import (
 	"github.com/alecthomas/chroma/v2/styles"
 )
 
-const syntaxHighlightStyle = "xcode"
+const (
+	lightSyntaxHighlightStyle = "xcode"
+	darkSyntaxHighlightStyle  = "monokai"
+)
 
 func highlightCode(
 	name string,
 	mimeType string,
 	content string,
-) (template.HTML, string, bool) {
+) (template.HTML, template.HTML, string, bool) {
 	lexer := lexers.Match(name)
 	if lexer == nil {
 		lexer = lexers.MatchMimeType(mimeType)
 	}
 
 	if !isHighlightLexer(lexer) {
-		return "", "", false
+		return "", "", "", false
 	}
 
 	lexer = chroma.Coalesce(lexer)
-	style := styles.Get(syntaxHighlightStyle)
+	lightHTML, ok := renderHighlightedCode(lexer, lightSyntaxHighlightStyle, content)
+	if !ok {
+		return "", "", "", false
+	}
+
+	darkHTML, ok := renderHighlightedCode(lexer, darkSyntaxHighlightStyle, content)
+	if !ok {
+		return "", "", "", false
+	}
+
+	return lightHTML, darkHTML, lexer.Config().Name, true
+}
+
+func renderHighlightedCode(
+	lexer chroma.Lexer,
+	styleName string,
+	content string,
+) (template.HTML, bool) {
+	style := styles.Get(styleName)
 	if style == nil {
 		style = styles.Fallback
 	}
@@ -39,15 +60,15 @@ func highlightCode(
 
 	iterator, err := lexer.Tokenise(nil, content)
 	if err != nil {
-		return "", "", false
+		return "", false
 	}
 
 	var output bytes.Buffer
 	if err := formatter.Format(&output, style, iterator); err != nil {
-		return "", "", false
+		return "", false
 	}
 
-	return template.HTML(output.String()), lexer.Config().Name, true
+	return template.HTML(output.String()), true
 }
 
 func isHighlightLexer(lexer chroma.Lexer) bool {

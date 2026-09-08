@@ -51,7 +51,6 @@ Implemented:
 
 Planned for the first version:
 
-- [ ] Limited text-content search within the configured root.
 - [ ] Keyboard navigation and improved metadata views.
 - [ ] Opt-in write-mode workflows with confirmations and trash-first delete.
 - [ ] Bulk selection, archive downloads, and file refresh behavior.

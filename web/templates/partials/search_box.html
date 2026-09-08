@@ -7,18 +7,28 @@
 	<input type="hidden" name="sort" value="{{ .Sort }}">
 	<input type="hidden" name="dir" value="{{ .Direction }}">
 	<label class="search-label" for="global-search">Search</label>
-	<input
-		id="global-search"
-		class="search-input"
-		type="search"
-		name="q"
-		autocomplete="off"
-		minlength="2"
-		placeholder="Search files"
-		hx-get="/partials/search"
-		hx-trigger="input changed delay:300ms, search"
-		hx-target="#files-region"
-		hx-include="#search-region input"
-		hx-swap="innerHTML"
-		hx-sync="#search-region:replace">
+	<div class="search-controls">
+		<input
+			id="global-search"
+			class="search-input"
+			type="search"
+			name="q"
+			autocomplete="off"
+			minlength="2"
+			placeholder="Search files"
+			hx-get="/partials/search"
+			hx-trigger="input changed delay:300ms, search"
+			hx-target="#files-region"
+			hx-include="#search-region input"
+			hx-swap="innerHTML"
+			hx-sync="#search-region:replace">
+		<button
+			class="settings-button"
+			type="button"
+			aria-label="Open settings"
+			title="Settings"
+			data-settings-open>
+			<span aria-hidden="true">&#9881;</span>
+		</button>
+	</div>
 </div>

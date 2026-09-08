@@ -175,8 +175,13 @@ func TestPreviewRendersPrettyJSON(t *testing.T) {
 		t.Fatalf("expected escaped pretty json, got %q", body)
 	}
 
-	if !strings.Contains(body, `class="syntax-preview code-preview"`) {
-		t.Fatalf("expected highlighted json preview, got %q", body)
+	for _, part := range []string{
+		`class="syntax-preview syntax-preview-light code-preview"`,
+		`class="syntax-preview syntax-preview-dark code-preview"`,
+	} {
+		if !strings.Contains(body, part) {
+			t.Fatalf("expected %q in highlighted json preview, got %q", part, body)
+		}
 	}
 }
 
@@ -198,8 +203,13 @@ func TestPreviewRendersHighlightedCode(t *testing.T) {
 		t.Fatalf("expected code preview body, got %q", body)
 	}
 
-	if !strings.Contains(body, `class="syntax-preview code-preview"`) {
-		t.Fatalf("expected highlighted code wrapper, got %q", body)
+	for _, part := range []string{
+		`class="syntax-preview syntax-preview-light code-preview"`,
+		`class="syntax-preview syntax-preview-dark code-preview"`,
+	} {
+		if !strings.Contains(body, part) {
+			t.Fatalf("expected %q in highlighted code wrapper, got %q", part, body)
+		}
 	}
 
 	if !strings.Contains(body, "<span") {

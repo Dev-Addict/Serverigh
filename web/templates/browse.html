@@ -45,6 +45,7 @@
 		role="status"
 		aria-live="polite"
 		aria-atomic="true"></div>
-	<script src="/static/app.js"></script>
+	{{ template "settings_modal.html" . }}
+	<script type="module" src="/static/app.js"></script>
 </body>
 </html>

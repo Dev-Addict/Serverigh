@@ -44,6 +44,22 @@ func TestBrowseRendersShell(t *testing.T) {
 		t.Fatalf("expected search region in response, got %q", body)
 	}
 
+	if !strings.Contains(body, `data-settings-open`) {
+		t.Fatalf("expected settings button in response, got %q", body)
+	}
+
+	if !strings.Contains(body, `id="settings-modal"`) {
+		t.Fatalf("expected settings modal in response, got %q", body)
+	}
+
+	if !strings.Contains(body, `<option value="light" selected>Light</option>`) {
+		t.Fatalf("expected light theme option in response, got %q", body)
+	}
+
+	if !strings.Contains(body, `<option value="dark">Dark</option>`) {
+		t.Fatalf("expected dark theme option in response, got %q", body)
+	}
+
 	if strings.Contains(body, "<form") {
 		t.Fatalf("expected search control to be non-submittable, got %q", body)
 	}

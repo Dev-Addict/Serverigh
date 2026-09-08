@@ -66,8 +66,6 @@ minimal client state, and no heavy frontend build step.
 
 ## Version 1 Features
 
-- Text-content search.
-  Priority: high. Add limited text-content search under the configured root.
 - File metadata drawer.
   Priority: high. Show owner, permissions, mime type, line count, dimensions,
   and checksums where cheap. Compute expensive fields lazily.

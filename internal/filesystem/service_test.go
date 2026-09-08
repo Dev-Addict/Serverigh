@@ -269,6 +269,10 @@ func TestPreviewPrettyPrintsJSON(t *testing.T) {
 	if preview.HTMLContent == "" {
 		t.Fatalf("expected highlighted json content")
 	}
+
+	if preview.DarkHTMLContent == "" {
+		t.Fatalf("expected dark highlighted json content")
+	}
 }
 
 func TestPreviewHighlightsCodeFile(t *testing.T) {
@@ -301,6 +305,11 @@ func TestPreviewHighlightsCodeFile(t *testing.T) {
 	if !strings.Contains(html, "package") {
 		t.Fatalf("expected highlighted source, got %q", html)
 	}
+
+	darkHTML := string(preview.DarkHTMLContent)
+	if !strings.Contains(darkHTML, "<span") {
+		t.Fatalf("expected dark highlighted html, got %q", darkHTML)
+	}
 }
 
 func TestPreviewHighlightsConfigFile(t *testing.T) {
@@ -319,6 +328,10 @@ func TestPreviewHighlightsConfigFile(t *testing.T) {
 
 	if preview.HTMLContent == "" {
 		t.Fatalf("expected highlighted config content")
+	}
+
+	if preview.DarkHTMLContent == "" {
+		t.Fatalf("expected dark highlighted config content")
 	}
 }
 

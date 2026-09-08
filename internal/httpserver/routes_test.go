@@ -114,23 +114,33 @@ func TestRoutesWireCoreHandlers(t *testing.T) {
 
 func TestRoutesServeEmbeddedStaticAssets(t *testing.T) {
 	app := testApp(t, testConfig(t))
-	req := httptest.NewRequest(http.MethodGet, "/static/app.js", nil)
-	resp, err := app.Test(req)
-	if err != nil {
-		t.Fatalf("test request: %v", err)
+
+	tests := []string{
+		"/static/app.js",
+		"/static/app/theme.js",
 	}
 
-	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("expected status 200, got %d", resp.StatusCode)
-	}
+	for _, path := range tests {
+		t.Run(path, func(t *testing.T) {
+			req := httptest.NewRequest(http.MethodGet, path, nil)
+			resp, err := app.Test(req)
+			if err != nil {
+				t.Fatalf("test request: %v", err)
+			}
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		t.Fatalf("read response body: %v", err)
-	}
+			if resp.StatusCode != http.StatusOK {
+				t.Fatalf("expected status 200, got %d", resp.StatusCode)
+			}
 
-	if string(body) == "" {
-		t.Fatalf("expected static asset body")
+			body, err := io.ReadAll(resp.Body)
+			if err != nil {
+				t.Fatalf("read response body: %v", err)
+			}
+
+			if string(body) == "" {
+				t.Fatalf("expected static asset body")
+			}
+		})
 	}
 }
 

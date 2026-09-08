@@ -67,15 +67,27 @@
 		</p>
 		{{ end }}
 		{{ if .HTMLContent }}
-		<div class="syntax-preview code-preview">
+		<div class="syntax-preview syntax-preview-light code-preview">
 			{{ .HTMLContent }}
 		</div>
+		{{ if .DarkHTMLContent }}
+		<div class="syntax-preview syntax-preview-dark code-preview">
+			{{ .DarkHTMLContent }}
+		</div>
+		{{ end }}
 		{{ else }}
 		<pre class="text-preview code-preview"><code>{{ .Content }}</code></pre>
 		{{ end }}
 		{{ else if eq .Kind "code" }}
-		<div class="syntax-preview code-preview" data-language="{{ .Language }}">
+		<div
+			class="syntax-preview syntax-preview-light code-preview"
+			data-language="{{ .Language }}">
 			{{ .HTMLContent }}
+		</div>
+		<div
+			class="syntax-preview syntax-preview-dark code-preview"
+			data-language="{{ .Language }}">
+			{{ .DarkHTMLContent }}
 		</div>
 		{{ else if eq .Kind "image" }}
 		<img
