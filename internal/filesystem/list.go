@@ -35,10 +35,12 @@ type Entry struct {
 	SizeLabel    string
 	CreatedTime  time.Time
 	CreatedLabel string
+	CreatedValue string
 	CreatedKnown bool
 	Mode         string
 	ModTime      time.Time
 	ModTimeLabel string
+	ModTimeValue string
 	IsDir        bool
 	IsHidden     bool
 }
@@ -125,10 +127,15 @@ func (s Service) list(
 				SizeLabel:    fileinfo.FormatSize(info.Size()),
 				CreatedTime:  createdTime,
 				CreatedLabel: fileinfo.FormatOptionalTime(createdTime, createdKnown),
+				CreatedValue: fileinfo.FormatOptionalTimeValue(
+					createdTime,
+					createdKnown,
+				),
 				CreatedKnown: createdKnown,
 				Mode:         info.Mode().String(),
 				ModTime:      info.ModTime(),
-				ModTimeLabel: info.ModTime().Format("2006-01-02 15:04"),
+				ModTimeLabel: fileinfo.FormatTime(info.ModTime()),
+				ModTimeValue: fileinfo.FormatTimeValue(info.ModTime()),
 				IsDir:        info.IsDir(),
 				IsHidden:     hidden,
 			})

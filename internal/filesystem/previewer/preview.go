@@ -50,8 +50,10 @@ type File struct {
 	Mode              string
 	CreatedTime       time.Time
 	CreatedTimeLabel  string
+	CreatedTimeValue  string
 	ModifiedTime      time.Time
 	ModifiedTimeLabel string
+	ModifiedTimeValue string
 	CreationTimeKnown bool
 	MIMEType          string
 }

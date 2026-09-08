@@ -94,8 +94,8 @@ minimal client state, and no heavy frontend build step.
   Priority: medium. Switch between compact, comfortable, and full-width preview
   density, especially for CSV and Markdown.
 - Keyboard navigation.
-  Priority: medium. Support arrow keys, enter to open, backspace to parent, and
-  slash to search. Keep shortcuts discoverable through tooltips and menus.
+  Status: implemented. Support arrow keys, enter to open, backspace to parent,
+  and slash to search. Keep shortcuts discoverable through tooltips and menus.
 
 ## Later Features
 

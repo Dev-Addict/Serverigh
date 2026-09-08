@@ -24,7 +24,7 @@ func TestFilesRendersDirectoryListing(t *testing.T) {
 	)
 
 	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("expected status 200, got %d", resp.StatusCode)
+		t.Fatalf("expected status 200, got %d: %s", resp.StatusCode, body)
 	}
 
 	if !strings.Contains(body, "note.txt") {
@@ -246,6 +246,10 @@ func TestFilesRendersTableControls(t *testing.T) {
 
 	expected := []string{
 		`aria-sort="descending"`,
+		`data-entry-row`,
+		`data-relative-path="note.txt"`,
+		`data-absolute-path=`,
+		`<time datetime=`,
 		`data-copy-text="note.txt"`,
 		`title="Copy absolute path"`,
 	}

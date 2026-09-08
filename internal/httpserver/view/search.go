@@ -22,10 +22,15 @@ type SearchResultsView struct {
 type SearchResultView struct {
 	Name         string
 	ParentPath   string
+	RelativePath string
+	AbsolutePath string
 	Kind         string
 	SizeLabel    string
 	ModTimeLabel string
+	ModTimeValue string
 	CreatedLabel string
+	CreatedValue string
+	CreatedKnown bool
 	Mode         string
 	IsDir        bool
 	BrowseURL    string
@@ -58,10 +63,15 @@ func SearchResults(results filesystem.SearchResults) SearchResultsView {
 		view.Results = append(view.Results, SearchResultView{
 			Name:         result.Name,
 			ParentPath:   result.ParentPath,
+			RelativePath: result.RelativePath,
+			AbsolutePath: result.AbsolutePath,
 			Kind:         result.Kind,
 			SizeLabel:    result.SizeLabel,
 			ModTimeLabel: result.ModTimeLabel,
+			ModTimeValue: result.ModTimeValue,
 			CreatedLabel: result.CreatedLabel,
+			CreatedValue: result.CreatedValue,
+			CreatedKnown: result.CreatedKnown,
 			Mode:         result.Mode,
 			IsDir:        result.IsDir,
 			BrowseURL:    searchBrowseURL(result),

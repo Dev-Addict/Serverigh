@@ -47,11 +47,11 @@ Implemented:
   current-folder ranking, and preview links.
 - [x] Table sorting, config-driven hidden-file visibility, and copy-path
   actions.
+- [x] Keyboard navigation and improved metadata views.
 - [x] Health endpoint, Makefile workflow, and backend test coverage.
 
 Planned for the first version:
 
-- [ ] Keyboard navigation and improved metadata views.
 - [ ] Opt-in write-mode workflows with confirmations and trash-first delete.
 - [ ] Bulk selection, archive downloads, and file refresh behavior.
 

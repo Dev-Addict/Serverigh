@@ -2,8 +2,10 @@
 @import url("/static/layout.css");
 @import url("/static/search.css");
 @import url("/static/settings.css");
+@import url("/static/help.css");
 @import url("/static/files.css");
 @import url("/static/status.css");
+@import url("/static/metadata.css");
 @import url("/static/preview.css");
 @import url("/static/syntax.css");
 @import url("/static/responsive.css");

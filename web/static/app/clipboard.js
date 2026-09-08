@@ -14,12 +14,17 @@ export const initClipboardActions = (showToast) => {
       return;
     }
 
-    navigator.clipboard.writeText(copyButton.dataset.copyText || "").then(() => {
-      copyButton.dataset.copied = "true";
-      showToast("Path copied");
-      window.setTimeout(() => {
-        delete copyButton.dataset.copied;
-      }, 1200);
-    });
+    navigator.clipboard
+      .writeText(copyButton.dataset.copyText || "")
+      .then(() => {
+        copyButton.dataset.copied = "true";
+        showToast("Path copied");
+        window.setTimeout(() => {
+          delete copyButton.dataset.copied;
+        }, 1200);
+      })
+      .catch(() => {
+        showToast("Unable to copy path");
+      });
   });
 };

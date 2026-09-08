@@ -20,7 +20,10 @@
 		</thead>
 		<tbody>
 			{{ range .Results }}
-			<tr>
+			<tr
+				data-entry-row
+				data-relative-path="{{ .RelativePath }}"
+				data-absolute-path="{{ .AbsolutePath }}">
 				<td class="name-cell">
 					{{ if .IsDir }}
 					<a
@@ -29,7 +32,8 @@
 						hx-get="{{ .FilesURL }}"
 						hx-target="#files-region"
 						hx-swap="innerHTML"
-						hx-push-url="{{ .BrowseURL }}">
+						hx-push-url="{{ .BrowseURL }}"
+						title="Open {{ .Name }}">
 						<span class="entry-icon" aria-hidden="true"></span>
 						<span>{{ .Name }}/</span>
 					</a>
@@ -38,7 +42,8 @@
 						class="entry-link file-link"
 						href="{{ .BrowseURL }}"
 						data-search-preview-link
-						data-preview-url="{{ .PreviewURL }}">
+						data-preview-url="{{ .PreviewURL }}"
+						title="Preview {{ .Name }}">
 						<span class="entry-icon" aria-hidden="true"></span>
 						<span>{{ .Name }}</span>
 					</a>
@@ -46,8 +51,16 @@
 					<span class="search-entry-path">{{ .Kind }} in {{ .ParentPath }}</span>
 				</td>
 				<td class="numeric-cell">{{ .SizeLabel }}</td>
-				<td>{{ .ModTimeLabel }}</td>
-				<td>{{ .CreatedLabel }}</td>
+				<td>
+					<time datetime="{{ .ModTimeValue }}">{{ .ModTimeLabel }}</time>
+				</td>
+				<td>
+					{{ if .CreatedKnown }}
+					<time datetime="{{ .CreatedValue }}">{{ .CreatedLabel }}</time>
+					{{ else }}
+					{{ .CreatedLabel }}
+					{{ end }}
+				</td>
 				<td><code>{{ .Mode }}</code></td>
 				<td>
 					<div class="path-actions" aria-label="Search result actions">

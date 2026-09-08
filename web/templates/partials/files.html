@@ -27,11 +27,11 @@
 			<tr>
 				<th scope="col" aria-sort="{{ .Controls.NameSort.AriaSort }}">
 					<a
-						class="sort-link"
-						href="{{ .Controls.NameSort.BrowseURL }}"
-						hx-get="{{ .Controls.NameSort.FilesURL }}"
-						hx-target="#files-region"
-						hx-swap="innerHTML">
+							class="sort-link"
+							href="{{ .Controls.NameSort.BrowseURL }}"
+							hx-get="{{ .Controls.NameSort.FilesURL }}"
+							hx-target="#files-region"
+							hx-swap="innerHTML">
 						Name
 						{{ if .Controls.NameSort.Indicator }}
 						<span>{{ .Controls.NameSort.Indicator }}</span>
@@ -80,10 +80,13 @@
 				<th scope="col">Mode</th>
 				<th scope="col">Actions</th>
 			</tr>
-		</thead>
+			</thead>
 		<tbody>
 			{{ range .Entries }}
-			<tr>
+			<tr
+				data-entry-row
+				data-relative-path="{{ .RelativePath }}"
+				data-absolute-path="{{ .AbsolutePath }}">
 				<td class="name-cell">
 					{{ if .IsDir }}
 					<a
@@ -91,7 +94,8 @@
 						href="{{ $.BrowseURL .Path }}"
 						hx-get="{{ $.FilesURL .Path }}"
 						hx-target="#files-region"
-						hx-swap="innerHTML">
+						hx-swap="innerHTML"
+						title="Open {{ .Name }}">
 						<span class="entry-icon" aria-hidden="true"></span>
 						<span>{{ .Name }}/</span>
 					</a>
@@ -102,15 +106,24 @@
 						hx-get="/preview?path={{ .Path | urlquery }}"
 						hx-target="#preview-region"
 						hx-swap="innerHTML"
-						hx-push-url="{{ $.FileBrowseURL .Path }}">
+						hx-push-url="{{ $.FileBrowseURL .Path }}"
+						title="Preview {{ .Name }}">
 						<span class="entry-icon" aria-hidden="true"></span>
 						<span>{{ .Name }}</span>
 					</a>
 					{{ end }}
 				</td>
 				<td class="numeric-cell">{{ .SizeLabel }}</td>
-				<td>{{ .ModTimeLabel }}</td>
-				<td>{{ .CreatedLabel }}</td>
+				<td>
+					<time datetime="{{ .ModTimeValue }}">{{ .ModTimeLabel }}</time>
+				</td>
+				<td>
+					{{ if .CreatedKnown }}
+					<time datetime="{{ .CreatedValue }}">{{ .CreatedLabel }}</time>
+					{{ else }}
+					{{ .CreatedLabel }}
+					{{ end }}
+				</td>
 				<td><code>{{ .Mode }}</code></td>
 				<td>
 					<div class="path-actions" aria-label="Copy path actions">

@@ -52,6 +52,22 @@ func TestBrowseRendersShell(t *testing.T) {
 		t.Fatalf("expected settings modal in response, got %q", body)
 	}
 
+	if !strings.Contains(body, `id="keyboard-help-modal"`) {
+		t.Fatalf("expected keyboard help modal in response, got %q", body)
+	}
+
+	if !strings.Contains(body, `data-vim-key-status`) {
+		t.Fatalf("expected vim key status in response, got %q", body)
+	}
+
+	if !strings.Contains(body, `data-help-open`) {
+		t.Fatalf("expected keyboard help trigger in response, got %q", body)
+	}
+
+	if !strings.Contains(body, `Write Keys Not Implemented`) {
+		t.Fatalf("expected reserved write-key note in response, got %q", body)
+	}
+
 	if !strings.Contains(body, `<option value="light" selected>Light</option>`) {
 		t.Fatalf("expected light theme option in response, got %q", body)
 	}

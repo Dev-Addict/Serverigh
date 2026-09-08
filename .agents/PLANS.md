@@ -170,6 +170,8 @@ Tasks:
 - Add copy actions for relative and absolute paths.
 - Add a search bar that ranks current-folder and subtree matches first.
 - Add keyboard basics: arrow navigation, enter to open, and backspace to parent.
+  Completed with table focus navigation, slash-to-search, and parent/back
+  shortcuts.
 
 Acceptance criteria:
 

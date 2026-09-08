@@ -15,7 +15,8 @@
 }
 
 .preview-chrome .panel-header {
-  margin-bottom: 12px;
+  align-items: center;
+  margin-bottom: 0;
 }
 
 .file-actions {
@@ -46,7 +47,7 @@
 .preview-body-json,
 .preview-body-code {
   display: grid;
-  height: calc(100vh - var(--serverigh-preview-offset) - var(--serverigh-footer-height) - var(--serverigh-preview-chrome-height));
+  height: calc(100vh - var(--serverigh-preview-offset) - var(--serverigh-footer-height) - var(--serverigh-preview-chrome-height) - var(--serverigh-preview-metadata-height));
   padding: 0;
   overflow: hidden;
 }
@@ -57,7 +58,7 @@
 .preview-body-video {
   display: grid;
   place-items: center;
-  height: calc(100vh - var(--serverigh-preview-offset) - var(--serverigh-footer-height) - var(--serverigh-preview-chrome-height));
+  height: calc(100vh - var(--serverigh-preview-offset) - var(--serverigh-footer-height) - var(--serverigh-preview-chrome-height) - var(--serverigh-preview-metadata-height));
 }
 
 .notice,

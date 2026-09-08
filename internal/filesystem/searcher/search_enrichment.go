@@ -58,9 +58,16 @@ func (s Service) enrichResult(result Result) (Result, bool, error) {
 	result.Kind = fileinfo.Kind(info)
 	result.Size = info.Size()
 	result.SizeLabel = fileinfo.FormatSize(info.Size())
+	result.RelativePath = strings.TrimPrefix(result.Path, "/")
+	result.AbsolutePath = filename
 	result.Mode = info.Mode().String()
-	result.ModTimeLabel = info.ModTime().Format("2006-01-02 15:04")
+	result.ModTimeLabel = fileinfo.FormatTime(info.ModTime())
+	result.ModTimeValue = fileinfo.FormatTimeValue(info.ModTime())
 	result.CreatedLabel = fileinfo.FormatOptionalTime(createdTime, createdKnown)
+	result.CreatedValue = fileinfo.FormatOptionalTimeValue(
+		createdTime,
+		createdKnown,
+	)
 	result.CreatedKnown = createdKnown
 	result.IsDir = info.IsDir()
 

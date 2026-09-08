@@ -117,7 +117,23 @@ func TestRoutesServeEmbeddedStaticAssets(t *testing.T) {
 
 	tests := []string{
 		"/static/app.js",
+		"/static/app/help.js",
+		"/static/app/keyboard.js",
+		"/static/app/keyboard-command-state.js",
+		"/static/app/keyboard-copy-path.js",
+		"/static/app/keyboard-dom.js",
+		"/static/app/keyboard-entries.js",
+		"/static/app/keyboard-events.js",
+		"/static/app/keyboard-htmx-navigation.js",
+		"/static/app/keyboard-navigation.js",
+		"/static/app/keyboard-panes.js",
+		"/static/app/keyboard-runner.js",
+		"/static/app/keyboard-shortcuts.js",
+		"/static/app/keyboard-table.js",
+		"/static/app/layout.js",
+		"/static/app/layout-preview.js",
 		"/static/app/theme.js",
+		"/static/app/vim-status.js",
 	}
 
 	for _, path := range tests {

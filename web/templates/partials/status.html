@@ -8,4 +8,14 @@
 	<span>Limited to {{ .EntryLimit }} entries</span>
 	{{ end }}
 	<span>{{ .Mode }}</span>
+	<span class="vim-status" aria-label="Vim key status">
+		<span>keys</span>
+		<code data-vim-key-status>--</code>
+	</span>
+	<button
+		class="status-help"
+		type="button"
+		data-help-open>
+		Press ? for shortcuts
+	</button>
 </footer>

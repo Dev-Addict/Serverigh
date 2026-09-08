@@ -42,6 +42,19 @@ func TestPreviewRendersBoundedFilePreview(t *testing.T) {
 		t.Fatalf("expected fixed preview chrome, got %q", body)
 	}
 
+	for _, part := range []string{
+		`class="preview-metadata"`,
+		`class="metadata-grid"`,
+		`aria-label="File metadata"`,
+		`<dt>Type</dt>`,
+		`<dt>Absolute</dt>`,
+		`<time datetime=`,
+	} {
+		if !strings.Contains(body, part) {
+			t.Fatalf("expected %q in metadata view, got %q", part, body)
+		}
+	}
+
 	if !strings.Contains(body, `class="preview-body preview-body-text"`) {
 		t.Fatalf("expected scrollable preview body, got %q", body)
 	}

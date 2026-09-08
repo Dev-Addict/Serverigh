@@ -91,6 +91,14 @@
   background: var(--color-row-hover);
 }
 
+.file-table tbody tr:focus-within {
+  background: var(--color-selected);
+}
+
+.file-table tbody tr[data-copied="true"] {
+  background: var(--color-selected);
+}
+
 .name-cell,
 .file-table code {
   overflow-wrap: anywhere;
@@ -102,6 +110,12 @@
   gap: 8px;
   align-items: center;
   font-weight: 600;
+}
+
+.entry-link:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
 }
 
 .entry-link span:last-child {

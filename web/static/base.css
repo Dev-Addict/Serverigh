@@ -35,6 +35,7 @@
   --color-table-head: #edf3f4;
   --color-status-bg: #263238;
   --color-status-text: #edf2f4;
+  --color-status-border: #65727a;
   --color-toast-bg: #172026;
   --color-toast-text: #ffffff;
   --shadow-modal: 0 18px 48px rgba(23, 32, 38, 0.22);
@@ -75,6 +76,7 @@ html[data-theme="dark"] {
   --color-table-head: #202a30;
   --color-status-bg: #0d1114;
   --color-status-text: #edf2f4;
+  --color-status-border: #5c6d76;
   --color-toast-bg: #edf2f4;
   --color-toast-text: #11161a;
   --shadow-modal: 0 18px 48px rgba(0, 0, 0, 0.44);
@@ -115,4 +117,5 @@ a:hover {
   --serverigh-top-bar-height: 0px;
   --serverigh-footer-height: 0px;
   --serverigh-preview-chrome-height: 0px;
+  --serverigh-preview-metadata-height: 0px;
 }

@@ -1,23 +1,58 @@
 <section class="preview-panel" data-path="{{ .Path }}">
 	<div class="preview-chrome">
 		<header class="panel-header">
-			<h2>{{ .Name }}</h2>
-			<p>
-				{{ .SizeLabel }}
-				<span aria-hidden="true">/</span>
-				{{ .MIMEType }}
-				<span aria-hidden="true">/</span>
-				Created {{ .CreatedTimeLabel }}
-				<span aria-hidden="true">/</span>
-				Modified {{ .ModifiedTimeLabel }}
-			</p>
-		</header>
+			<div>
+				<h2>{{ .Name }}</h2>
+				<p>{{ .Path }}</p>
+			</div>
 
-		<nav class="file-actions" aria-label="File actions">
-			<a href="/raw?path={{ .Path | urlquery }}">Raw</a>
-			<a href="/download?path={{ .Path | urlquery }}">Download</a>
-		</nav>
+			<nav class="file-actions" aria-label="File actions">
+				<a href="/raw?path={{ .Path | urlquery }}">Raw</a>
+				<a href="/download?path={{ .Path | urlquery }}">Download</a>
+			</nav>
+		</header>
 	</div>
+
+	<section class="preview-metadata" aria-label="File metadata">
+		<dl class="metadata-grid">
+			<div>
+				<dt>Type</dt>
+				<dd>{{ .MIMEType }}</dd>
+			</div>
+			<div>
+				<dt>Size</dt>
+				<dd>{{ .SizeLabel }}</dd>
+			</div>
+			<div>
+				<dt>Modified</dt>
+				<dd>
+					<time datetime="{{ .ModifiedTimeValue }}">
+						{{ .ModifiedTimeLabel }}
+					</time>
+				</dd>
+			</div>
+			<div>
+				<dt>Created</dt>
+				<dd>
+					{{ if .CreationTimeKnown }}
+					<time datetime="{{ .CreatedTimeValue }}">
+						{{ .CreatedTimeLabel }}
+					</time>
+					{{ else }}
+					{{ .CreatedTimeLabel }}
+					{{ end }}
+				</dd>
+			</div>
+			<div>
+				<dt>Mode</dt>
+				<dd><code>{{ .Mode }}</code></dd>
+			</div>
+			<div class="metadata-wide">
+				<dt>Absolute</dt>
+				<dd>{{ .Absolute }}</dd>
+			</div>
+		</dl>
+	</section>
 
 	<div class="preview-body preview-body-{{ .Kind }}">
 		{{ if .ShowTruncated }}

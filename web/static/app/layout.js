@@ -1,34 +1,4 @@
-const updatePreviewOffset = () => {
-  const topBar = document.querySelector(".top-bar");
-  const breadcrumbs = document.querySelector(".breadcrumbs");
-  const footer = document.querySelector(".status-row");
-  const previewChrome = document.querySelector(".preview-chrome");
-  const topBarHeight = topBar?.offsetHeight || 0;
-  const breadcrumbsHeight = breadcrumbs?.offsetHeight || 0;
-  const footerHeight = footer?.offsetHeight || 0;
-  const previewChromeHeight = previewChrome?.offsetHeight || 0;
-  const offset = topBarHeight + breadcrumbsHeight;
-
-  document.documentElement.style.setProperty(
-    "--serverigh-top-bar-height",
-    `${topBarHeight}px`,
-  );
-
-  document.documentElement.style.setProperty(
-    "--serverigh-footer-height",
-    `${footerHeight}px`,
-  );
-
-  document.documentElement.style.setProperty(
-    "--serverigh-preview-chrome-height",
-    `${previewChromeHeight}px`,
-  );
-
-  document.documentElement.style.setProperty(
-    "--serverigh-preview-offset",
-    `${offset}px`,
-  );
-};
+import { updatePreviewOffset } from "./layout-preview.js";
 
 const observePreviewChrome = (queueUpdate) => {
   if (!("ResizeObserver" in window)) {
@@ -36,16 +6,28 @@ const observePreviewChrome = (queueUpdate) => {
   }
 
   const observer = new ResizeObserver(queueUpdate);
+  const observedNodes = new Set();
+
+  const observeNode = (node) => {
+    if (observedNodes.has(node)) {
+      return;
+    }
+
+    observedNodes.add(node);
+    observer.observe(node);
+  };
+
   const observeChrome = () => {
+    observer.disconnect();
+    observedNodes.clear();
+
     document
       .querySelectorAll(".top-bar, .breadcrumbs, .status-row")
-      .forEach((node) => {
-        observer.observe(node);
-      });
+      .forEach(observeNode);
 
-    document.querySelectorAll(".preview-chrome").forEach((node) => {
-      observer.observe(node);
-    });
+    document
+      .querySelectorAll(".preview-chrome, .preview-metadata")
+      .forEach(observeNode);
   };
 
   observeChrome();

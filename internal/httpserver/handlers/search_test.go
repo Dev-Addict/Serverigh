@@ -107,8 +107,12 @@ func TestSearchFileResultLinksToParentAndPreview(t *testing.T) {
 	}
 
 	for _, part := range []string{
+		`data-entry-row`,
+		`data-relative-path="docs/report.txt"`,
+		`data-absolute-path=`,
 		`data-search-preview-link`,
 		`data-preview-url="/preview?path=%2Fdocs%2Freport.txt"`,
+		`<time datetime=`,
 		`<th scope="col">Actions</th>`,
 		`class="path-actions"`,
 		`title="Go">Go</a>`,
@@ -118,9 +122,7 @@ func TestSearchFileResultLinksToParentAndPreview(t *testing.T) {
 		}
 	}
 
-	for _, removed := range []string{
-		`data-copy-text=`,
-	} {
+	for _, removed := range []string{`data-copy-text=`} {
 		if strings.Contains(body, removed) {
 			t.Fatalf("expected %q to be removed from file result, got %q", removed, body)
 		}

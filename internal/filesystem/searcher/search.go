@@ -29,12 +29,16 @@ type Result struct {
 	Name         string
 	Path         string
 	ParentPath   string
+	RelativePath string
+	AbsolutePath string
 	Kind         string
 	Size         int64
 	SizeLabel    string
 	Mode         string
 	ModTimeLabel string
+	ModTimeValue string
 	CreatedLabel string
+	CreatedValue string
 	CreatedKnown bool
 	IsDir        bool
 	Score        int

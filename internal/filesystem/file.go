@@ -23,8 +23,10 @@ type File struct {
 	Mode              string
 	CreatedTime       time.Time
 	CreatedTimeLabel  string
+	CreatedTimeValue  string
 	ModifiedTime      time.Time
 	ModifiedTimeLabel string
+	ModifiedTimeValue string
 	CreationTimeKnown bool
 	MIMEType          string
 }
@@ -121,8 +123,10 @@ func fileFromInfo(
 		Mode:              info.Mode().String(),
 		CreatedTime:       createdTime,
 		CreatedTimeLabel:  fileinfo.FormatOptionalTime(createdTime, creationTimeKnown),
+		CreatedTimeValue:  fileinfo.FormatOptionalTimeValue(createdTime, creationTimeKnown),
 		ModifiedTime:      modifiedTime,
 		ModifiedTimeLabel: fileinfo.FormatTime(modifiedTime),
+		ModifiedTimeValue: fileinfo.FormatTimeValue(modifiedTime),
 		CreationTimeKnown: creationTimeKnown,
 		MIMEType:          mimeType,
 	}
