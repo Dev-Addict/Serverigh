@@ -101,7 +101,7 @@ func TestWriteActionMovesFileToTrash(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(root, "note.txt")); !os.IsNotExist(err) {
 		t.Fatalf("expected original file to be moved, got %v", err)
 	}
-	trashEntries, err := os.ReadDir(filepath.Join(root, ".serverigh-trash"))
+	trashEntries, err := os.ReadDir(filepath.Join(root, ".serverigh", "trash"))
 	if err != nil {
 		t.Fatalf("read trash: %v", err)
 	}

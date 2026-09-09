@@ -16,11 +16,23 @@ func TestTrashesPath(t *testing.T) {
 	}
 
 	assertMissing(t, filepath.Join(root, "note.txt"))
-	entries, err := os.ReadDir(filepath.Join(root, trashFolderName))
+	entries, err := os.ReadDir(
+		filepath.Join(root, stateFolderName, trashFolderName),
+	)
 	if err != nil {
 		t.Fatalf("read trash: %v", err)
 	}
 	if len(entries) != 1 {
 		t.Fatalf("expected one trash entry, got %d", len(entries))
+	}
+}
+
+func TestRejectsTrashingStateDirectory(t *testing.T) {
+	root := t.TempDir()
+	mkdir(t, filepath.Join(root, stateFolderName, trashFolderName))
+	service := NewService(root)
+
+	if err := service.Trash("/" + stateFolderName); err == nil {
+		t.Fatalf("expected state directory trash to fail")
 	}
 }

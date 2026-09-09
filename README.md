@@ -171,7 +171,7 @@ Serverigh is intentionally local-first and root-scoped.
 - It keeps mutating actions unavailable unless write mode is explicitly
   enabled.
 - It uses prompt, menu, or confirmation workflows for mutating file actions.
-- It moves deleted entries into `.serverigh-trash` under the configured root.
+- It moves deleted entries into `.serverigh/trash` under the configured root.
 
 Do not expose Serverigh to the public internet unless authentication,
 authorization, and transport security have been designed for that deployment.

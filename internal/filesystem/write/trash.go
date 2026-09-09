@@ -7,7 +7,10 @@ import (
 	"time"
 )
 
-const trashFolderName = ".serverigh-trash"
+const (
+	stateFolderName = ".serverigh"
+	trashFolderName = "trash"
+)
 
 func (s Service) Trash(requestPath string) error {
 	source, err := s.resolve(requestPath)
@@ -15,8 +18,8 @@ func (s Service) Trash(requestPath string) error {
 		return err
 	}
 
-	trashPath := filepath.Join(s.root, trashFolderName)
-	if source.Absolute == trashPath {
+	trashPath := filepath.Join(s.root, stateFolderName, trashFolderName)
+	if sameOrDescendant(trashPath, source.Absolute) {
 		return ErrInvalidPath
 	}
 
