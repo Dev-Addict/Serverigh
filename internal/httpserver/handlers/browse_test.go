@@ -56,6 +56,10 @@ func TestBrowseRendersShell(t *testing.T) {
 		t.Fatalf("expected keyboard help modal in response, got %q", body)
 	}
 
+	if !strings.Contains(body, `id="write-modal"`) {
+		t.Fatalf("expected write modal in response, got %q", body)
+	}
+
 	if !strings.Contains(body, `data-vim-key-status`) {
 		t.Fatalf("expected vim key status in response, got %q", body)
 	}
@@ -64,8 +68,8 @@ func TestBrowseRendersShell(t *testing.T) {
 		t.Fatalf("expected keyboard help trigger in response, got %q", body)
 	}
 
-	if !strings.Contains(body, `Write Keys Not Implemented`) {
-		t.Fatalf("expected reserved write-key note in response, got %q", body)
+	if !strings.Contains(body, `Write Mode`) {
+		t.Fatalf("expected write-mode shortcut section in response, got %q", body)
 	}
 
 	if !strings.Contains(body, `<option value="light" selected>Light</option>`) {
@@ -76,7 +80,7 @@ func TestBrowseRendersShell(t *testing.T) {
 		t.Fatalf("expected dark theme option in response, got %q", body)
 	}
 
-	if strings.Contains(body, "<form") {
+	if strings.Contains(body, `id="search-region"><form`) {
 		t.Fatalf("expected search control to be non-submittable, got %q", body)
 	}
 

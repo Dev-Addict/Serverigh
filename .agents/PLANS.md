@@ -64,8 +64,7 @@ Ship these as required first-version capabilities:
 Defer these until after the first version unless the read-only release gates
 are already met:
 
-- Mutating file actions such as rename, move, copy, delete, mkdir, and upload.
-- Trash-first delete behavior.
+- Restore UI for trash-first delete behavior.
 - Multi-root bookmarks.
 - Bulk selection and archive downloads.
 - File watching.

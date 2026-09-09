@@ -32,6 +32,7 @@ func New(cfg config.Config) (*fiber.App, error) {
 		handlers: routeHandlers,
 	}
 
+	registerMiddleware(app)
 	server.registerRoutes(app)
 
 	return app, nil

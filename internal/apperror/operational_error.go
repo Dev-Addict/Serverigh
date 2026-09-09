@@ -11,10 +11,12 @@ const (
 	CodeIsDirectory      Code = "is_directory"
 	CodeNotDirectory     Code = "not_directory"
 	CodeNotFound         Code = "not_found"
+	CodeAlreadyExists    Code = "already_exists"
 	CodePermissionDenied Code = "permission_denied"
 	CodeFilesystem       Code = "filesystem"
 	CodeRequestCanceled  Code = "request_canceled"
 	CodeRequestTimeout   Code = "request_timeout"
+	CodeWriteDisabled    Code = "write_disabled"
 	CodeServer           Code = "server"
 )
 

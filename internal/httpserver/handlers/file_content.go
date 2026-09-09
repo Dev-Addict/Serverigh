@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"log/slog"
 	"mime"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 
@@ -11,10 +13,12 @@ import (
 )
 
 func (h Handlers) Download(c *fiber.Ctx) error {
+	start := time.Now()
 	file, err := h.files.Open(c.Query("path", "/"))
 	if err != nil {
 		return h.writeOperationalError(c, err)
 	}
+	logFileStream(c, "download started", start, file)
 
 	c.Set(fiber.HeaderXContentTypeOptions, "nosniff")
 	c.Set(
@@ -32,10 +36,12 @@ func (h Handlers) Download(c *fiber.Ctx) error {
 }
 
 func (h Handlers) Raw(c *fiber.Ctx) error {
+	start := time.Now()
 	file, err := h.files.Open(c.Query("path", "/"))
 	if err != nil {
 		return h.writeOperationalError(c, err)
 	}
+	logFileStream(c, "raw file started", start, file)
 
 	c.Set(fiber.HeaderXContentTypeOptions, "nosniff")
 	c.Set(fiber.HeaderContentSecurityPolicy, "default-src 'none'")
@@ -107,4 +113,24 @@ func streamSize(size int64) int {
 	}
 
 	return int(size)
+}
+
+func logFileStream(
+	c *fiber.Ctx,
+	event string,
+	start time.Time,
+	file filesystem.OpenedFile,
+) {
+	logHandlerOperation(
+		c,
+		slog.LevelInfo,
+		event,
+		start,
+		"path",
+		file.Path,
+		"mime_type",
+		file.MIMEType,
+		"size",
+		file.Size,
+	)
 }

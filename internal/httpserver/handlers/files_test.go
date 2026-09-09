@@ -247,11 +247,19 @@ func TestFilesRendersTableControls(t *testing.T) {
 	expected := []string{
 		`aria-sort="descending"`,
 		`data-entry-row`,
+		`data-entry-id="/note.txt"`,
+		`data-entry-name="note.txt"`,
+		`data-entry-path="/note.txt"`,
+		`data-entry-menu-button`,
+		`class="entry-menu-heading" scope="col" aria-label="Actions"></th>`,
+		`<span aria-hidden="true">&#8942;</span>`,
 		`data-relative-path="note.txt"`,
 		`data-absolute-path=`,
+		`data-write-context-menu`,
+		`data-has-entry="false"`,
+		`data-entry-required`,
+		`data-context-copy="relative"`,
 		`<time datetime=`,
-		`data-copy-text="note.txt"`,
-		`title="Copy absolute path"`,
 	}
 
 	for _, part := range expected {
@@ -266,6 +274,10 @@ func TestFilesRendersTableControls(t *testing.T) {
 		`name="filter"`,
 		`filter=`,
 		`class="table-controls"`,
+		`<th scope="col">Actions</th>`,
+		`data-copy-text=`,
+		`data-write-create=`,
+		`data-context-write=`,
 		`data-hidden-toggle`,
 		`name="hidden"`,
 		`>Hidden files<`,

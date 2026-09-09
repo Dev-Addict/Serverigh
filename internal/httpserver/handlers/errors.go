@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -58,6 +59,7 @@ func (h Handlers) writeError(
 	code apperror.Code,
 	message string,
 ) error {
+	logHandlerError(c, status, code, message)
 	if wantsHTMLError(c) {
 		c.Status(status)
 
@@ -71,6 +73,36 @@ func (h Handlers) writeError(
 		"code":  string(code),
 		"error": message,
 	})
+}
+
+func logHandlerError(
+	c *fiber.Ctx,
+	status int,
+	code apperror.Code,
+	message string,
+) {
+	level := slog.LevelWarn
+	if status >= fiber.StatusInternalServerError {
+		level = slog.LevelError
+	}
+
+	slog.Log(
+		c.UserContext(),
+		level,
+		"request error",
+		"request_id",
+		c.Locals("request_id"),
+		"method",
+		c.Method(),
+		"path",
+		c.Path(),
+		"status",
+		status,
+		"code",
+		code,
+		"message",
+		message,
+	)
 }
 
 func wantsHTMLError(c *fiber.Ctx) bool {
@@ -97,12 +129,16 @@ func statusForOperationalCode(code apperror.Code) int {
 		status = fiber.StatusBadRequest
 	case apperror.CodeNotFound:
 		status = fiber.StatusNotFound
+	case apperror.CodeAlreadyExists:
+		status = fiber.StatusConflict
 	case apperror.CodePermissionDenied:
 		status = fiber.StatusForbidden
 	case apperror.CodeRequestCanceled:
 		status = fiber.StatusRequestTimeout
 	case apperror.CodeRequestTimeout:
 		status = fiber.StatusGatewayTimeout
+	case apperror.CodeWriteDisabled:
+		status = fiber.StatusForbidden
 	case apperror.CodeServer:
 		status = fiber.StatusInternalServerError
 	}

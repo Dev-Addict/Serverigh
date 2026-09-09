@@ -28,6 +28,10 @@ var (
 		apperror.CodeInvalidPath,
 		"path changed while opening",
 	)
+	ErrPathExists = apperror.New(
+		apperror.CodeAlreadyExists,
+		"path already exists",
+	)
 )
 
 func wrapFileError(operation string, err error) error {

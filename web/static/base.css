@@ -29,6 +29,7 @@
   --color-file-fold: #e8eef1;
   --color-error-border: #d89a8d;
   --color-error-bg: #fff7f5;
+  --color-danger: #9d2f20;
   --color-markdown-border: #9ab0b8;
   --color-markdown-muted: #4f5f67;
   --color-code-bg: #e9eef0;
@@ -70,6 +71,7 @@ html[data-theme="dark"] {
   --color-file-fold: #26343b;
   --color-error-border: #d98b7e;
   --color-error-bg: #2a1b1a;
+  --color-danger: #f3a092;
   --color-markdown-border: #78929e;
   --color-markdown-muted: #c0ccd1;
   --color-code-bg: #263238;

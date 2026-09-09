@@ -73,11 +73,12 @@ minimal client state, and no heavy frontend build step.
   Priority: high. Configure named roots such as Projects, Downloads, and Home.
   Each root must have its own path boundary.
 - File operations.
-  Priority: high. Add new folder, rename, move, copy, delete, and upload only
-  when write mode is enabled. Confirm destructive actions.
+  Priority: high. Add new folder, new file, rename, move, copy, delete, and
+  upload only when write mode is enabled. Confirm destructive actions.
+  Status: implemented for single entries.
 - Trash-first delete.
-  Priority: high. Prefer moving to trash when supported. Fall back to permanent
-  delete only with explicit confirmation.
+  Priority: high. Move deleted entries into a root-scoped trash folder.
+  Status: implemented without restore UI.
 - Bulk selection.
   Priority: medium. Select multiple files for download, move, copy, or delete
   with predictable keyboard and checkbox behavior.

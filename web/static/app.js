@@ -9,6 +9,7 @@ import { initSettings } from "./app/settings.js";
 import { initTheme } from "./app/theme.js";
 import { createToast } from "./app/toast.js";
 import { initVimStatus } from "./app/vim-status.js";
+import { initWriteActions } from "./app/write-actions.js";
 
 document.documentElement.dataset.serverigh = "ready";
 
@@ -24,3 +25,4 @@ initHtmxStatus(queuePreviewOffsetUpdate);
 initClipboardActions(showToast);
 initHistoryBack();
 initKeyboardNavigation(showToast, setKeyStatus);
+initWriteActions(showToast);

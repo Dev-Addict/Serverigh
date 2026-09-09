@@ -32,7 +32,9 @@ func New(cfg config.Config) (Handlers, error) {
 		return Handlers{}, err
 	}
 
-	templates, err := template.ParseFS(
+	templates, err := template.New("").Funcs(template.FuncMap{
+		"dict": templateDict,
+	}).ParseFS(
 		web.Templates,
 		"templates/*.html",
 		"templates/partials/*.html",
@@ -56,4 +58,16 @@ func New(cfg config.Config) (Handlers, error) {
 			MaxPreviewBytes: cfg.MaxPreviewBytes,
 		},
 	}, nil
+}
+
+func templateDict(values ...any) map[string]any {
+	result := map[string]any{}
+	for index := 0; index+1 < len(values); index += 2 {
+		key, ok := values[index].(string)
+		if ok {
+			result[key] = values[index+1]
+		}
+	}
+
+	return result
 }

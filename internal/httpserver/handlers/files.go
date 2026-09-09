@@ -1,19 +1,35 @@
 package handlers
 
 import (
+	"log/slog"
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 
 	"serverigh/internal/httpserver/view"
 )
 
 func (h Handlers) Files(c *fiber.Ctx) error {
+	start := time.Now()
 	options := listOptionsFromRequest(c)
 	listing, err := h.files.ListWithOptions(c.Query("path", "/"), options)
 	if err != nil {
 		return h.writeOperationalError(c, err)
 	}
+	logHandlerOperation(
+		c,
+		slog.LevelInfo,
+		"directory listed",
+		start,
+		"path",
+		listing.Path,
+		"entry_count",
+		len(listing.Entries),
+		"truncated",
+		listing.Truncated,
+	)
 
-	files := view.Files(listing)
+	files := view.Files(listing, h.config.Write)
 
 	if c.Get("HX-Request") == "true" {
 		c.Set("HX-Push-Url", files.Controls.BrowseURL)

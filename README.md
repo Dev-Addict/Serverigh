@@ -20,8 +20,8 @@ browsing, safe path handling, bounded previews, HTMX folder/file navigation,
 Markdown/CSV/JSON/code/media previewers, raw/download responses, and
 operational errors.
 
-Search, table controls, and write workflows are tracked below as unchecked
-items.
+Search, table controls, and remaining file-management workflows are tracked
+below as unchecked items.
 
 ## Feature Checklist
 
@@ -48,12 +48,14 @@ Implemented:
 - [x] Table sorting, config-driven hidden-file visibility, and copy-path
   actions.
 - [x] Keyboard navigation and improved metadata views.
+- [x] Opt-in write-mode workflows with create, rename, move, copy, file/folder
+  upload, and trash-first delete.
 - [x] Health endpoint, Makefile workflow, and backend test coverage.
 
 Planned for the first version:
 
-- [ ] Opt-in write-mode workflows with confirmations and trash-first delete.
-- [ ] Bulk selection, archive downloads, and file refresh behavior.
+- [ ] Bulk selection, archive downloads, restore from trash, and file refresh
+  behavior.
 
 Later or explicitly deferred:
 
@@ -144,9 +146,10 @@ Current routes:
 - `GET /healthz`
   Returns a health payload for smoke checks.
 
-Reserved but not implemented yet:
+Write-mode routes:
 
 - `POST /actions/mkdir`
+- `POST /actions/file`
 - `POST /actions/rename`
 - `POST /actions/move`
 - `POST /actions/copy`
@@ -165,7 +168,10 @@ Serverigh is intentionally local-first and root-scoped.
 - It streams raw and download responses from validated file handles.
 - It serves active raw content, such as HTML and SVG, as plain text.
 - It sends `X-Content-Type-Options: nosniff` for raw and download responses.
-- It keeps mutating actions unavailable until write workflows are implemented.
+- It keeps mutating actions unavailable unless write mode is explicitly
+  enabled.
+- It uses prompt, menu, or confirmation workflows for mutating file actions.
+- It moves deleted entries into `.serverigh-trash` under the configured root.
 
 Do not expose Serverigh to the public internet unless authentication,
 authorization, and transport security have been designed for that deployment.

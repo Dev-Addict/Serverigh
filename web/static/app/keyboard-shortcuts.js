@@ -10,7 +10,8 @@ import { runBufferedCommand, runSingleKeyCommand } from "./keyboard-runner.js";
 const isCountKey = (key, state) =>
   /^[1-9]$/.test(key) || (state.hasCount() && key === "0");
 
-const isBufferedPrefix = (key) => key === "g" || key === "y";
+const isBufferedPrefix = (key) =>
+  key === "c" || key === "d" || key === "g" || key === "m" || key === "y";
 
 const handleCommandKey = (event, context, state) => {
   if (isCountKey(event.key, state)) {

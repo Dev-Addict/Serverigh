@@ -1,0 +1,29 @@
+{{ if .Truncated }}
+<p class="folder-tree-notice">Showing the first available destination folders.</p>
+{{ end }}
+{{ range .Entries }}
+<div
+	class="folder-tree-row"
+	data-folder-row
+	data-folder-path="{{ .Path }}"
+	data-folder-expanded="{{ .Expanded }}"
+	data-folder-has-children="{{ .HasChildren }}"
+	style="--folder-depth: {{ .Depth }}em;">
+	<button
+		type="button"
+		class="folder-tree-toggle"
+		aria-label="Toggle {{ .Name }}"
+		data-folder-toggle
+		{{ if not .HasChildren }}disabled{{ end }}>
+		<span aria-hidden="true">›</span>
+	</button>
+	<button
+		type="button"
+		class="folder-tree-option"
+		data-folder-select
+		{{ if .Selected }}data-selected="true"{{ end }}>
+		<span aria-hidden="true"></span>
+		<span>{{ .Name }}</span>
+	</button>
+</div>
+{{ end }}

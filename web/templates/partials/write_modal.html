@@ -1,0 +1,48 @@
+<div
+	id="write-modal"
+	class="modal-backdrop"
+	role="presentation"
+	aria-hidden="true"
+	data-write-modal>
+	<section
+		class="write-modal"
+		role="dialog"
+		aria-modal="true"
+		aria-labelledby="write-modal-title"
+		tabindex="-1">
+		<header class="write-modal-header">
+			<h2 id="write-modal-title" data-write-modal-title>Write action</h2>
+			<button
+				class="icon-button"
+				type="button"
+				aria-label="Close write action"
+				title="Close write action"
+				data-write-modal-close>
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</header>
+		<form class="write-modal-body" data-write-modal-form>
+			<p class="write-modal-summary" data-write-modal-summary></p>
+			<label class="write-modal-field" data-write-name-field>
+				<span data-write-name-label>Name</span>
+				<input
+					type="text"
+					name="name"
+					autocomplete="off"
+					data-write-name-input>
+			</label>
+			<div class="write-modal-field" data-write-destination-field>
+				<span>Destination</span>
+				<input type="hidden" name="destination" data-write-destination-input>
+				<div
+					class="folder-tree"
+					data-folder-tree
+					aria-label="Destination folder tree"></div>
+			</div>
+			<footer class="write-modal-actions">
+				<button type="button" data-write-modal-close>Cancel</button>
+				<button type="submit" data-write-modal-submit>Submit</button>
+			</footer>
+		</form>
+	</section>
+</div>

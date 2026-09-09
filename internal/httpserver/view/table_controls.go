@@ -4,7 +4,8 @@ import "serverigh/internal/filesystem"
 
 type FilesView struct {
 	filesystem.DirectoryListing
-	Controls TableControlsView
+	Controls     TableControlsView
+	WriteEnabled bool
 }
 
 type TableControlsView struct {
@@ -26,12 +27,13 @@ type TableSortLink struct {
 	Active    bool
 }
 
-func Files(listing filesystem.DirectoryListing) FilesView {
+func Files(listing filesystem.DirectoryListing, writeEnabled bool) FilesView {
 	controls := TableControls(listing.Path, listing.Options)
 
 	return FilesView{
 		DirectoryListing: listing,
 		Controls:         controls,
+		WriteEnabled:     writeEnabled,
 	}
 }
 

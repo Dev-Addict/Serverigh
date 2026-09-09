@@ -17,7 +17,10 @@
 }
 
 .quiet-link {
+  display: inline-flex;
   flex: 0 0 auto;
+  gap: 6px;
+  align-items: center;
   min-height: 32px;
   padding: 7px 10px;
   border: 1px solid var(--color-border);
@@ -26,6 +29,13 @@
   color: var(--color-text-strong);
   font-size: 13px;
   line-height: 1.2;
+}
+
+.panel-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 8px;
+  align-items: flex-start;
 }
 
 .file-table {
@@ -50,28 +60,28 @@
   text-transform: uppercase;
 }
 
-.file-table th:nth-child(1) {
-  width: 32%;
+.directory-table th:nth-child(1) {
+  width: 30%;
 }
 
-.file-table th:nth-child(2) {
-  width: 11%;
-}
-
-.file-table th:nth-child(3) {
-  width: 17%;
-}
-
-.file-table th:nth-child(4) {
-  width: 17%;
-}
-
-.file-table th:nth-child(5) {
-  width: 11%;
-}
-
-.file-table th:nth-child(6) {
+.directory-table th:nth-child(2) {
   width: 12%;
+}
+
+.directory-table th:nth-child(3) {
+  width: 20%;
+}
+
+.directory-table th:nth-child(4) {
+  width: 20%;
+}
+
+.directory-table th:nth-child(5) {
+  width: 14%;
+}
+
+.directory-table th:nth-child(6) {
+  width: 4%;
 }
 
 .sort-link {
@@ -104,9 +114,17 @@
   overflow-wrap: anywhere;
 }
 
+.entry-name-wrap {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
 .entry-link {
   display: inline-flex;
+  flex: 1 1 auto;
   max-width: 100%;
+  min-width: 0;
   gap: 8px;
   align-items: center;
   font-weight: 600;
@@ -119,10 +137,41 @@
 }
 
 .entry-link span:last-child {
+  display: inline-block;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.entry-menu-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
+}
+
+.entry-menu-cell,
+.entry-menu-heading {
+  width: 34px;
+  padding-right: 8px;
+  padding-left: 4px;
+  text-align: right;
+}
+
+.entry-menu-button:hover,
+.entry-menu-button:focus-visible {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-strong);
 }
 
 .entry-icon {
@@ -187,6 +236,7 @@
 
 .path-actions {
   display: inline-flex;
+  flex-wrap: wrap;
   gap: 6px;
   align-items: center;
 }

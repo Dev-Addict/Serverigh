@@ -45,7 +45,7 @@ func newCLI(cfg *config.Config, action serverAction) *cli.App {
 			},
 			&cli.BoolFlag{
 				Name:        "show-hidden",
-				Usage:       "show dotfiles by default",
+				Usage:       "show hidden files",
 				Value:       cfg.ShowHidden,
 				EnvVars:     []string{"SERVERIGH_SHOW_HIDDEN"},
 				Destination: &cfg.ShowHidden,

@@ -11,6 +11,8 @@ GOMODCACHE ?= /tmp/serverigh-go-mod
 ROOT ?= /home/devaddict/Work
 HOST ?= 127.0.0.1
 PORT ?= 4173
+WRITE ?= true
+SHOW_HIDDEN ?= true
 
 GO_ENV := GOCACHE=$(GOCACHE) GOMODCACHE=$(GOMODCACHE)
 
@@ -39,7 +41,9 @@ run: ## Run the development server.
 	$(GO_ENV) $(GO) run $(CMD) \
 		--root "$(ROOT)" \
 		--host "$(HOST)" \
-		--port "$(PORT)"
+		--port "$(PORT)" \
+		--write "$(WRITE)" \
+		--show-hidden "$(SHOW_HIDDEN)"
 
 build: ## Build the serverigh binary.
 	@mkdir -p $(BIN_DIR)

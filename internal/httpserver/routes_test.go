@@ -15,6 +15,7 @@ import (
 
 func TestRoutesWireCoreHandlers(t *testing.T) {
 	cfg := testConfig(t)
+	cfg.Write = true
 	if err := os.Mkdir(filepath.Join(cfg.Root, "docs"), 0o755); err != nil {
 		t.Fatalf("create docs directory: %v", err)
 	}
@@ -53,6 +54,11 @@ func TestRoutesWireCoreHandlers(t *testing.T) {
 		{
 			name:   "files",
 			path:   "/partials/files?path=/",
+			status: http.StatusOK,
+		},
+		{
+			name:   "folders",
+			path:   "/partials/folders?path=/",
 			status: http.StatusOK,
 		},
 		{
@@ -130,10 +136,26 @@ func TestRoutesServeEmbeddedStaticAssets(t *testing.T) {
 		"/static/app/keyboard-runner.js",
 		"/static/app/keyboard-shortcuts.js",
 		"/static/app/keyboard-table.js",
+		"/static/app/keyboard-write-actions.js",
 		"/static/app/layout.js",
 		"/static/app/layout-preview.js",
 		"/static/app/theme.js",
 		"/static/app/vim-status.js",
+		"/static/app/write-actions.js",
+		"/static/app/write-context-menu.js",
+		"/static/app/write-context-state.js",
+		"/static/app/write-create.js",
+		"/static/app/write-entry-actions.js",
+		"/static/app/write-folder-cache.js",
+		"/static/app/write-folder-dom.js",
+		"/static/app/write-folder-requests.js",
+		"/static/app/write-menu.js",
+		"/static/app/write-modal-elements.js",
+		"/static/app/write-modal-folders.js",
+		"/static/app/write-modal-view.js",
+		"/static/app/write-modal.js",
+		"/static/app/write-request.js",
+		"/static/app/write-upload.js",
 	}
 
 	for _, path := range tests {

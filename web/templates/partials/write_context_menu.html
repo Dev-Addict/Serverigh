@@ -1,0 +1,49 @@
+<div
+	class="write-context-menu"
+	data-write-context-menu
+	data-has-entry="false"
+	aria-hidden="true">
+	<button
+		type="button"
+		data-entry-required
+		data-context-copy="relative">Copy relative path</button>
+	<button
+		type="button"
+		data-entry-required
+		data-context-copy="absolute">Copy absolute path</button>
+	{{ if .WriteEnabled }}
+	<hr data-entry-required>
+	<button type="button" data-write-create="folder">New folder</button>
+	<button type="button" data-write-create="file">New file</button>
+	{{ template "write_upload_form.html" dict
+		"Path" .Path
+		"Sort" .Options.Sort
+		"Direction" .Options.Direction
+		"Label" "Upload files"
+		"Folder" false }}
+	{{ template "write_upload_form.html" dict
+		"Path" .Path
+		"Sort" .Options.Sort
+		"Direction" .Options.Direction
+		"Label" "Upload folder"
+		"Folder" true }}
+	<hr data-entry-required>
+	<button type="button" data-entry-required data-context-write="rename">
+		Rename
+	</button>
+	<button type="button" data-entry-required data-context-write="copy">
+		Copy
+	</button>
+	<button type="button" data-entry-required data-context-write="duplicate">
+		Duplicate
+	</button>
+	<button type="button" data-entry-required data-context-write="move">
+		Move
+	</button>
+	<button
+		class="write-button-danger"
+		type="button"
+		data-entry-required
+		data-context-write="delete">Move to trash</button>
+	{{ end }}
+</div>

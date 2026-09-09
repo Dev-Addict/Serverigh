@@ -23,11 +23,14 @@ const focusEntry = (links, index) => {
 };
 
 export const selectedEntryLink = () => {
-  const links = entryLinks();
-  const index = linkIndex(links, document.activeElement);
+	const links = entryLinks();
+	const index = linkIndex(links, document.activeElement);
 
-  return index < 0 ? null : links[index];
+	return index < 0 ? null : links[index];
 };
+
+export const selectedEntryRow = () =>
+  selectedEntryLink()?.closest("[data-entry-row]");
 
 export const moveEntryFocus = (delta) => {
   const links = entryLinks();

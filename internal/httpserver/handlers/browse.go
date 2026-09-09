@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"log/slog"
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 
 	"serverigh/internal/filesystem"
@@ -8,6 +11,7 @@ import (
 )
 
 func (h Handlers) Browse(c *fiber.Ctx) error {
+	start := time.Now()
 	activePath := c.Query("path", "/")
 	options := listOptionsFromRequest(c)
 	listing, err := h.files.ListWithOptions(activePath, options)
@@ -15,7 +19,7 @@ func (h Handlers) Browse(c *fiber.Ctx) error {
 		return h.writeOperationalError(c, err)
 	}
 
-	files := view.Files(listing)
+	files := view.Files(listing, h.config.Write)
 
 	var preview *filesystem.Preview
 	selectedFile := c.Query("file")
@@ -27,6 +31,20 @@ func (h Handlers) Browse(c *fiber.Ctx) error {
 
 		preview = &selectedPreview
 	}
+	logHandlerOperation(
+		c,
+		slog.LevelInfo,
+		"browse rendered",
+		start,
+		"path",
+		listing.Path,
+		"entry_count",
+		len(listing.Entries),
+		"truncated",
+		listing.Truncated,
+		"has_preview",
+		preview != nil,
+	)
 
 	page := view.BrowsePage{
 		Root:    h.config.Root,

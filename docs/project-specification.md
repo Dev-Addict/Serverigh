@@ -93,14 +93,15 @@ Suggested environment aliases:
 - `GET /raw?path=...`: stream raw file content when browser-safe.
 - `GET /healthz`: health check.
 
-Future write-mode routes:
+Write-mode routes:
 
 - `POST /actions/mkdir`: create a folder.
+- `POST /actions/file`: create an empty file.
 - `POST /actions/rename`: rename a file or folder.
 - `POST /actions/move`: move selected entries.
 - `POST /actions/copy`: copy selected entries.
 - `POST /actions/delete`: delete selected entries.
-- `POST /actions/upload`: upload files to the active folder.
+- `POST /actions/upload`: upload files or folder contents to the active folder.
 
 ## UI Layout
 

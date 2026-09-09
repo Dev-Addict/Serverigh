@@ -8,6 +8,13 @@ import {
 } from "./keyboard-entries.js";
 import { goBack, goToParent, refreshListing } from "./keyboard-navigation.js";
 import { focusFilesRegion, focusPreviewRegion } from "./keyboard-panes.js";
+import {
+  copySelectedFromKeyboard,
+  createFolderFromKeyboard,
+  deleteSelectedFromKeyboard,
+  moveSelectedFromKeyboard,
+  renameSelectedFromKeyboard,
+} from "./keyboard-write-actions.js";
 
 export const runSingleKeyCommand = (key, context, count) => {
   switch (key) {
@@ -31,8 +38,10 @@ export const runSingleKeyCommand = (key, context, count) => {
   case "r":
   case "R":
     return refreshListing();
-  case "Y":
-    return copySelectedPath(true, context.showToast);
+	  case "Y":
+	    return copySelectedPath(true, context.showToast);
+	  case "a":
+	    return createFolderFromKeyboard(context.showToast);
   case "p":
     return focusPreviewRegion();
   case "f":
@@ -52,9 +61,25 @@ export const runBufferedCommand = (key, context, state) => {
     return focusFirstEntry();
   }
 
-  if (command === "yy" || command.endsWith("yy")) {
-    return copySelectedPath(false, context.showToast);
-  }
+	if (command === "yy" || command.endsWith("yy")) {
+		return copySelectedPath(false, context.showToast);
+	}
 
-  return false;
+	if (command === "cw" || command.endsWith("cw")) {
+		return renameSelectedFromKeyboard(context.showToast);
+	}
+
+	if (command === "cp" || command.endsWith("cp")) {
+		return copySelectedFromKeyboard(context.showToast);
+	}
+
+	if (command === "dd" || command.endsWith("dd")) {
+		return deleteSelectedFromKeyboard(context.showToast);
+	}
+
+	if (command === "mm" || command.endsWith("mm")) {
+		return moveSelectedFromKeyboard(context.showToast);
+	}
+
+	return false;
 };

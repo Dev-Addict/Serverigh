@@ -1,0 +1,26 @@
+<details class="write-menu" data-write-menu>
+	<summary class="write-menu-trigger">
+		<span class="write-menu-plus" aria-hidden="true">+</span>
+		<span>Upload</span>
+	</summary>
+	<div class="write-menu-list" role="menu">
+		<button type="button" data-write-create="folder" role="menuitem">
+			New folder
+		</button>
+		<button type="button" data-write-create="file" role="menuitem">
+			New file
+		</button>
+		{{ template "write_upload_form.html" dict
+			"Path" .Path
+			"Sort" .Options.Sort
+			"Direction" .Options.Direction
+			"Label" "Upload files"
+			"Folder" false }}
+		{{ template "write_upload_form.html" dict
+			"Path" .Path
+			"Sort" .Options.Sort
+			"Direction" .Options.Direction
+			"Label" "Upload folder"
+			"Folder" true }}
+	</div>
+</details>

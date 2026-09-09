@@ -25,6 +25,14 @@ func NewIndex() *Index {
 	return &Index{}
 }
 
+func (i *Index) Clear() {
+	i.mutex.Lock()
+	defer i.mutex.Unlock()
+
+	i.entries = nil
+	i.expires = time.Time{}
+}
+
 func (s Service) cachedSearchEntries(ctx context.Context) ([]searchEntry, error) {
 	if ctxErr := ctx.Err(); ctxErr != nil {
 		return nil, ctxErr

@@ -1,0 +1,113 @@
+.write-menu {
+  position: relative;
+}
+
+.write-menu-trigger,
+.write-menu-list button,
+.write-menu-list label,
+.write-context-menu button,
+.write-context-menu label {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  align-items: center;
+  min-height: 28px;
+  padding: 5px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-text-strong);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.1;
+  text-align: left;
+}
+
+.write-menu-trigger {
+  width: auto;
+  min-height: 32px;
+  list-style: none;
+}
+
+.write-menu-plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 16px;
+}
+
+.write-menu-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.write-menu-list,
+.write-context-menu {
+  min-width: 180px;
+  padding: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-modal);
+  z-index: 60;
+}
+
+.write-menu-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+}
+
+.write-menu-list button,
+.write-menu-list label,
+.write-context-menu button,
+.write-context-menu label {
+  border-color: transparent;
+  border-radius: 4px;
+  background: transparent;
+}
+
+.write-menu-list button:hover,
+.write-menu-list label:hover,
+.write-context-menu button:hover,
+.write-context-menu label:hover {
+  background: var(--color-row-hover);
+}
+
+.write-upload-form {
+  margin: 0;
+}
+
+.write-upload-form input[type="file"] {
+  display: none;
+}
+
+.write-context-menu {
+  position: fixed;
+  display: none;
+}
+
+.write-context-menu[data-open="true"] {
+  display: grid;
+  gap: 2px;
+}
+
+.write-context-menu[data-has-entry="false"] [data-entry-required] {
+  display: none;
+}
+
+.write-context-menu hr {
+  width: 100%;
+  margin: 5px 0;
+  border: 0;
+  border-top: 1px solid var(--color-border-muted);
+}
+
+.write-button-danger {
+  border-color: var(--color-error-border);
+  color: var(--color-danger);
+}
