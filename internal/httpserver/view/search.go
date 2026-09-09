@@ -33,6 +33,7 @@ type SearchResultView struct {
 	CreatedKnown bool
 	Mode         string
 	IsDir        bool
+	Icon         FileIconView
 	BrowseURL    string
 	FilesURL     string
 	PreviewURL   string
@@ -74,6 +75,7 @@ func SearchResults(results filesystem.SearchResults) SearchResultsView {
 			CreatedKnown: result.CreatedKnown,
 			Mode:         result.Mode,
 			IsDir:        result.IsDir,
+			Icon:         FileIcon(result.Name, result.Kind, result.IsDir),
 			BrowseURL:    searchBrowseURL(result),
 			FilesURL:     searchFilesURL(result),
 			PreviewURL:   previewURL(result.Path),

@@ -99,6 +99,7 @@
 				data-relative-path="{{ .RelativePath }}"
 				data-absolute-path="{{ .AbsolutePath }}">
 				<td class="name-cell">
+					{{ $icon := $.Icon . }}
 					<div class="entry-name-wrap">
 						{{ if .IsDir }}
 						<a
@@ -108,7 +109,11 @@
 							hx-target="#files-region"
 							hx-swap="innerHTML"
 							title="Open {{ .Name }}">
-							<span class="entry-icon" aria-hidden="true"></span>
+							<img
+								class="entry-icon"
+								src="{{ $icon.Path }}"
+								alt=""
+								aria-hidden="true">
 							<span>{{ .Name }}/</span>
 						</a>
 						{{ else }}
@@ -120,7 +125,11 @@
 							hx-swap="innerHTML"
 							hx-push-url="{{ $.FileBrowseURL .Path }}"
 							title="Preview {{ .Name }}">
-							<span class="entry-icon" aria-hidden="true"></span>
+							<img
+								class="entry-icon"
+								src="{{ $icon.Path }}"
+								alt=""
+								aria-hidden="true">
 							<span>{{ .Name }}</span>
 						</a>
 						{{ end }}

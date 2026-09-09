@@ -34,7 +34,11 @@
 						hx-swap="innerHTML"
 						hx-push-url="{{ .BrowseURL }}"
 						title="Open {{ .Name }}">
-						<span class="entry-icon" aria-hidden="true"></span>
+						<img
+							class="entry-icon"
+							src="{{ .Icon.Path }}"
+							alt=""
+							aria-hidden="true">
 						<span>{{ .Name }}/</span>
 					</a>
 					{{ else }}
@@ -44,7 +48,11 @@
 						data-search-preview-link
 						data-preview-url="{{ .PreviewURL }}"
 						title="Preview {{ .Name }}">
-						<span class="entry-icon" aria-hidden="true"></span>
+						<img
+							class="entry-icon"
+							src="{{ .Icon.Path }}"
+							alt=""
+							aria-hidden="true">
 						<span>{{ .Name }}</span>
 					</a>
 					{{ end }}

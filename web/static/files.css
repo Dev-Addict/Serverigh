@@ -175,59 +175,10 @@
 }
 
 .entry-icon {
-  display: inline-flex;
   flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
   width: 18px;
   height: 20px;
-  position: relative;
-}
-
-.folder-link .entry-icon::before {
-  position: absolute;
-  top: 4px;
-  left: 1px;
-  width: 16px;
-  height: 12px;
-  border-radius: 2px;
-  background: var(--color-folder);
-  content: "";
-}
-
-.folder-link .entry-icon::after {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 8px;
-  height: 4px;
-  border-radius: 2px 2px 0 0;
-  background: var(--color-folder);
-  content: "";
-}
-
-.file-link .entry-icon::before {
-  position: absolute;
-  top: 2px;
-  left: 3px;
-  width: 12px;
-  height: 16px;
-  border: 1px solid var(--color-file-border);
-  border-radius: 2px;
-  background: var(--color-surface);
-  content: "";
-}
-
-.file-link .entry-icon::after {
-  position: absolute;
-  top: 2px;
-  right: 3px;
-  width: 5px;
-  height: 5px;
-  border-left: 1px solid var(--color-file-border);
-  border-bottom: 1px solid var(--color-file-border);
-  background: var(--color-file-fold);
-  content: "";
+  object-fit: contain;
 }
 
 .numeric-cell {
