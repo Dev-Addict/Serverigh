@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="{{ .Theme }}">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,7 +7,12 @@
 	<link rel="stylesheet" href="/static/styles.css">
 	<script src="/static/htmx.min.js"></script>
 </head>
-<body>
+<body
+	data-column-size="{{ .Columns.Size }}"
+	data-column-modified="{{ .Columns.Modified }}"
+	data-column-created="{{ .Columns.Created }}"
+	data-column-mode="{{ .Columns.Mode }}"
+	data-max-preview-bytes="{{ .MaxPreviewBytes }}">
 	<div class="app-shell" hx-history-elt>
 		<header class="top-bar">
 			<div class="brand-block">

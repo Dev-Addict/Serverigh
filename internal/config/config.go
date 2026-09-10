@@ -12,6 +12,7 @@ import (
 const (
 	defaultHost            = "127.0.0.1"
 	defaultPort            = 4173
+	defaultTheme           = "light"
 	defaultWrite           = false
 	defaultShowHidden      = false
 	defaultMaxPreviewBytes = int64(1_048_576)
@@ -21,8 +22,10 @@ type Config struct {
 	Root            string
 	Host            string
 	Port            int
+	Theme           string
 	Write           bool
 	ShowHidden      bool
+	Columns         Columns
 	MaxPreviewBytes int64
 }
 
@@ -41,8 +44,10 @@ func Default() (Config, error) {
 		Root:            wd,
 		Host:            defaultHost,
 		Port:            defaultPort,
+		Theme:           defaultTheme,
 		Write:           defaultWrite,
 		ShowHidden:      defaultShowHidden,
+		Columns:         DefaultColumns(),
 		MaxPreviewBytes: defaultMaxPreviewBytes,
 	}, nil
 }
@@ -67,6 +72,14 @@ func (c *Config) Normalize() error {
 			apperror.CodeInvalidConfig,
 			"max preview bytes must be greater than zero",
 		)
+	}
+
+	if c.Theme == "" {
+		c.Theme = defaultTheme
+	}
+
+	if c.Theme != "light" && c.Theme != "dark" {
+		return wrapConfigOperation("validate theme", errInvalidTheme)
 	}
 
 	root, err := filepath.Abs(c.Root)

@@ -7,6 +7,11 @@ import (
 	"serverigh/internal/apperror"
 )
 
+var (
+	errInvalidTheme           = errors.New("theme must be light or dark")
+	errInvalidMaxPreviewBytes = errors.New("max preview bytes must be positive")
+)
+
 func wrapRootOperation(operation string, err error) error {
 	switch {
 	case errors.Is(err, os.ErrNotExist):
@@ -31,4 +36,13 @@ func wrapRootOperation(operation string, err error) error {
 			err,
 		)
 	}
+}
+
+func wrapConfigOperation(operation string, err error) error {
+	return apperror.WrapOperation(
+		apperror.CodeInvalidConfig,
+		"invalid config",
+		operation,
+		err,
+	)
 }

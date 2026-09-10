@@ -28,6 +28,8 @@ func (s Server) registerRoutes(app *fiber.App) {
 	app.Get("/download", s.handlers.Download)
 	app.Get("/raw", s.handlers.Raw)
 
+	app.Post("/settings", s.handlers.Settings)
+
 	app.Post("/actions/mkdir", s.handlers.Mkdir)
 	app.Post("/actions/file", s.handlers.CreateFile)
 	app.Post("/actions/rename", s.handlers.Rename)

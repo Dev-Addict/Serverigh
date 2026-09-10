@@ -1,16 +1,22 @@
 package view
 
-import "serverigh/internal/filesystem"
+import (
+	"serverigh/internal/config"
+	"serverigh/internal/filesystem"
+)
 
 type BrowsePage struct {
-	Root        string
-	Path        string
-	Mode        string
-	Listing     FilesView
-	PathSummary PathSummaryView
-	Breadcrumbs BreadcrumbsView
-	Search      SearchBoxView
-	EmptyState  EmptyPreviewView
-	Status      StatusView
-	Preview     *filesystem.Preview
+	Root            string
+	Path            string
+	Mode            string
+	Theme           string
+	MaxPreviewBytes int64
+	Listing         FilesView
+	PathSummary     PathSummaryView
+	Breadcrumbs     BreadcrumbsView
+	Search          SearchBoxView
+	EmptyState      EmptyPreviewView
+	Status          StatusView
+	Columns         config.Columns
+	Preview         *filesystem.Preview
 }

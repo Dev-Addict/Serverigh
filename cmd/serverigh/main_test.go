@@ -12,6 +12,8 @@ func TestCLIParsesServerConfig(t *testing.T) {
 		Root:            root,
 		Host:            "127.0.0.1",
 		Port:            4173,
+		Theme:           "light",
+		Columns:         config.DefaultColumns(),
 		MaxPreviewBytes: 1024,
 	}
 
@@ -30,6 +32,8 @@ func TestCLIParsesServerConfig(t *testing.T) {
 		"0.0.0.0",
 		"--port",
 		"9999",
+		"--theme",
+		"dark",
 		"--write",
 		"--show-hidden",
 		"--max-preview-bytes",
@@ -51,6 +55,10 @@ func TestCLIParsesServerConfig(t *testing.T) {
 		t.Fatalf("expected port 9999, got %d", captured.Port)
 	}
 
+	if captured.Theme != "dark" {
+		t.Fatalf("expected dark theme, got %q", captured.Theme)
+	}
+
 	if !captured.Write {
 		t.Fatalf("expected write mode to be enabled")
 	}
@@ -61,5 +69,45 @@ func TestCLIParsesServerConfig(t *testing.T) {
 
 	if captured.MaxPreviewBytes != 2048 {
 		t.Fatalf("expected max preview bytes 2048, got %d", captured.MaxPreviewBytes)
+	}
+}
+
+func TestCLIParsesColumnFlags(t *testing.T) {
+	root := t.TempDir()
+	cfg := config.Config{
+		Root:            root,
+		Host:            "127.0.0.1",
+		Port:            4173,
+		Theme:           "light",
+		Columns:         config.DefaultColumns(),
+		MaxPreviewBytes: 1024,
+	}
+
+	var captured config.Config
+	app := newCLI(&cfg, func(cfg config.Config) error {
+		captured = cfg
+
+		return nil
+	})
+
+	err := app.Run([]string{
+		"serverigh",
+		"--column-size=false",
+		"--column-mode=false",
+	})
+	if err != nil {
+		t.Fatalf("run cli: %v", err)
+	}
+
+	if captured.Columns.Size {
+		t.Fatalf("expected size column to be hidden")
+	}
+
+	if captured.Columns.Mode {
+		t.Fatalf("expected mode column to be hidden")
+	}
+
+	if !captured.Columns.Modified || !captured.Columns.Created {
+		t.Fatalf("expected unspecified columns to stay visible")
 	}
 }

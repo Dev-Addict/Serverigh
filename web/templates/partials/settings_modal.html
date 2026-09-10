@@ -25,10 +25,58 @@
 			<label class="settings-field" for="theme-select">
 				<span>Theme</span>
 				<select id="theme-select" name="theme" data-theme-select>
+					{{ if eq .Theme "light" }}
 					<option value="light" selected>Light</option>
+					{{ else }}
+					<option value="light">Light</option>
+					{{ end }}
+					{{ if eq .Theme "dark" }}
+					<option value="dark" selected>Dark</option>
+					{{ else }}
 					<option value="dark">Dark</option>
+					{{ end }}
 				</select>
 			</label>
+			<label class="settings-field" for="max-preview-bytes">
+				<span>Max Preview Bytes</span>
+				<input
+					id="max-preview-bytes"
+					type="number"
+					min="1"
+					value="{{ .MaxPreviewBytes }}"
+					data-max-preview-bytes>
+			</label>
+			<section class="settings-section" aria-labelledby="columns-title">
+				<h3 id="columns-title">Columns</h3>
+				<label class="settings-check">
+					<input
+						type="checkbox"
+						data-column-toggle="size"
+						{{ if .Columns.Size }}checked{{ end }}>
+					<span>Size</span>
+				</label>
+				<label class="settings-check">
+					<input
+						type="checkbox"
+						data-column-toggle="modified"
+						{{ if .Columns.Modified }}checked{{ end }}>
+					<span>Modified</span>
+				</label>
+				<label class="settings-check">
+					<input
+						type="checkbox"
+						data-column-toggle="created"
+						{{ if .Columns.Created }}checked{{ end }}>
+					<span>Created</span>
+				</label>
+				<label class="settings-check">
+					<input
+						type="checkbox"
+						data-column-toggle="mode"
+						{{ if .Columns.Mode }}checked{{ end }}>
+					<span>Mode</span>
+				</label>
+			</section>
 		</div>
 	</section>
 </div>

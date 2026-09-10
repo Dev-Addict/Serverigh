@@ -46,7 +46,10 @@
 						{{ end }}
 					</a>
 				</th>
-				<th scope="col" aria-sort="{{ .Controls.SizeSort.AriaSort }}">
+				<th
+					class="column-size"
+					scope="col"
+					aria-sort="{{ .Controls.SizeSort.AriaSort }}">
 					<a
 						class="sort-link"
 						href="{{ .Controls.SizeSort.BrowseURL }}"
@@ -59,7 +62,10 @@
 						{{ end }}
 					</a>
 				</th>
-				<th scope="col" aria-sort="{{ .Controls.ModifiedSort.AriaSort }}">
+				<th
+					class="column-modified"
+					scope="col"
+					aria-sort="{{ .Controls.ModifiedSort.AriaSort }}">
 					<a
 						class="sort-link"
 						href="{{ .Controls.ModifiedSort.BrowseURL }}"
@@ -72,7 +78,10 @@
 						{{ end }}
 					</a>
 				</th>
-				<th scope="col" aria-sort="{{ .Controls.CreatedSort.AriaSort }}">
+				<th
+					class="column-created"
+					scope="col"
+					aria-sort="{{ .Controls.CreatedSort.AriaSort }}">
 					<a
 						class="sort-link"
 						href="{{ .Controls.CreatedSort.BrowseURL }}"
@@ -85,7 +94,7 @@
 						{{ end }}
 					</a>
 				</th>
-				<th scope="col">Mode</th>
+				<th class="column-mode" scope="col">Mode</th>
 				<th class="entry-menu-heading" scope="col" aria-label="Actions"></th>
 			</tr>
 		</thead>
@@ -135,18 +144,18 @@
 						{{ end }}
 					</div>
 				</td>
-				<td class="numeric-cell">{{ .SizeLabel }}</td>
-				<td>
+				<td class="numeric-cell column-size">{{ .SizeLabel }}</td>
+				<td class="column-modified">
 					<time datetime="{{ .ModTimeValue }}">{{ .ModTimeLabel }}</time>
 				</td>
-				<td>
+				<td class="column-created">
 					{{ if .CreatedKnown }}
 					<time datetime="{{ .CreatedValue }}">{{ .CreatedLabel }}</time>
 					{{ else }}
 					{{ .CreatedLabel }}
 					{{ end }}
 				</td>
-				<td><code>{{ .Mode }}</code></td>
+				<td class="column-mode"><code>{{ .Mode }}</code></td>
 				<td class="entry-menu-cell">
 					<button
 						class="entry-menu-button"

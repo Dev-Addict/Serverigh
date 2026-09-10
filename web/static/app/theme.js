@@ -1,21 +1,4 @@
-const themeStorageKey = "serverigh.theme";
 const supportedThemes = new Set(["light", "dark"]);
-
-const storedValue = (key) => {
-  try {
-    return window.localStorage?.getItem(key);
-  } catch {
-    return null;
-  }
-};
-
-const storeValue = (key, value) => {
-  try {
-    window.localStorage?.setItem(key, value);
-  } catch {
-    return;
-  }
-};
 
 export const applyTheme = (theme) => {
   const nextTheme = supportedThemes.has(theme) ? theme : "light";
@@ -27,7 +10,7 @@ export const applyTheme = (theme) => {
 };
 
 export const initTheme = () => {
-  applyTheme(storedValue(themeStorageKey) || "light");
+  applyTheme(document.documentElement.dataset.theme || "light");
 
   document.addEventListener("change", (event) => {
     if (!(event.target instanceof HTMLSelectElement)) {
@@ -39,6 +22,5 @@ export const initTheme = () => {
     }
 
     applyTheme(event.target.value);
-    storeValue(themeStorageKey, event.target.value);
   });
 };

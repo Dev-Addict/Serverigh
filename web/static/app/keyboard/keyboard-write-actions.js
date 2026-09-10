@@ -1,6 +1,6 @@
 import { selectedEntryRow } from "./keyboard-entries.js";
-import { createItem } from "./write-create.js";
-import { runEntryWriteAction } from "./write-entry-actions.js";
+import { createItem } from "../write/write-create.js";
+import { runEntryWriteAction } from "../write/write-entry-actions.js";
 
 export const createFolderFromKeyboard = (showToast) =>
   createItem("folder", showToast);

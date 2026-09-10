@@ -109,7 +109,8 @@ http://127.0.0.1:4173
 
 ## Configuration
 
-Serverigh can be configured with CLI flags or environment variables.
+Serverigh can be configured with CLI flags, TOML files, or environment
+variables.
 
 - `--root`
   Environment: `SERVERIGH_ROOT`. Default: current directory. Filesystem root.
@@ -124,6 +125,48 @@ Serverigh can be configured with CLI flags or environment variables.
 - `--max-preview-bytes`
   Environment: `SERVERIGH_MAX_PREVIEW_BYTES`. Default: `1048576`. Preview byte
   limit.
+- `--theme`
+  Environment: `SERVERIGH_THEME`. Default: `light`. Initial UI theme.
+- `--column-size`
+  Environment: `SERVERIGH_COLUMN_SIZE`. Default: `true`.
+- `--column-modified`
+  Environment: `SERVERIGH_COLUMN_MODIFIED`. Default: `true`.
+- `--column-created`
+  Environment: `SERVERIGH_COLUMN_CREATED`. Default: `true`.
+- `--column-mode`
+  Environment: `SERVERIGH_COLUMN_MODE`. Default: `true`.
+
+Configuration can also be provided in TOML:
+
+```toml
+root = "/path/to/workspace"
+host = "127.0.0.1"
+port = 4173
+theme = "light"
+write = false
+show_hidden = false
+max_preview_bytes = 1048576
+
+[column]
+size = true
+modified = true
+created = true
+mode = true
+```
+
+Configuration is resolved in this order:
+
+1. CLI flags.
+2. Local config: `ROOT/.serverigh/config.toml`.
+3. Environment variables.
+4. Global config: `CONFIG_ROOT/.serverigh/config.toml`.
+5. Defaults.
+
+`CONFIG_ROOT` is the operating system's user config directory, such as
+`$XDG_CONFIG_HOME` or `~/.config` on Linux.
+
+The settings modal exposes theme, preview size, and column visibility. Root,
+host, port, write mode, and hidden-file visibility remain startup settings.
 
 ## Routes
 

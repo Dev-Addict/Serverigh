@@ -1,4 +1,4 @@
-import { selectedEntryRow } from "./keyboard-entries.js";
+import { selectedEntryRow } from "../keyboard/keyboard-entries.js";
 import { initWriteCreateActions } from "./write-create.js";
 import { initWriteModal } from "./write-modal.js";
 import {

@@ -1,4 +1,4 @@
-import { openHelpModal } from "./help.js";
+import { openHelpModal } from "../help.js";
 import { copySelectedPath } from "./keyboard-copy-path.js";
 import {
   focusFirstEntry,

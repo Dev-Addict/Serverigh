@@ -20,6 +20,8 @@ func testHandlers(t *testing.T, opts ...func(*config.Config)) Handlers {
 		Root:            t.TempDir(),
 		Host:            "127.0.0.1",
 		Port:            4173,
+		Theme:           "light",
+		Columns:         config.DefaultColumns(),
 		MaxPreviewBytes: 1024,
 	}
 
@@ -46,6 +48,8 @@ func testHandlersWithRoot(
 		Root:            root,
 		Host:            "127.0.0.1",
 		Port:            4173,
+		Theme:           "light",
+		Columns:         config.DefaultColumns(),
 		MaxPreviewBytes: 1024,
 	}
 

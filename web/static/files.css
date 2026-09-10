@@ -84,6 +84,13 @@
   width: 4%;
 }
 
+body[data-column-size="false"] .column-size,
+body[data-column-modified="false"] .column-modified,
+body[data-column-created="false"] .column-created,
+body[data-column-mode="false"] .column-mode {
+  display: none;
+}
+
 .sort-link {
   display: inline-flex;
   gap: 6px;

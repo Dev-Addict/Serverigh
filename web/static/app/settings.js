@@ -1,64 +1,93 @@
-let previousSettingsFocus;
+import { debounce } from "./debounce.js";
+import { flushSettings, saveSettings } from "./settings-save.js";
+import {
+  settingsModal,
+  syncColumnToggle,
+  syncColumnToggles,
+  syncMaxPreviewBytes,
+} from "./settings-dom.js";
+import { closeSettings, openSettings } from "./settings-modal.js";
 
-const settingsModal = () => document.querySelector("[data-settings-modal]");
-const settingsDialog = () => document.querySelector(".settings-modal");
+const saveSettingsSoon = debounce(saveSettings, 250);
 
-const openSettings = (trigger) => {
-  const modal = settingsModal();
-  const dialog = settingsDialog();
-  if (!(modal instanceof HTMLElement) || !(dialog instanceof HTMLElement)) {
+const handleSettingsClick = (event) => {
+  if (!(event.target instanceof Element)) {
     return;
   }
 
-  previousSettingsFocus = trigger;
-  modal.dataset.open = "true";
-  modal.setAttribute("aria-hidden", "false");
-  dialog.focus();
+  const settingsOpen = event.target.closest("[data-settings-open]");
+  if (settingsOpen instanceof HTMLElement) {
+    event.preventDefault();
+    openSettings(settingsOpen);
+
+    return;
+  }
+
+  const settingsClose = event.target.closest("[data-settings-close]");
+  if (settingsClose) {
+    event.preventDefault();
+    closeSettings();
+
+    return;
+  }
+
+  if (event.target === settingsModal()) {
+    closeSettings();
+  }
 };
 
-const closeSettings = () => {
-  const modal = settingsModal();
-  if (!(modal instanceof HTMLElement)) {
+const handleSettingsChange = (event) => {
+  if (
+    event.target instanceof HTMLInputElement
+    && event.target.matches("[data-column-toggle]")
+  ) {
+    syncColumnToggle(event.target);
+    saveSettings();
+
     return;
   }
 
-  delete modal.dataset.open;
-  modal.setAttribute("aria-hidden", "true");
-  if (previousSettingsFocus instanceof HTMLElement) {
-    previousSettingsFocus.focus();
+  if (
+    event.target instanceof HTMLInputElement
+    && event.target.matches("[data-max-preview-bytes]")
+  ) {
+    syncMaxPreviewBytes(event.target);
+    saveSettings();
+
+    return;
+  }
+
+  if (
+    event.target instanceof HTMLSelectElement
+    && event.target.matches("[data-theme-select]")
+  ) {
+    saveSettings();
+  }
+};
+
+const handleSettingsInput = (event) => {
+  if (
+    event.target instanceof HTMLInputElement
+    && event.target.matches("[data-max-preview-bytes]")
+  ) {
+    syncMaxPreviewBytes(event.target);
+    saveSettingsSoon();
   }
 };
 
 export const initSettings = () => {
-  document.addEventListener("click", (event) => {
-    if (!(event.target instanceof Element)) {
-      return;
-    }
+  syncColumnToggles();
 
-    const settingsOpen = event.target.closest("[data-settings-open]");
-    if (settingsOpen instanceof HTMLElement) {
-      event.preventDefault();
-      openSettings(settingsOpen);
-
-      return;
-    }
-
-    const settingsClose = event.target.closest("[data-settings-close]");
-    if (settingsClose) {
-      event.preventDefault();
-      closeSettings();
-
-      return;
-    }
-
-    if (event.target === settingsModal()) {
-      closeSettings();
-    }
-  });
+  document.addEventListener("click", handleSettingsClick);
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeSettings();
     }
   });
+
+  document.addEventListener("change", handleSettingsChange);
+  document.addEventListener("input", handleSettingsInput);
+
+  window.addEventListener("pagehide", flushSettings);
 };

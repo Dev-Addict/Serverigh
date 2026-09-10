@@ -11,6 +11,7 @@ func (h Handlers) Health(c *fiber.Ctx) error {
 		"app":                "serverigh",
 		"status":             "ok",
 		"root":               h.config.Root,
+		"theme":              h.config.Theme,
 		"write":              h.config.Write,
 		"showHidden":         h.config.ShowHidden,
 		"maxPreviewBytes":    h.config.MaxPreviewBytes,

@@ -52,6 +52,14 @@ func TestBrowseRendersShell(t *testing.T) {
 		t.Fatalf("expected settings modal in response, got %q", body)
 	}
 
+	if !strings.Contains(body, `data-column-size="true"`) {
+		t.Fatalf("expected size column default in response, got %q", body)
+	}
+
+	if !strings.Contains(body, `data-column-toggle="mode"`) {
+		t.Fatalf("expected column settings controls in response, got %q", body)
+	}
+
 	if !strings.Contains(body, `id="keyboard-help-modal"`) {
 		t.Fatalf("expected keyboard help modal in response, got %q", body)
 	}

@@ -47,10 +47,12 @@ func (h Handlers) Browse(c *fiber.Ctx) error {
 	)
 
 	page := view.BrowsePage{
-		Root:    h.config.Root,
-		Path:    listing.Path,
-		Mode:    view.ModeLabel(h.config.Write),
-		Listing: files,
+		Root:            h.config.Root,
+		Path:            listing.Path,
+		Mode:            view.ModeLabel(h.config.Write),
+		Theme:           h.config.Theme,
+		MaxPreviewBytes: h.config.MaxPreviewBytes,
+		Listing:         files,
 		PathSummary: view.PathSummaryView{
 			Root: h.config.Root,
 			Path: listing.Path,
@@ -62,6 +64,7 @@ func (h Handlers) Browse(c *fiber.Ctx) error {
 		},
 		Preview: preview,
 		Status:  view.Status(listing, h.config.Write, false),
+		Columns: h.config.Columns,
 	}
 
 	return h.render(c, "browse.html", page)

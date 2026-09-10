@@ -11,10 +11,10 @@
 		<thead>
 			<tr>
 				<th scope="col">Name</th>
-				<th scope="col">Size</th>
-				<th scope="col">Modified</th>
-				<th scope="col">Created</th>
-				<th scope="col">Mode</th>
+				<th class="column-size" scope="col">Size</th>
+				<th class="column-modified" scope="col">Modified</th>
+				<th class="column-created" scope="col">Created</th>
+				<th class="column-mode" scope="col">Mode</th>
 				<th scope="col">Actions</th>
 			</tr>
 		</thead>
@@ -58,18 +58,18 @@
 					{{ end }}
 					<span class="search-entry-path">{{ .Kind }} in {{ .ParentPath }}</span>
 				</td>
-				<td class="numeric-cell">{{ .SizeLabel }}</td>
-				<td>
+				<td class="numeric-cell column-size">{{ .SizeLabel }}</td>
+				<td class="column-modified">
 					<time datetime="{{ .ModTimeValue }}">{{ .ModTimeLabel }}</time>
 				</td>
-				<td>
+				<td class="column-created">
 					{{ if .CreatedKnown }}
 					<time datetime="{{ .CreatedValue }}">{{ .CreatedLabel }}</time>
 					{{ else }}
 					{{ .CreatedLabel }}
 					{{ end }}
 				</td>
-				<td><code>{{ .Mode }}</code></td>
+				<td class="column-mode"><code>{{ .Mode }}</code></td>
 				<td>
 					<div class="path-actions" aria-label="Search result actions">
 						<a class="copy-button" href="{{ .BrowseURL }}" title="Go">Go</a>

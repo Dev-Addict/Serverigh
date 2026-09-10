@@ -10,15 +10,17 @@ import (
 )
 
 type Handlers struct {
-	config    ConfigView
-	files     filesystem.Service
+	config    *ConfigView
+	files     *filesystem.Service
 	templates *template.Template
 }
 
 type ConfigView struct {
 	Root            string
+	Theme           string
 	Write           bool
 	ShowHidden      bool
+	Columns         config.Columns
 	MaxPreviewBytes int64
 }
 
@@ -50,11 +52,13 @@ func New(cfg config.Config) (Handlers, error) {
 
 	return Handlers{
 		templates: templates,
-		files:     files,
-		config: ConfigView{
+		files:     &files,
+		config: &ConfigView{
 			Root:            cfg.Root,
+			Theme:           cfg.Theme,
 			Write:           cfg.Write,
 			ShowHidden:      cfg.ShowHidden,
+			Columns:         cfg.Columns,
 			MaxPreviewBytes: cfg.MaxPreviewBytes,
 		},
 	}, nil
