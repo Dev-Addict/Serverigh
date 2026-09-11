@@ -1,17 +1,18 @@
 package write
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 )
 
 func (s Service) CreateDirectory(parentPath string, name string) error {
-	target, err := s.childTarget(parentPath, name)
+	target, err := s.directoryTarget(parentPath, name)
 	if err != nil {
 		return err
 	}
 
-	if err := os.Mkdir(target, 0o755); err != nil {
+	if err := os.MkdirAll(target, 0o755); err != nil {
 		return wrapWriteError("create directory", err)
 	}
 
@@ -34,6 +35,33 @@ func (s Service) CreateFile(parentPath string, name string) error {
 	}
 
 	return nil
+}
+
+func (s Service) directoryTarget(parentPath string, name string) (string, error) {
+	relativePath, err := cleanDirectoryPath(name)
+	if err != nil {
+		return "", err
+	}
+
+	parent, err := s.resolve(parentPath)
+	if err != nil {
+		return "", err
+	}
+	if !parent.Info.IsDir() {
+		return "", ErrNotDirectory
+	}
+
+	target := filepath.Join(parent.Absolute, filepath.FromSlash(relativePath))
+	if err := s.ensureInsideRoot(target); err != nil {
+		return "", err
+	}
+	if _, err := os.Lstat(target); err == nil {
+		return "", ErrPathExists
+	} else if !errors.Is(err, os.ErrNotExist) {
+		return "", wrapFileError("inspect target path", err)
+	}
+
+	return target, nil
 }
 
 func (s Service) Rename(requestPath string, name string) error {

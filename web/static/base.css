@@ -109,6 +109,27 @@ a:hover {
   text-decoration: underline;
 }
 
+.ui-icon {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  color: currentColor;
+  vertical-align: middle;
+}
+
+.ui-icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.ui-icon circle {
+  fill: currentColor;
+}
+
 .app-shell {
   display: grid;
   min-height: 100vh;

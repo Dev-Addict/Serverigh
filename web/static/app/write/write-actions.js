@@ -1,5 +1,6 @@
 import { selectedEntryRow } from "../keyboard/keyboard-entries.js";
 import { initBulkActions } from "./write-bulk-actions.js";
+import { downloadBulk } from "./write-bulk-download.js";
 import { initBulkSelection } from "./write-bulk-selection.js";
 import { initWriteCreateActions } from "./write-create.js";
 import { initWriteModal } from "./write-modal.js";
@@ -34,9 +35,15 @@ const downloadContextEntry = (row, showToast) => {
     showToast("Select an entry first");
 
     return;
-  }
+	}
 
-  window.location.href = `/download?path=${encodeURIComponent(path)}`;
+	if (row?.dataset.entryDir === "true") {
+		downloadBulk([path], showToast);
+
+		return;
+	}
+
+	window.location.href = `/download?path=${encodeURIComponent(path)}`;
 };
 
 const initContextActions = (showToast) => {

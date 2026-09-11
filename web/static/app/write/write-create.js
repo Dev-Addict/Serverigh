@@ -10,7 +10,7 @@ export const createItem = (kind, showToast) => {
 
   const action = kind === "file" ? "file" : "mkdir";
   openNameModal({
-    nameLabel: kind === "file" ? "File name" : "Folder name",
+    nameLabel: kind === "file" ? "File name" : "Folder path",
     submit: ({name}) => {
       if (!postWriteAction(action, {...baseActionValues(), name})) {
         showToast("Write action unavailable");

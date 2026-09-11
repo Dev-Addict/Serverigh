@@ -1,4 +1,4 @@
-package handlers
+package write
 
 import (
 	"log/slog"
@@ -15,18 +15,19 @@ type folderTreeView struct {
 }
 
 func (h Handlers) Folders(c *fiber.Ctx) error {
-	if disabled, err := h.writeModeDisabled(c); disabled {
+	if disabled, err := h.ModeDisabled(c); disabled {
 		return err
 	}
 
 	start := time.Now()
 	selectedPath := c.Query("selected")
 	if selectedPath != "" {
-		tree, err := h.files.FolderBranch(selectedPath)
+		tree, err := h.Files.FolderBranch(selectedPath)
 		if err != nil {
-			return h.writeOperationalError(c, err)
+			return h.WriteOperationalError(c, err)
 		}
-		logHandlerOperation(
+
+		logOperation(
 			c,
 			slog.LevelInfo,
 			"folder branch listed",
@@ -39,15 +40,16 @@ func (h Handlers) Folders(c *fiber.Ctx) error {
 			tree.Truncated,
 		)
 
-		return h.render(c, "write_folder_tree.html", tree)
+		return h.Render(c, "write_folder_tree.html", tree)
 	}
 
 	parentPath := c.Query("path", "/")
-	entries, truncated, err := h.files.FolderChildren(parentPath)
+	entries, truncated, err := h.Files.FolderChildren(parentPath)
 	if err != nil {
-		return h.writeOperationalError(c, err)
+		return h.WriteOperationalError(c, err)
 	}
-	logHandlerOperation(
+
+	logOperation(
 		c,
 		slog.LevelInfo,
 		"folder children listed",
@@ -60,7 +62,7 @@ func (h Handlers) Folders(c *fiber.Ctx) error {
 		truncated,
 	)
 
-	return h.render(c, "write_folder_tree.html", folderTreeView{
+	return h.Render(c, "write_folder_tree.html", folderTreeView{
 		Entries:   entries,
 		Truncated: truncated,
 	})

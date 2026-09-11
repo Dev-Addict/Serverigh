@@ -18,7 +18,7 @@
 				aria-label="Close keyboard shortcuts"
 				title="Close keyboard shortcuts"
 				data-help-close>
-				<span aria-hidden="true">&times;</span>
+				{{ template "icon_close.html" . }}
 			</button>
 		</header>
 		<div class="help-modal-body">
@@ -28,13 +28,13 @@
 					<div><dt>/</dt><dd>Focus search.</dd></div>
 					<div><dt>Esc</dt><dd>Leave search or close a modal.</dd></div>
 					<div><dt>j</dt><dd>Move down one row.</dd></div>
-					<div><dt>&lt;count&gt;j</dt><dd>Move down count rows.</dd></div>
+					<div><dt>count+j</dt><dd>Move down count rows.</dd></div>
 					<div><dt>k</dt><dd>Move up one row.</dd></div>
-					<div><dt>&lt;count&gt;k</dt><dd>Move up count rows.</dd></div>
+					<div><dt>count+k</dt><dd>Move up count rows.</dd></div>
 					<div><dt>gg</dt><dd>Jump to the first row.</dd></div>
 					<div><dt>G</dt><dd>Jump to the last row.</dd></div>
 					<div><dt>h</dt><dd>Go to the parent directory.</dd></div>
-					<div><dt>&lt;count&gt;h</dt><dd>Go up count directories.</dd></div>
+					<div><dt>count+h</dt><dd>Go up count directories.</dd></div>
 					<div><dt>l</dt><dd>Open a folder or preview a file.</dd></div>
 					<div><dt>Enter</dt><dd>Open the selected row.</dd></div>
 					<div><dt>o</dt><dd>Open the selected row.</dd></div>

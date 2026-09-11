@@ -21,6 +21,10 @@ func (s Service) resolve(requestPath string) (ResolvedPath, error) {
 		return ResolvedPath{}, err
 	}
 
+	if isTrashPath(logicalPath) {
+		return s.resolveTrashPath(logicalPath)
+	}
+
 	absolutePath := filepath.Join(
 		s.root,
 		filepath.FromSlash(strings.TrimPrefix(logicalPath, "/")),
@@ -45,6 +49,24 @@ func (s Service) resolve(requestPath string) (ResolvedPath, error) {
 	return ResolvedPath{
 		Path:     logicalPath,
 		Absolute: realPath,
+		Info:     info,
+	}, nil
+}
+
+func (s Service) resolveTrashPath(logicalPath string) (ResolvedPath, error) {
+	absolutePath := trashStorageChild(s.root, logicalPath)
+	if err := s.ensureInsideRoot(absolutePath); err != nil {
+		return ResolvedPath{}, err
+	}
+
+	info, err := os.Lstat(absolutePath)
+	if err != nil {
+		return ResolvedPath{}, wrapFileError("inspect trash path", err)
+	}
+
+	return ResolvedPath{
+		Path:     logicalPath,
+		Absolute: absolutePath,
 		Info:     info,
 	}, nil
 }

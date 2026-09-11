@@ -1,6 +1,10 @@
 package view
 
-import "serverigh/internal/filesystem"
+import (
+	"path/filepath"
+
+	"serverigh/internal/filesystem"
+)
 
 type FilesView struct {
 	filesystem.DirectoryListing
@@ -28,12 +32,38 @@ type TableSortLink struct {
 }
 
 func Files(listing filesystem.DirectoryListing, writeEnabled bool) FilesView {
+	if writeEnabled && listing.Path == "/" {
+		listing.Entries = append(
+			[]filesystem.Entry{trashRootEntry(listing.Root)},
+			listing.Entries...,
+		)
+	}
 	controls := TableControls(listing.Path, listing.Options)
 
 	return FilesView{
 		DirectoryListing: listing,
 		Controls:         controls,
 		WriteEnabled:     writeEnabled,
+	}
+}
+
+func trashRootEntry(root string) filesystem.Entry {
+	return filesystem.Entry{
+		Name:         "Trash",
+		Path:         filesystem.TrashPath,
+		RelativePath: "trash",
+		AbsolutePath: filepath.Join(
+			root,
+			filesystem.StateDirectoryName,
+			filesystem.TrashDirectoryName,
+		),
+		Kind:         "folder",
+		SizeLabel:    "-",
+		Mode:         "-",
+		CreatedLabel: "-",
+		ModTimeLabel: "-",
+		IsDir:        true,
+		IsTrashRoot:  true,
 	}
 }
 

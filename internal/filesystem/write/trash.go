@@ -7,11 +7,6 @@ import (
 	"time"
 )
 
-const (
-	stateFolderName = ".serverigh"
-	trashFolderName = "trash"
-)
-
 func (s Service) Trash(requestPath string) error {
 	source, err := s.resolve(requestPath)
 	if err != nil {
@@ -26,13 +21,19 @@ func (s Service) Trash(requestPath string) error {
 	if err := os.MkdirAll(trashPath, 0o755); err != nil {
 		return wrapWriteError("create trash directory", err)
 	}
+	if err := os.MkdirAll(
+		trashMetaStoragePath(s.root),
+		0o755,
+	); err != nil {
+		return wrapWriteError("create trash metadata directory", err)
+	}
 
 	target := uniqueTrashPath(trashPath, path.Base(source.Path))
 	if err := os.Rename(source.Absolute, target); err != nil {
 		return wrapWriteError("move path to trash", err)
 	}
 
-	return nil
+	return s.writeTrashMetadata(filepath.Base(target), source.Path)
 }
 
 func uniqueTrashPath(trashPath string, name string) string {

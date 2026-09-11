@@ -23,6 +23,7 @@ type DirectoryListing struct {
 	Options    ListOptions
 	Truncated  bool
 	EntryLimit int
+	IsTrash    bool
 }
 
 type Entry struct {
@@ -43,6 +44,8 @@ type Entry struct {
 	ModTimeValue string
 	IsDir        bool
 	IsHidden     bool
+	IsTrashRoot  bool
+	IsTrashEntry bool
 }
 
 func (s Service) List(requestPath string) (DirectoryListing, error) {
@@ -63,6 +66,9 @@ func (s Service) list(
 ) (DirectoryListing, error) {
 	if entryLimit < 1 {
 		return DirectoryListing{}, ErrInvalidPath
+	}
+	if isTrashPath(requestPath) {
+		return s.listTrash(entryLimit, options)
 	}
 
 	resolved, err := s.Resolve(requestPath)
@@ -95,6 +101,9 @@ func (s Service) list(
 
 		for _, entry := range entries {
 			name := entry.Name()
+			if resolved.Path == "/" && name == "trash" {
+				continue
+			}
 			entryPath := filepath.Join(resolved.Absolute, name)
 			hidden := fileinfo.IsHidden(entryPath, name)
 			if hidden && !s.showHidden {
@@ -115,30 +124,10 @@ func (s Service) list(
 				)
 			}
 
-			path := displayPath(resolved.Path, name)
-			createdTime, createdKnown := fileinfo.CreationTime(entryPath)
-			listing.Entries = append(listing.Entries, Entry{
-				Name:         name,
-				Path:         path,
-				RelativePath: strings.TrimPrefix(path, "/"),
-				AbsolutePath: entryPath,
-				Kind:         fileinfo.Kind(info),
-				Size:         info.Size(),
-				SizeLabel:    fileinfo.FormatSize(info.Size()),
-				CreatedTime:  createdTime,
-				CreatedLabel: fileinfo.FormatOptionalTime(createdTime, createdKnown),
-				CreatedValue: fileinfo.FormatOptionalTimeValue(
-					createdTime,
-					createdKnown,
-				),
-				CreatedKnown: createdKnown,
-				Mode:         info.Mode().String(),
-				ModTime:      info.ModTime(),
-				ModTimeLabel: fileinfo.FormatTime(info.ModTime()),
-				ModTimeValue: fileinfo.FormatTimeValue(info.ModTime()),
-				IsDir:        info.IsDir(),
-				IsHidden:     hidden,
-			})
+			listing.Entries = append(
+				listing.Entries,
+				entryFromInfo(name, displayPath(resolved.Path, name), entryPath, info),
+			)
 		}
 
 		if errors.Is(err, io.EOF) {
@@ -147,4 +136,36 @@ func (s Service) list(
 	}
 
 	return sortedListing(listing), nil
+}
+
+func entryFromInfo(
+	name string,
+	requestPath string,
+	absolutePath string,
+	info os.FileInfo,
+) Entry {
+	createdTime, createdKnown := fileinfo.CreationTime(absolutePath)
+
+	return Entry{
+		Name:         name,
+		Path:         requestPath,
+		RelativePath: strings.TrimPrefix(requestPath, "/"),
+		AbsolutePath: absolutePath,
+		Kind:         fileinfo.Kind(info),
+		Size:         info.Size(),
+		SizeLabel:    fileinfo.FormatSize(info.Size()),
+		CreatedTime:  createdTime,
+		CreatedLabel: fileinfo.FormatOptionalTime(createdTime, createdKnown),
+		CreatedValue: fileinfo.FormatOptionalTimeValue(
+			createdTime,
+			createdKnown,
+		),
+		CreatedKnown: createdKnown,
+		Mode:         info.Mode().String(),
+		ModTime:      info.ModTime(),
+		ModTimeLabel: fileinfo.FormatTime(info.ModTime()),
+		ModTimeValue: fileinfo.FormatTimeValue(info.ModTime()),
+		IsDir:        info.IsDir(),
+		IsHidden:     fileinfo.IsHidden(absolutePath, name),
+	}
 }

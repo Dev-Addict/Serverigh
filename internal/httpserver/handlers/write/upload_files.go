@@ -1,4 +1,4 @@
-package handlers
+package write
 
 import (
 	"mime/multipart"
@@ -8,8 +8,7 @@ import (
 
 func (h Handlers) uploadFile(
 	parentPath string,
-	relativePaths []string,
-	index int,
+	uploadPath string,
 	fileHeader *multipart.FileHeader,
 ) error {
 	file, err := fileHeader.Open()
@@ -17,8 +16,8 @@ func (h Handlers) uploadFile(
 		return err
 	}
 
-	err = h.files.Upload(parentPath, filesystem.WriteUpload{
-		Name:   uploadName(fileHeader.Filename, relativePaths, index),
+	err = h.Files.Upload(parentPath, filesystem.WriteUpload{
+		Name:   uploadPath,
 		Source: file,
 	})
 	closeErr := file.Close()

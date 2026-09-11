@@ -45,11 +45,19 @@ func BreadcrumbsForPath(activePath string) []Breadcrumb {
 	for i, part := range parts {
 		itemPath := "/" + strings.Join(parts[:i+1], "/")
 		items = append(items, Breadcrumb{
-			Name:    part,
+			Name:    breadcrumbName(itemPath, part),
 			Path:    itemPath,
 			Current: i == len(parts)-1,
 		})
 	}
 
 	return items
+}
+
+func breadcrumbName(itemPath string, name string) string {
+	if itemPath == "/trash" {
+		return "Trash"
+	}
+
+	return name
 }

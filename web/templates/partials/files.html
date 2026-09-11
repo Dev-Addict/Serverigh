@@ -1,4 +1,7 @@
-<section class="file-panel" data-path="{{ .Path }}">
+<section
+	class="file-panel"
+	data-path="{{ .Path }}"
+	data-trash-view="{{ .IsTrash }}">
 	<header class="panel-header">
 		<div>
 			<h2>Files</h2>
@@ -11,13 +14,16 @@
 				hx-get="{{ .Controls.FilesURL }}"
 				hx-target="#files-region"
 				hx-swap="innerHTML">
-				<span aria-hidden="true">↻</span>
+				{{ template "icon_refresh.html" . }}
 				<span>Refresh</span>
 			</a>
 			{{ if .WriteEnabled }}
+			{{ if not .IsTrash }}
 			{{ template "write_menu.html" . }}
 			{{ end }}
+			{{ end }}
 	</div>
+	{{ if not .IsTrash }}
 	<div class="panel-actions bulk-panel-actions" data-panel-bulk-actions>
 		<button type="button" data-bulk-action="copy">Copy</button>
 		<button type="button" data-bulk-action="duplicate">Duplicate</button>
@@ -25,6 +31,7 @@
 		<button type="button" data-bulk-action="download">Download</button>
 		<button type="button" data-bulk-action="delete">Trash</button>
 	</div>
+	{{ end }}
 	</header>
 
 	{{ template "write_context_menu.html" . }}

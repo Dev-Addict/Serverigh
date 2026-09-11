@@ -36,7 +36,8 @@ func TestFilesRendersWriteMenusInWriteMode(t *testing.T) {
 func writeMenuParts() []string {
 	return []string{
 		`data-write-menu`,
-		`class="write-menu-plus" aria-hidden="true">+</span>`,
+		`class="write-menu-plus"`,
+		`<path d="M12 5v14"></path>`,
 		`data-write-context-menu`,
 		`data-bulk-count="0"`,
 		`data-bulk-only`,

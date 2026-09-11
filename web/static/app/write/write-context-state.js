@@ -42,6 +42,11 @@ export const openContextMenu = (row, x, y) => {
   }
 
   activeRow = row instanceof HTMLElement ? row : null;
+  if (activeRow?.dataset.trashRoot === "true") {
+    activeRow = null;
+
+    return false;
+  }
   if (!activeRow && !hasWriteMenu()) {
     return false;
   }

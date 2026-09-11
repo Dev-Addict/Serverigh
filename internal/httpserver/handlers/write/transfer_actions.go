@@ -1,4 +1,4 @@
-package handlers
+package write
 
 import (
 	"time"
@@ -7,7 +7,7 @@ import (
 )
 
 func (h Handlers) Move(c *fiber.Ctx) error {
-	if disabled, err := h.writeModeDisabled(c); disabled {
+	if disabled, err := h.ModeDisabled(c); disabled {
 		return err
 	}
 
@@ -15,7 +15,7 @@ func (h Handlers) Move(c *fiber.Ctx) error {
 	parentPath := formPath(c)
 	target := c.FormValue("target")
 	destination := c.FormValue("destination", "/")
-	err := h.files.Move(target, destination)
+	err := h.Files.Move(target, destination)
 	if resultErr := h.logTransferResult(
 		c,
 		"move",
@@ -28,11 +28,11 @@ func (h Handlers) Move(c *fiber.Ctx) error {
 		return resultErr
 	}
 
-	return h.writeRefresh(c, parentPath)
+	return h.Refresh(c, parentPath)
 }
 
 func (h Handlers) Copy(c *fiber.Ctx) error {
-	if disabled, err := h.writeModeDisabled(c); disabled {
+	if disabled, err := h.ModeDisabled(c); disabled {
 		return err
 	}
 
@@ -40,7 +40,7 @@ func (h Handlers) Copy(c *fiber.Ctx) error {
 	parentPath := formPath(c)
 	target := c.FormValue("target")
 	destination := c.FormValue("destination", parentPath)
-	err := h.files.Copy(target, destination)
+	err := h.Files.Copy(target, destination)
 	if resultErr := h.logTransferResult(
 		c,
 		"copy",
@@ -53,19 +53,19 @@ func (h Handlers) Copy(c *fiber.Ctx) error {
 		return resultErr
 	}
 
-	return h.writeRefresh(c, parentPath)
+	return h.Refresh(c, parentPath)
 }
 
 func (h Handlers) Duplicate(c *fiber.Ctx) error {
-	if disabled, err := h.writeModeDisabled(c); disabled {
+	if disabled, err := h.ModeDisabled(c); disabled {
 		return err
 	}
 
 	start := time.Now()
 	parentPath := formPath(c)
 	target := c.FormValue("target")
-	err := h.files.Duplicate(target)
-	if resultErr := h.writeActionResult(
+	err := h.Files.Duplicate(target)
+	if resultErr := h.ActionResult(
 		c,
 		"duplicate",
 		start,
@@ -78,7 +78,7 @@ func (h Handlers) Duplicate(c *fiber.Ctx) error {
 		return resultErr
 	}
 
-	return h.writeRefresh(c, parentPath)
+	return h.Refresh(c, parentPath)
 }
 
 func (h Handlers) logTransferResult(
@@ -90,7 +90,7 @@ func (h Handlers) logTransferResult(
 	target string,
 	destination string,
 ) error {
-	return h.writeActionResult(
+	return h.ActionResult(
 		c,
 		action,
 		start,

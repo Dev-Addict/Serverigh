@@ -30,6 +30,9 @@ func (s Service) Move(requestPath string, targetParentPath string) error {
 	if err := os.Rename(source.Absolute, target); err != nil {
 		return wrapWriteError("move path", err)
 	}
+	if isTrashPath(source.Path) {
+		return s.removeTrashMetadata(path.Base(source.Path))
+	}
 
 	return nil
 }

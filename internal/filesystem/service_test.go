@@ -123,6 +123,33 @@ func TestListWithOptionsUsesConfiguredHiddenVisibility(t *testing.T) {
 	}
 }
 
+func TestListTrashUsesVirtualTrashPath(t *testing.T) {
+	root := t.TempDir()
+	files := newTestService(t, root, false, 1024)
+	if err := files.Trash("/missing.txt"); err == nil {
+		t.Fatalf("expected missing file trash to fail")
+	}
+	writeFile(t, filepath.Join(root, "note.txt"), "hello")
+	if err := files.Trash("/note.txt"); err != nil {
+		t.Fatalf("trash file: %v", err)
+	}
+
+	listing, err := files.List(TrashPath)
+	if err != nil {
+		t.Fatalf("list trash: %v", err)
+	}
+
+	if !listing.IsTrash || listing.Path != TrashPath {
+		t.Fatalf("expected trash listing, got %#v", listing)
+	}
+	if len(listing.Entries) != 1 || !listing.Entries[0].IsTrashEntry {
+		t.Fatalf("expected one trash entry, got %#v", listing.Entries)
+	}
+	if !strings.HasPrefix(listing.Entries[0].Path, TrashPath+"/") {
+		t.Fatalf("expected virtual trash path, got %#v", listing.Entries[0])
+	}
+}
+
 func TestResolveRejectsTraversal(t *testing.T) {
 	files := newTestService(t, t.TempDir(), false, 1024)
 

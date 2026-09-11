@@ -1,4 +1,4 @@
-package handlers
+package write
 
 import (
 	"time"
@@ -7,14 +7,14 @@ import (
 )
 
 func (h Handlers) Mkdir(c *fiber.Ctx) error {
-	if disabled, err := h.writeModeDisabled(c); disabled {
+	if disabled, err := h.ModeDisabled(c); disabled {
 		return err
 	}
 
 	start := time.Now()
 	parentPath := formPath(c)
-	err := h.files.CreateDirectory(parentPath, c.FormValue("name"))
-	if resultErr := h.writeActionResult(
+	err := h.Files.CreateDirectory(parentPath, c.FormValue("name"))
+	if resultErr := h.ActionResult(
 		c,
 		"mkdir",
 		start,
@@ -25,18 +25,18 @@ func (h Handlers) Mkdir(c *fiber.Ctx) error {
 		return resultErr
 	}
 
-	return h.writeRefresh(c, parentPath)
+	return h.Refresh(c, parentPath)
 }
 
 func (h Handlers) CreateFile(c *fiber.Ctx) error {
-	if disabled, err := h.writeModeDisabled(c); disabled {
+	if disabled, err := h.ModeDisabled(c); disabled {
 		return err
 	}
 
 	start := time.Now()
 	parentPath := formPath(c)
-	err := h.files.CreateFile(parentPath, c.FormValue("name"))
-	if resultErr := h.writeActionResult(
+	err := h.Files.CreateFile(parentPath, c.FormValue("name"))
+	if resultErr := h.ActionResult(
 		c,
 		"create_file",
 		start,
@@ -47,19 +47,19 @@ func (h Handlers) CreateFile(c *fiber.Ctx) error {
 		return resultErr
 	}
 
-	return h.writeRefresh(c, parentPath)
+	return h.Refresh(c, parentPath)
 }
 
 func (h Handlers) Rename(c *fiber.Ctx) error {
-	if disabled, err := h.writeModeDisabled(c); disabled {
+	if disabled, err := h.ModeDisabled(c); disabled {
 		return err
 	}
 
 	start := time.Now()
 	parentPath := formPath(c)
 	requestPath := c.FormValue("target")
-	err := h.files.Rename(requestPath, c.FormValue("name"))
-	if resultErr := h.writeActionResult(
+	err := h.Files.Rename(requestPath, c.FormValue("name"))
+	if resultErr := h.ActionResult(
 		c,
 		"rename",
 		start,
@@ -72,5 +72,5 @@ func (h Handlers) Rename(c *fiber.Ctx) error {
 		return resultErr
 	}
 
-	return h.writeRefresh(c, parentPath)
+	return h.Refresh(c, parentPath)
 }

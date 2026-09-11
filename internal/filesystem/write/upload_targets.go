@@ -27,7 +27,62 @@ func (s Service) uploadTarget(parentPath string, uploadPath string) (string, err
 		return "", err
 	}
 
-	return s.childTargetForAbsolute(target, path.Base(cleanPath))
+	return s.uniqueChildTargetForAbsolute(target, path.Base(cleanPath))
+}
+
+func (s Service) UniqueUploadPaths(
+	parentPath string,
+	uploadPaths []string,
+) ([]string, error) {
+	parent, err := s.resolve(parentPath)
+	if err != nil {
+		return nil, err
+	}
+	if !parent.Info.IsDir() {
+		return nil, ErrNotDirectory
+	}
+
+	renamed := make([]string, len(uploadPaths))
+	mappedFolders := map[string]string{}
+	reservedNames := map[string]bool{}
+	for index, uploadPath := range uploadPaths {
+		cleanPath, err := cleanUploadPath(uploadPath)
+		if err != nil {
+			return nil, err
+		}
+
+		folderName, childPath, isFolderUpload := strings.Cut(cleanPath, "/")
+		if !isFolderUpload {
+			renamed[index], err = s.uniqueChildNameForAbsolute(
+				parent.Absolute,
+				cleanPath,
+				reservedNames,
+			)
+			if err != nil {
+				return nil, err
+			}
+			reservedNames[renamed[index]] = true
+			continue
+		}
+
+		mappedFolder, ok := mappedFolders[folderName]
+		if !ok {
+			mappedFolder, err = s.uniqueChildNameForAbsolute(
+				parent.Absolute,
+				folderName,
+				reservedNames,
+			)
+			if err != nil {
+				return nil, err
+			}
+			mappedFolders[folderName] = mappedFolder
+			reservedNames[mappedFolder] = true
+		}
+
+		renamed[index] = path.Join(mappedFolder, childPath)
+	}
+
+	return renamed, nil
 }
 
 func cleanUploadPath(uploadPath string) (string, error) {

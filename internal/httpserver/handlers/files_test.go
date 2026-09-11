@@ -32,6 +32,31 @@ func TestFilesRendersDirectoryListing(t *testing.T) {
 	}
 }
 
+func TestFilesRendersTrashEntryAtRootInWriteMode(t *testing.T) {
+	root := t.TempDir()
+	h := writeModeHandlers(t, root)
+
+	app := fiber.New()
+	app.Get("/partials/files", h.Files)
+
+	resp, body := testRequest(
+		t,
+		app,
+		http.MethodGet,
+		"/partials/files?path=/",
+	)
+
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("expected status 200, got %d: %s", resp.StatusCode, body)
+	}
+	if !strings.Contains(body, `data-entry-path="/trash"`) {
+		t.Fatalf("expected trash entry in root listing, got %q", body)
+	}
+	if !strings.Contains(body, `>Trash/</span>`) {
+		t.Fatalf("expected trash label in root listing, got %q", body)
+	}
+}
+
 func TestFilesRejectsTraversal(t *testing.T) {
 	h := testHandlers(t)
 	app := fiber.New()
@@ -256,7 +281,8 @@ func TestFilesRendersTableControls(t *testing.T) {
 		`data-panel-bulk-actions`,
 		`data-bulk-action="download"`,
 		`class="entry-menu-heading" scope="col" aria-label="Actions"></th>`,
-		`<span aria-hidden="true">&#8942;</span>`,
+		`class="ui-icon"`,
+		`<circle cx="12" cy="12" r="1.5"></circle>`,
 		`data-relative-path="note.txt"`,
 		`data-absolute-path=`,
 		`data-write-context-menu`,

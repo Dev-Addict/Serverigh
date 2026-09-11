@@ -15,7 +15,7 @@
 		aria-label="Toggle {{ .Name }}"
 		data-folder-toggle
 		{{ if not .HasChildren }}disabled{{ end }}>
-		<span aria-hidden="true">›</span>
+		{{ template "icon_chevron_right.html" . }}
 	</button>
 	<button
 		type="button"

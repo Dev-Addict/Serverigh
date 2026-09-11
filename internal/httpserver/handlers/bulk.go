@@ -27,11 +27,13 @@ func (h Handlers) BulkDownload(c *fiber.Ctx) error {
 }
 
 func (h Handlers) bulkHandlers() bulkhandlers.Handlers {
+	writeHandlers := h.writeHandlers()
+
 	return bulkhandlers.Handlers{
 		Files:                 h.files,
-		WriteActionResult:     h.writeActionResult,
-		WriteModeDisabled:     h.writeModeDisabled,
+		WriteActionResult:     writeHandlers.ActionResult,
+		WriteModeDisabled:     writeHandlers.ModeDisabled,
 		WriteOperationalError: h.writeOperationalError,
-		WriteRefresh:          h.writeRefresh,
+		WriteRefresh:          writeHandlers.Refresh,
 	}
 }

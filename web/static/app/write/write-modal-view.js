@@ -1,26 +1,22 @@
 import {
-  destinationField,
-  dialog,
-  form,
-  modal,
-  nameField,
+	dialog,
+	form,
+	modal,
+	nameField,
   nameInput,
   nameLabel,
   setHidden,
   setText,
-  submitButton,
-  summary,
-  title,
+	summary,
+	title,
 } from "./write-modal-elements.js";
+import {
+	setDangerState,
+	setDestinationState,
+	setSubmitText,
+} from "./write-modal-state.js";
 
 let previousFocus = null;
-
-const setSubmitText = (value) => {
-  const button = submitButton();
-  if (button instanceof HTMLButtonElement) {
-    button.textContent = value;
-  }
-};
 
 const focusModal = () => {
   const input = nameInput();
@@ -56,7 +52,8 @@ export const openModalView = (options) => {
   setText(nameLabel(), options.nameLabel || "Name");
   setSubmitText(options.submitLabel || "Submit");
   setHidden(nameField(), !options.name);
-  setHidden(destinationField(), !options.destination);
+  setDestinationState(Boolean(options.destination));
+  setDangerState(target, Boolean(options.danger));
 
   const input = nameInput();
   if (input instanceof HTMLInputElement) {
@@ -78,6 +75,7 @@ export const closeModalView = () => {
   }
 
   delete target.dataset.open;
+  delete target.dataset.variant;
   target.setAttribute("aria-hidden", "true");
   if (previousFocus instanceof HTMLElement) {
     previousFocus.focus();

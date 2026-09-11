@@ -16,6 +16,16 @@ func TestCreatesDirectory(t *testing.T) {
 	assertDirExists(t, filepath.Join(service.root, "docs"))
 }
 
+func TestCreatesNestedDirectory(t *testing.T) {
+	service := NewService(t.TempDir())
+
+	if err := service.CreateDirectory("/", "parent/child"); err != nil {
+		t.Fatalf("create nested directory: %v", err)
+	}
+
+	assertDirExists(t, filepath.Join(service.root, "parent", "child"))
+}
+
 func TestCreatesFile(t *testing.T) {
 	root := t.TempDir()
 	service := NewService(root)
@@ -27,10 +37,23 @@ func TestCreatesFile(t *testing.T) {
 	assertFileContent(t, filepath.Join(root, "note.txt"), "")
 }
 
-func TestRejectsNestedEntryName(t *testing.T) {
+func TestRejectsParentTraversalDirectoryPath(t *testing.T) {
 	service := NewService(t.TempDir())
 
 	err := service.CreateDirectory("/", "../outside")
+	if err == nil {
+		t.Fatalf("expected invalid path error")
+	}
+
+	if !strings.Contains(err.Error(), "invalid path") {
+		t.Fatalf("expected invalid path error, got %v", err)
+	}
+}
+
+func TestRejectsAbsoluteDirectoryPath(t *testing.T) {
+	service := NewService(t.TempDir())
+
+	err := service.CreateDirectory("/", "/outside")
 	if err == nil {
 		t.Fatalf("expected invalid path error")
 	}

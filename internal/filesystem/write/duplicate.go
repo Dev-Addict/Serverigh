@@ -34,14 +34,64 @@ func (s Service) Duplicate(requestPath string) error {
 }
 
 func (s Service) uniqueDuplicateTarget(parent string, name string) (string, error) {
+	return s.uniqueNumberedTarget(parent, name, nil)
+}
+
+func (s Service) uniqueChildTargetForAbsolute(parent string, name string) (string, error) {
+	target, err := s.childTargetForAbsolute(parent, name)
+	if err == nil {
+		return target, nil
+	}
+	if err != ErrPathExists {
+		return "", err
+	}
+
+	return s.uniqueNumberedTarget(parent, name, nil)
+}
+
+func (s Service) uniqueChildNameForAbsolute(
+	parent string,
+	name string,
+	reserved map[string]bool,
+) (string, error) {
+	if err := validateEntryName(name); err != nil {
+		return "", err
+	}
+	if reserved == nil || !reserved[name] {
+		target, err := s.childTargetForAbsolute(parent, name)
+		if err == nil {
+			return filepath.Base(target), nil
+		}
+		if err != ErrPathExists {
+			return "", err
+		}
+	}
+
+	target, err := s.uniqueNumberedTarget(parent, name, reserved)
+	if err != nil {
+		return "", err
+	}
+
+	return filepath.Base(target), nil
+}
+
+func (s Service) uniqueNumberedTarget(
+	parent string,
+	name string,
+	reserved map[string]bool,
+) (string, error) {
 	if err := validateEntryName(name); err != nil {
 		return "", err
 	}
 
-	ext := filepath.Ext(name)
-	base := strings.TrimSuffix(name, ext)
-	for index := 1; index < 10_000; index++ {
-		target := filepath.Join(parent, duplicateName(base, ext, index))
+	base, ext, start := numberedNameParts(name)
+	for index := start; index < 10_000; index++ {
+		candidate := numberedName(base, ext, index)
+		if reserved != nil && reserved[candidate] {
+			continue
+		}
+
+		target := filepath.Join(parent, candidate)
 		if err := s.ensureInsideRoot(target); err != nil {
 			return "", err
 		}
@@ -55,6 +105,22 @@ func (s Service) uniqueDuplicateTarget(parent string, name string) (string, erro
 	return "", ErrPathExists
 }
 
-func duplicateName(base string, ext string, index int) string {
+func numberedNameParts(name string) (string, string, int) {
+	ext := filepath.Ext(name)
+	base := strings.TrimSuffix(name, ext)
+	separator := strings.LastIndex(base, " ")
+	if separator < 0 {
+		return base, ext, 1
+	}
+
+	index, err := strconv.Atoi(base[separator+1:])
+	if err != nil || index < 1 {
+		return base, ext, 1
+	}
+
+	return base[:separator], ext, index + 1
+}
+
+func numberedName(base string, ext string, index int) string {
 	return base + " " + strconv.Itoa(index) + ext
 }

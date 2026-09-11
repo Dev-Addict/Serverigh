@@ -46,12 +46,27 @@ func (s Service) Upload(parentPath string, upload WriteUpload) error {
 	return s.invalidateAfterWrite(err)
 }
 
+func (s Service) UniqueUploadPaths(
+	parentPath string,
+	uploadPaths []string,
+) ([]string, error) {
+	return s.writeService().UniqueUploadPaths(parentPath, uploadPaths)
+}
+
 func (s Service) Duplicate(requestPath string) error {
 	return s.invalidateAfterWrite(s.writeService().Duplicate(requestPath))
 }
 
 func (s Service) Trash(requestPath string) error {
 	return s.invalidateAfterWrite(s.writeService().Trash(requestPath))
+}
+
+func (s Service) RestoreTrash(requestPath string) error {
+	return s.invalidateAfterWrite(s.writeService().RestoreTrash(requestPath))
+}
+
+func (s Service) DeleteTrash(requestPath string) error {
+	return s.invalidateAfterWrite(s.writeService().DeleteTrash(requestPath))
 }
 
 func (s Service) writeService() writefs.Service {

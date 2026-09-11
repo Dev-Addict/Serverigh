@@ -57,6 +57,28 @@ func TestWriteActionCreatesDirectoryAndRefreshesListing(t *testing.T) {
 	}
 }
 
+func TestWriteActionCreatesNestedDirectory(t *testing.T) {
+	root := t.TempDir()
+	h := writeModeHandlers(t, root)
+	app := fiber.New()
+	app.Post("/actions/mkdir", h.Mkdir)
+
+	resp, body := formRequest(t, app, "/actions/mkdir", url.Values{
+		"path": {"/"},
+		"name": {"parent/child"},
+	})
+
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("expected status 200, got %d: %s", resp.StatusCode, body)
+	}
+	if !strings.Contains(body, "parent/") {
+		t.Fatalf("expected refreshed listing, got %q", body)
+	}
+	if _, err := os.Stat(filepath.Join(root, "parent", "child")); err != nil {
+		t.Fatalf("expected nested directory to be created: %v", err)
+	}
+}
+
 func TestWriteActionCreatesFileAndRefreshesListing(t *testing.T) {
 	root := t.TempDir()
 	h := writeModeHandlers(t, root)
@@ -180,6 +202,32 @@ func TestWriteActionUploadsFolderFiles(t *testing.T) {
 	}
 }
 
+func TestWriteActionUploadsFolderWithIncrementingName(t *testing.T) {
+	root := t.TempDir()
+	if err := os.Mkdir(filepath.Join(root, "folder"), 0o755); err != nil {
+		t.Fatalf("create existing folder: %v", err)
+	}
+	h := writeModeHandlers(t, root)
+	app := fiber.New()
+	app.Post("/actions/upload", h.Upload)
+
+	resp, body := uploadRequestWithFiles(t, app, "/actions/upload", []uploadFixture{
+		{name: "folder/one.txt", content: "one"},
+		{name: "folder/two.txt", content: "two"},
+	})
+
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("expected status 200, got %d: %s", resp.StatusCode, body)
+	}
+	assertUploadedFileContent(t, filepath.Join(root, "folder 1", "one.txt"), "one")
+	assertUploadedFileContent(t, filepath.Join(root, "folder 1", "two.txt"), "two")
+}
+
+type uploadFixture struct {
+	name    string
+	content string
+}
+
 func writeModeHandlers(t *testing.T, root string) Handlers {
 	t.Helper()
 
@@ -240,6 +288,51 @@ func uploadRequest(
 	req.Header.Set("HX-Request", "true")
 
 	return testFiberRequest(t, app, req)
+}
+
+func uploadRequestWithFiles(
+	t *testing.T,
+	app *fiber.App,
+	target string,
+	files []uploadFixture,
+) (*http.Response, string) {
+	t.Helper()
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	if err := writer.WriteField("path", "/"); err != nil {
+		t.Fatalf("write path field: %v", err)
+	}
+	for _, upload := range files {
+		if err := writer.WriteField("relative_path", upload.name); err != nil {
+			t.Fatalf("write relative path field: %v", err)
+		}
+		file, err := writer.CreateFormFile("file", filepath.Base(upload.name))
+		if err != nil {
+			t.Fatalf("create upload field: %v", err)
+		}
+		if _, err := file.Write([]byte(upload.content)); err != nil {
+			t.Fatalf("write upload content: %v", err)
+		}
+	}
+	if err := writer.Close(); err != nil {
+		t.Fatalf("close multipart writer: %v", err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, target, body)
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	req.Header.Set("HX-Request", "true")
+	return testFiberRequest(t, app, req)
+}
+
+func assertUploadedFileContent(t *testing.T, filename string, expected string) {
+	t.Helper()
+	content, err := os.ReadFile(filename)
+	if err != nil {
+		t.Fatalf("read %q: %v", filename, err)
+	}
+	if string(content) != expected {
+		t.Fatalf("expected %q content %q, got %q", filename, expected, content)
+	}
 }
 
 func testFiberRequest(
