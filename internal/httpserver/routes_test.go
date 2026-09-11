@@ -57,6 +57,11 @@ func TestRoutesWireCoreHandlers(t *testing.T) {
 			status: http.StatusOK,
 		},
 		{
+			name:   "files version",
+			path:   "/partials/files/version?path=/",
+			status: http.StatusOK,
+		},
+		{
 			name:   "folders",
 			path:   "/partials/folders?path=/",
 			status: http.StatusOK,
@@ -124,6 +129,7 @@ func TestRoutesServeEmbeddedStaticAssets(t *testing.T) {
 	tests := []string{
 		"/static/app.js",
 		"/static/app/debounce.js",
+		"/static/app/file-refresh.js",
 		"/static/app/help.js",
 		"/static/app/keyboard/keyboard.js",
 		"/static/app/keyboard/keyboard-command-state.js",

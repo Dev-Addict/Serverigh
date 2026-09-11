@@ -88,6 +88,7 @@ minimal client state, and no heavy frontend build step.
 - File watcher refresh.
   Priority: medium. Refresh visible directory contents when files change on
   disk. Use polling first if native watchers add too much complexity.
+  Status: implemented with polling.
 - Better code preview.
   Priority: medium. Add syntax highlighting and line numbers with server-side
   highlighting or a small static highlighter.

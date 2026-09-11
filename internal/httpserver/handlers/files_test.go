@@ -1,7 +1,10 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -29,6 +32,146 @@ func TestFilesRendersDirectoryListing(t *testing.T) {
 
 	if !strings.Contains(body, "note.txt") {
 		t.Fatalf("expected listed file in response, got %q", body)
+	}
+}
+
+func decodeFilesVersion(t *testing.T, body string) filesVersionResponse {
+	t.Helper()
+	var response filesVersionResponse
+	if err := json.Unmarshal([]byte(body), &response); err != nil {
+		t.Fatalf("decode files version response %q: %v", body, err)
+	}
+
+	return response
+}
+
+func filesVersionFor(
+	t *testing.T,
+	app *fiber.App,
+	path string,
+) filesVersionResponse {
+	t.Helper()
+	resp, body := testRequest(
+		t,
+		app,
+		http.MethodGet,
+		"/partials/files/version?path="+path,
+	)
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("expected status 200, got %d: %s", resp.StatusCode, body)
+	}
+
+	return decodeFilesVersion(t, body)
+}
+
+func TestFilesVersionChangesWhenDirectoryContentsChange(t *testing.T) {
+	root := t.TempDir()
+	h := testHandlersWithRoot(t, root)
+
+	app := fiber.New()
+	app.Get("/partials/files/version", h.FilesVersion)
+
+	resp, body := testRequest(
+		t,
+		app,
+		http.MethodGet,
+		"/partials/files/version?path=/",
+	)
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("expected status 200, got %d: %s", resp.StatusCode, body)
+	}
+	before := decodeFilesVersion(t, body)
+
+	writeTestFile(t, root, "note.txt", "hello")
+	resp, body = testRequest(
+		t,
+		app,
+		http.MethodGet,
+		"/partials/files/version?path=/",
+	)
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("expected status 200, got %d: %s", resp.StatusCode, body)
+	}
+	after := decodeFilesVersion(t, body)
+
+	if after.Path != "/" {
+		t.Fatalf("expected path /, got %q", after.Path)
+	}
+	if before.Version == "" || after.Version == "" {
+		t.Fatalf("expected non-empty versions before=%q after=%q", before.Version, after.Version)
+	}
+	if before.Version == after.Version {
+		t.Fatalf("expected changed version after file write, got %q", after.Version)
+	}
+}
+
+func TestFilesVersionStableWhenDirectoryContentsDoNotChange(t *testing.T) {
+	root := t.TempDir()
+	writeTestFile(t, root, "note.txt", "hello")
+	h := testHandlersWithRoot(t, root)
+	app := fiber.New()
+	app.Get("/partials/files/version", h.FilesVersion)
+
+	before := filesVersionFor(t, app, "/")
+	after := filesVersionFor(t, app, "/")
+
+	if before.Version != after.Version {
+		t.Fatalf("expected stable version, got before=%q after=%q", before.Version, after.Version)
+	}
+}
+
+func TestFilesVersionChangesWhenFileContentChanges(t *testing.T) {
+	root := t.TempDir()
+	writeTestFile(t, root, "note.txt", "hello")
+	h := testHandlersWithRoot(t, root)
+	app := fiber.New()
+	app.Get("/partials/files/version", h.FilesVersion)
+
+	before := filesVersionFor(t, app, "/")
+	writeTestFile(t, root, "note.txt", "hello again")
+	after := filesVersionFor(t, app, "/")
+
+	if before.Version == after.Version {
+		t.Fatalf("expected changed version after file content update, got %q", after.Version)
+	}
+}
+
+func TestFilesVersionChangesWhenFileRenames(t *testing.T) {
+	root := t.TempDir()
+	writeTestFile(t, root, "note.txt", "hello")
+	h := testHandlersWithRoot(t, root)
+	app := fiber.New()
+	app.Get("/partials/files/version", h.FilesVersion)
+
+	before := filesVersionFor(t, app, "/")
+	if err := os.Rename(
+		filepath.Join(root, "note.txt"),
+		filepath.Join(root, "renamed.txt"),
+	); err != nil {
+		t.Fatalf("rename file: %v", err)
+	}
+	after := filesVersionFor(t, app, "/")
+
+	if before.Version == after.Version {
+		t.Fatalf("expected changed version after rename, got %q", after.Version)
+	}
+}
+
+func TestFilesVersionChangesWhenFileDeletes(t *testing.T) {
+	root := t.TempDir()
+	writeTestFile(t, root, "note.txt", "hello")
+	h := testHandlersWithRoot(t, root)
+	app := fiber.New()
+	app.Get("/partials/files/version", h.FilesVersion)
+
+	before := filesVersionFor(t, app, "/")
+	if err := os.Remove(filepath.Join(root, "note.txt")); err != nil {
+		t.Fatalf("remove file: %v", err)
+	}
+	after := filesVersionFor(t, app, "/")
+
+	if before.Version == after.Version {
+		t.Fatalf("expected changed version after delete, got %q", after.Version)
 	}
 }
 

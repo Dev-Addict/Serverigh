@@ -1,4 +1,5 @@
 import { initClipboardActions } from "./app/clipboard.js";
+import { initFileRefresh } from "./app/file-refresh.js";
 import { initHistoryBack } from "./app/history.js";
 import { initHtmxStatus } from "./app/htmx.js";
 import { initHelpModal } from "./app/help.js";
@@ -22,6 +23,7 @@ initSettings();
 initHelpModal();
 initSearchPreview();
 initHtmxStatus(queuePreviewOffsetUpdate);
+initFileRefresh();
 initClipboardActions(showToast);
 initHistoryBack();
 initKeyboardNavigation(showToast, setKeyStatus);

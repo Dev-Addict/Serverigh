@@ -29,33 +29,30 @@ Implemented:
 
 - [x] Fiber HTTP server with CLI and environment configuration.
 - [x] Configurable root, host, port, write mode, hidden files, and preview
-  limits.
+      limits.
 - [x] Embedded templates and static assets.
 - [x] Root-scoped browsing with traversal and symlink escape protection.
 - [x] Directory listing with folder-first sorting and bounded result counts.
 - [x] File metadata, including size, mode, MIME type, creation time, and
-  modification time.
+      modification time.
 - [x] Bounded text preview with truncation and binary-file handling.
 - [x] Markdown, CSV, JSON, code/config, media, and binary preview states.
 - [x] Raw and download routes with validated file handles and safety headers.
 - [x] Operational error codes with JSON or HTML responses as appropriate.
 - [x] Explorer shell with top bar, file table, preview pane, and status row.
 - [x] HTMX navigation for folder browsing, file preview updates, and
-  breadcrumbs.
+      breadcrumbs.
 - [x] URL-backed state for reload, back, and forward navigation.
 - [x] Fuzzy filename search with `fastwalk`, `sahilm/fuzzy`,
-  current-folder ranking, and preview links.
+      current-folder ranking, and preview links.
 - [x] Table sorting, config-driven hidden-file visibility, and copy-path
-  actions.
+      actions.
 - [x] Keyboard navigation and improved metadata views.
 - [x] Opt-in write-mode workflows with create, rename, move, copy, file/folder
-  upload, and trash-first delete.
+      upload, and trash-first delete.
+- [x] Polling refresh for visible directory changes made outside Serverigh.
 - [x] Health endpoint, Makefile workflow, and backend test coverage.
-
-Planned for the first version:
-
-- [ ] Bulk selection, archive downloads, restore from trash, and file refresh
-  behavior.
+- [x] Bulk selection, archive downloads, and restore from trash behavior.
 
 Later or explicitly deferred:
 
