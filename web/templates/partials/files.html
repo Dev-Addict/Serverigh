@@ -4,7 +4,7 @@
 			<h2>Files</h2>
 			<p>{{ len .Entries }} visible entries in {{ .Path }}</p>
 		</div>
-		<div class="panel-actions">
+		<div class="panel-actions" data-panel-normal-actions>
 			<a
 				class="quiet-link"
 				href="{{ .Controls.BrowseURL }}"
@@ -17,7 +17,14 @@
 			{{ if .WriteEnabled }}
 			{{ template "write_menu.html" . }}
 			{{ end }}
-		</div>
+	</div>
+	<div class="panel-actions bulk-panel-actions" data-panel-bulk-actions>
+		<button type="button" data-bulk-action="copy">Copy</button>
+		<button type="button" data-bulk-action="duplicate">Duplicate</button>
+		<button type="button" data-bulk-action="move">Move</button>
+		<button type="button" data-bulk-action="download">Download</button>
+		<button type="button" data-bulk-action="delete">Trash</button>
+	</div>
 	</header>
 
 	{{ template "write_context_menu.html" . }}
@@ -31,142 +38,19 @@
 
 	{{ if .Entries }}
 	<table class="file-table directory-table">
-		<thead>
-			<tr>
-				<th scope="col" aria-sort="{{ .Controls.NameSort.AriaSort }}">
-					<a
-						class="sort-link"
-						href="{{ .Controls.NameSort.BrowseURL }}"
-						hx-get="{{ .Controls.NameSort.FilesURL }}"
-						hx-target="#files-region"
-						hx-swap="innerHTML">
-						Name
-						{{ if .Controls.NameSort.Indicator }}
-						<span>{{ .Controls.NameSort.Indicator }}</span>
-						{{ end }}
-					</a>
-				</th>
-				<th
-					class="column-size"
-					scope="col"
-					aria-sort="{{ .Controls.SizeSort.AriaSort }}">
-					<a
-						class="sort-link"
-						href="{{ .Controls.SizeSort.BrowseURL }}"
-						hx-get="{{ .Controls.SizeSort.FilesURL }}"
-						hx-target="#files-region"
-						hx-swap="innerHTML">
-						Size
-						{{ if .Controls.SizeSort.Indicator }}
-						<span>{{ .Controls.SizeSort.Indicator }}</span>
-						{{ end }}
-					</a>
-				</th>
-				<th
-					class="column-modified"
-					scope="col"
-					aria-sort="{{ .Controls.ModifiedSort.AriaSort }}">
-					<a
-						class="sort-link"
-						href="{{ .Controls.ModifiedSort.BrowseURL }}"
-						hx-get="{{ .Controls.ModifiedSort.FilesURL }}"
-						hx-target="#files-region"
-						hx-swap="innerHTML">
-						Modified
-						{{ if .Controls.ModifiedSort.Indicator }}
-						<span>{{ .Controls.ModifiedSort.Indicator }}</span>
-						{{ end }}
-					</a>
-				</th>
-				<th
-					class="column-created"
-					scope="col"
-					aria-sort="{{ .Controls.CreatedSort.AriaSort }}">
-					<a
-						class="sort-link"
-						href="{{ .Controls.CreatedSort.BrowseURL }}"
-						hx-get="{{ .Controls.CreatedSort.FilesURL }}"
-						hx-target="#files-region"
-						hx-swap="innerHTML">
-						Created
-						{{ if .Controls.CreatedSort.Indicator }}
-						<span>{{ .Controls.CreatedSort.Indicator }}</span>
-						{{ end }}
-					</a>
-				</th>
-				<th class="column-mode" scope="col">Mode</th>
-				<th class="entry-menu-heading" scope="col" aria-label="Actions"></th>
-			</tr>
-		</thead>
+		<colgroup>
+			<col class="entry-select-column">
+			<col class="entry-name-column">
+			<col class="entry-size-column">
+			<col class="entry-modified-column">
+			<col class="entry-created-column">
+			<col class="entry-mode-column">
+			<col class="entry-menu-column">
+		</colgroup>
+		{{ template "files_table_head.html" . }}
 		<tbody>
 			{{ range .Entries }}
-			<tr
-				data-entry-row
-				data-entry-id="{{ .Path }}"
-				data-entry-name="{{ .Name }}"
-				data-entry-path="{{ .Path }}"
-				data-relative-path="{{ .RelativePath }}"
-				data-absolute-path="{{ .AbsolutePath }}">
-				<td class="name-cell">
-					{{ $icon := $.Icon . }}
-					<div class="entry-name-wrap">
-						{{ if .IsDir }}
-						<a
-							class="entry-link folder-link"
-							href="{{ $.BrowseURL .Path }}"
-							hx-get="{{ $.FilesURL .Path }}"
-							hx-target="#files-region"
-							hx-swap="innerHTML"
-							title="Open {{ .Name }}">
-							<img
-								class="entry-icon"
-								src="{{ $icon.Path }}"
-								alt=""
-								aria-hidden="true">
-							<span>{{ .Name }}/</span>
-						</a>
-						{{ else }}
-						<a
-							class="entry-link file-link"
-							href="{{ $.FileBrowseURL .Path }}"
-							hx-get="/preview?path={{ .Path | urlquery }}"
-							hx-target="#preview-region"
-							hx-swap="innerHTML"
-							hx-push-url="{{ $.FileBrowseURL .Path }}"
-							title="Preview {{ .Name }}">
-							<img
-								class="entry-icon"
-								src="{{ $icon.Path }}"
-								alt=""
-								aria-hidden="true">
-							<span>{{ .Name }}</span>
-						</a>
-						{{ end }}
-					</div>
-				</td>
-				<td class="numeric-cell column-size">{{ .SizeLabel }}</td>
-				<td class="column-modified">
-					<time datetime="{{ .ModTimeValue }}">{{ .ModTimeLabel }}</time>
-				</td>
-				<td class="column-created">
-					{{ if .CreatedKnown }}
-					<time datetime="{{ .CreatedValue }}">{{ .CreatedLabel }}</time>
-					{{ else }}
-					{{ .CreatedLabel }}
-					{{ end }}
-				</td>
-				<td class="column-mode"><code>{{ .Mode }}</code></td>
-				<td class="entry-menu-cell">
-					<button
-						class="entry-menu-button"
-						type="button"
-						aria-label="Open context menu for {{ .Name }}"
-						title="More actions"
-						data-entry-menu-button>
-						<span aria-hidden="true">&#8942;</span>
-					</button>
-				</td>
-			</tr>
+			{{ template "files_table_row.html" dict "Entry" . "View" $ }}
 			{{ end }}
 		</tbody>
 	</table>

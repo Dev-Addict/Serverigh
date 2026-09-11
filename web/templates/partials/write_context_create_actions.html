@@ -1,0 +1,19 @@
+<hr data-entry-required data-non-bulk>
+<button type="button" data-non-bulk data-write-create="folder">
+	New folder
+</button>
+<button type="button" data-non-bulk data-write-create="file">New file</button>
+<div data-non-bulk>
+{{ template "write_upload_form.html" dict
+	"Path" .Path
+	"Sort" .Options.Sort
+	"Direction" .Options.Direction
+	"Label" "Upload files"
+	"Folder" false }}
+{{ template "write_upload_form.html" dict
+	"Path" .Path
+	"Sort" .Options.Sort
+	"Direction" .Options.Direction
+	"Label" "Upload folder"
+	"Folder" true }}
+</div>

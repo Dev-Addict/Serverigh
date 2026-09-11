@@ -27,6 +27,7 @@ func (s Server) registerRoutes(app *fiber.App) {
 	app.Get("/preview", s.handlers.Preview)
 	app.Get("/download", s.handlers.Download)
 	app.Get("/raw", s.handlers.Raw)
+	app.Post("/download/bulk", s.handlers.BulkDownload)
 
 	app.Post("/settings", s.handlers.Settings)
 
@@ -37,6 +38,10 @@ func (s Server) registerRoutes(app *fiber.App) {
 	app.Post("/actions/copy", s.handlers.Copy)
 	app.Post("/actions/duplicate", s.handlers.Duplicate)
 	app.Post("/actions/delete", s.handlers.Delete)
+	app.Post("/actions/bulk/copy", s.handlers.BulkCopy)
+	app.Post("/actions/bulk/delete", s.handlers.BulkDelete)
+	app.Post("/actions/bulk/duplicate", s.handlers.BulkDuplicate)
+	app.Post("/actions/bulk/move", s.handlers.BulkMove)
 	app.Post("/actions/upload", s.handlers.Upload)
 
 	app.Use(s.handlers.NotFound)

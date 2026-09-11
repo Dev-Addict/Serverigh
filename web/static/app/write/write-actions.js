@@ -1,4 +1,6 @@
 import { selectedEntryRow } from "../keyboard/keyboard-entries.js";
+import { initBulkActions } from "./write-bulk-actions.js";
+import { initBulkSelection } from "./write-bulk-selection.js";
 import { initWriteCreateActions } from "./write-create.js";
 import { initWriteModal } from "./write-modal.js";
 import {
@@ -26,6 +28,17 @@ const copyContextPath = (row, absolute, showToast) => {
     .catch(() => showToast("Unable to copy path"));
 };
 
+const downloadContextEntry = (row, showToast) => {
+  const path = row?.dataset.entryPath;
+  if (!path) {
+    showToast("Select an entry first");
+
+    return;
+  }
+
+  window.location.href = `/download?path=${encodeURIComponent(path)}`;
+};
+
 const initContextActions = (showToast) => {
   document.addEventListener("click", (event) => {
     if (!(event.target instanceof Element)) {
@@ -34,7 +47,8 @@ const initContextActions = (showToast) => {
 
     const writeAction = event.target.closest("[data-context-write]");
     const copyAction = event.target.closest("[data-context-copy]");
-    if (!writeAction && !copyAction) {
+    const downloadAction = event.target.closest("[data-context-download]");
+    if (!writeAction && !copyAction && !downloadAction) {
       return;
     }
 
@@ -49,12 +63,16 @@ const initContextActions = (showToast) => {
         copyAction.dataset.contextCopy === "absolute",
         showToast,
       );
+    } else if (downloadAction instanceof HTMLButtonElement) {
+      downloadContextEntry(row, showToast);
     }
     closeContextMenu();
   });
 };
 
 export const initWriteActions = (showToast) => {
+  initBulkSelection();
+  initBulkActions(showToast);
   initWriteModal();
   initContextMenu();
   initContextActions(showToast);

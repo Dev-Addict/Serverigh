@@ -1,0 +1,68 @@
+<thead>
+	<tr>
+		<th class="entry-select-heading" scope="col" aria-label="Select"></th>
+		<th scope="col" aria-sort="{{ .Controls.NameSort.AriaSort }}">
+			<a
+				class="sort-link"
+				href="{{ .Controls.NameSort.BrowseURL }}"
+				hx-get="{{ .Controls.NameSort.FilesURL }}"
+				hx-target="#files-region"
+				hx-swap="innerHTML">
+				Name
+				{{ if .Controls.NameSort.Indicator }}
+				<span>{{ .Controls.NameSort.Indicator }}</span>
+				{{ end }}
+			</a>
+		</th>
+		<th
+			class="column-size"
+			scope="col"
+			aria-sort="{{ .Controls.SizeSort.AriaSort }}">
+			<a
+				class="sort-link"
+				href="{{ .Controls.SizeSort.BrowseURL }}"
+				hx-get="{{ .Controls.SizeSort.FilesURL }}"
+				hx-target="#files-region"
+				hx-swap="innerHTML">
+				Size
+				{{ if .Controls.SizeSort.Indicator }}
+				<span>{{ .Controls.SizeSort.Indicator }}</span>
+				{{ end }}
+			</a>
+		</th>
+		<th
+			class="column-modified"
+			scope="col"
+			aria-sort="{{ .Controls.ModifiedSort.AriaSort }}">
+			<a
+				class="sort-link"
+				href="{{ .Controls.ModifiedSort.BrowseURL }}"
+				hx-get="{{ .Controls.ModifiedSort.FilesURL }}"
+				hx-target="#files-region"
+				hx-swap="innerHTML">
+				Modified
+				{{ if .Controls.ModifiedSort.Indicator }}
+				<span>{{ .Controls.ModifiedSort.Indicator }}</span>
+				{{ end }}
+			</a>
+		</th>
+		<th
+			class="column-created"
+			scope="col"
+			aria-sort="{{ .Controls.CreatedSort.AriaSort }}">
+			<a
+				class="sort-link"
+				href="{{ .Controls.CreatedSort.BrowseURL }}"
+				hx-get="{{ .Controls.CreatedSort.FilesURL }}"
+				hx-target="#files-region"
+				hx-swap="innerHTML">
+				Created
+				{{ if .Controls.CreatedSort.Indicator }}
+				<span>{{ .Controls.CreatedSort.Indicator }}</span>
+				{{ end }}
+			</a>
+		</th>
+		<th class="column-mode" scope="col">Mode</th>
+		<th class="entry-menu-heading" scope="col" aria-label="Actions"></th>
+	</tr>
+</thead>

@@ -1,11 +1,14 @@
 # Routeup configuration patterns
 
-Use project configuration when the route should be repeatable or when routeup
-should start the application. For a one-off existing process, flags are enough.
+Use project configuration when the route should be repeatable or routeup should
+start the application. For one-off existing processes, flags are enough.
 
 Routeup checks only the current working directory. It reads `routeup.json` or a
 `routeup` block in `package.json`; `routeup.json` takes precedence when both are
-present. Do not add both formats for the same project.
+present. Do not add both formats to the same project.
+
+The examples below omit `$schema` to keep snippets compact. Add the official
+schema URL when editor validation is useful.
 
 ## Fixed port
 
@@ -13,7 +16,6 @@ Use this when another command owns the application process:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/mukul-mehta/routeup/main/routeup.schema.json",
   "name": "myapp",
   "port": 3000
 }
@@ -27,7 +29,6 @@ Non-JavaScript projects can put a shell command in `routeup.json`:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/mukul-mehta/routeup/main/routeup.schema.json",
   "name": "myapp",
   "command": "go run ./cmd/dev"
 }
@@ -50,8 +51,8 @@ block. Do not point `script` back to a script that runs bare `routeup`:
 ```
 
 Run bare `routeup` directly or through the package's `dev` script. The child
-must honor the injected `HOST` and `PORT`. If a framework ignores them, configure
-that framework explicitly rather than hard-coding another port.
+must honor the injected `HOST` and `PORT`. If a framework ignores them,
+configure that framework explicitly rather than hard-coding another port.
 
 ## Multiple targets
 
@@ -59,7 +60,6 @@ Route the longest matching path prefix to its target:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/mukul-mehta/routeup/main/routeup.schema.json",
   "name": "myapp",
   "targets": [
     { "path": "/", "port": 5173 },
@@ -79,7 +79,6 @@ configured route starts:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/mukul-mehta/routeup/main/routeup.schema.json",
   "name": "myapp",
   "port": 3000,
   "expose": {
@@ -93,7 +92,6 @@ serves all configured targets:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/mukul-mehta/routeup/main/routeup.schema.json",
   "name": "myapp",
   "targets": [
     { "path": "/", "port": 5173 },
@@ -116,7 +114,6 @@ all credentials, cookies, and webhook signatures relevant to the application:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/mukul-mehta/routeup/main/routeup.schema.json",
   "name": "myapp",
   "port": 3000,
   "capture": {

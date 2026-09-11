@@ -55,9 +55,9 @@ const openDestinationAction = (action, row, showToast) => {
 const openDelete = (row, showToast) => {
   openConfirmModal({
     submit: () => submitAction("delete", row, {}, showToast),
-    submitLabel: "Move to trash",
-    summary: `Move ${row.dataset.entryName || "this entry"} to trash?`,
-    title: "Confirm trash",
+    submitLabel: "Trash",
+    summary: `Trash ${row.dataset.entryName || "this entry"}?`,
+    title: "Trash entry",
   });
 };
 

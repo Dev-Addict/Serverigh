@@ -1,0 +1,80 @@
+.entry-select-column,
+.directory-table th:nth-child(1) {
+  width: 24px;
+}
+
+.entry-size-column,
+.entry-modified-column,
+.entry-created-column,
+.entry-mode-column,
+.entry-name-column {
+  width: auto;
+}
+
+.entry-menu-column,
+.directory-table th:nth-child(7) {
+  width: 28px;
+}
+
+body[data-column-size="false"] .entry-size-column,
+body[data-column-modified="false"] .entry-modified-column,
+body[data-column-created="false"] .entry-created-column,
+body[data-column-mode="false"] .entry-mode-column {
+  display: none;
+}
+
+.entry-select-heading,
+.entry-select-cell {
+  padding-right: 0;
+  padding-left: 6px;
+}
+
+.name-cell {
+  padding-left: 2px;
+}
+
+.file-table tbody tr[data-selected="true"] {
+  background: var(--color-selected);
+}
+
+.entry-select-cell {
+  text-align: left;
+}
+
+.entry-menu-heading,
+.entry-menu-cell {
+  padding-right: 4px;
+  padding-left: 4px;
+}
+
+.entry-select-cell input {
+  display: inline-grid;
+  place-content: center;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  appearance: none;
+  background: var(--color-surface);
+  color: var(--color-link);
+  cursor: pointer;
+}
+
+.entry-select-cell input::before {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: currentColor;
+  content: "";
+  transform: scale(0);
+}
+
+.entry-select-cell input:checked::before {
+  transform: scale(1);
+}
+
+.entry-select-cell input:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}

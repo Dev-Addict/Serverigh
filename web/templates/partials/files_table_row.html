@@ -1,0 +1,75 @@
+{{ $entry := .Entry }}
+{{ $view := .View }}
+{{ $icon := $view.Icon $entry }}
+<tr
+	data-entry-row
+	data-entry-id="{{ $entry.Path }}"
+	data-entry-name="{{ $entry.Name }}"
+	data-entry-path="{{ $entry.Path }}"
+	data-relative-path="{{ $entry.RelativePath }}"
+	data-absolute-path="{{ $entry.AbsolutePath }}">
+	<td class="entry-select-cell">
+		<input
+			type="checkbox"
+			aria-label="Select {{ $entry.Name }}"
+			data-entry-select>
+	</td>
+	<td class="name-cell">
+		<div class="entry-name-wrap">
+			{{ if $entry.IsDir }}
+			<a
+				class="entry-link folder-link"
+				href="{{ $view.BrowseURL $entry.Path }}"
+				hx-get="{{ $view.FilesURL $entry.Path }}"
+				hx-target="#files-region"
+				hx-swap="innerHTML"
+				title="Open {{ $entry.Name }}">
+				<img
+					class="entry-icon"
+					src="{{ $icon.Path }}"
+					alt=""
+					aria-hidden="true">
+				<span>{{ $entry.Name }}/</span>
+			</a>
+			{{ else }}
+			<a
+				class="entry-link file-link"
+				href="{{ $view.FileBrowseURL $entry.Path }}"
+				hx-get="/preview?path={{ $entry.Path | urlquery }}"
+				hx-target="#preview-region"
+				hx-swap="innerHTML"
+				hx-push-url="{{ $view.FileBrowseURL $entry.Path }}"
+				title="Preview {{ $entry.Name }}">
+				<img
+					class="entry-icon"
+					src="{{ $icon.Path }}"
+					alt=""
+					aria-hidden="true">
+				<span>{{ $entry.Name }}</span>
+			</a>
+			{{ end }}
+		</div>
+	</td>
+	<td class="numeric-cell column-size">{{ $entry.SizeLabel }}</td>
+	<td class="column-modified">
+		<time datetime="{{ $entry.ModTimeValue }}">{{ $entry.ModTimeLabel }}</time>
+	</td>
+	<td class="column-created">
+		{{ if $entry.CreatedKnown }}
+		<time datetime="{{ $entry.CreatedValue }}">{{ $entry.CreatedLabel }}</time>
+		{{ else }}
+		{{ $entry.CreatedLabel }}
+		{{ end }}
+	</td>
+	<td class="column-mode"><code>{{ $entry.Mode }}</code></td>
+	<td class="entry-menu-cell">
+		<button
+			class="entry-menu-button"
+			type="button"
+			aria-label="Open context menu for {{ $entry.Name }}"
+			title="More actions"
+			data-entry-menu-button>
+			<span aria-hidden="true">&#8942;</span>
+		</button>
+	</td>
+</tr>
